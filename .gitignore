@@ -1,0 +1,7 @@
+##
+##
+/MDK-ARM/DebugConfig
+/MDK-ARM/RTE
+/MDK-ARM/rzyOS
+*.mxproject
+*.ioc
