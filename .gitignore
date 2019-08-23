@@ -5,3 +5,4 @@
 /MDK-ARM/rzyOS
 *.mxproject
 *.ioc
+MDK-ARM/*.uvguix.*
