@@ -6,3 +6,5 @@
 *.mxproject
 *.ioc
 MDK-ARM/*.uvguix.*
+MDK-ARM/rzyOS.uvoptx
+MDK-ARM/EventRecorderStub.scvd
