@@ -392,6 +392,11 @@
               <FileType>1</FileType>
               <FilePath>.\SRC\switch.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SRC\rzyOS.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
