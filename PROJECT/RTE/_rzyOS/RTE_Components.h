@@ -1,10 +1,10 @@
 
 /*
- * Auto generated Run-Time-Environment Component Configuration File
+ * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
  * Project: 'rzyOS' 
- * Target:  'Target 1' 
+ * Target:  'rzyOS' 
  */
 
 #ifndef RTE_COMPONENTS_H
@@ -15,6 +15,7 @@
  * Define the Device Header File: 
  */
 #define CMSIS_device_header "ARMCM3.h"
+
 
 
 #endif /* RTE_COMPONENTS_H */
