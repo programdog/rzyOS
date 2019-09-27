@@ -3,6 +3,6 @@
 /PROJECT/Objects
 /PROJECT/RTE/_rzyOS
 
-MDK-ARM/*.uvguix.*
-MDK-ARM/*.uvoptx
-PROJECT/EventRecorderStub.scvd
+/PROJECT/*.uvguix.*
+/PROJECT/*.uvoptx
+/PROJECT/EventRecorderStub.scvd
