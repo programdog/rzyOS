@@ -11,12 +11,15 @@
 
 __asm void PendSV_Handler(void)
 {
-	IMPORT currentTask
+	IMPORT currentTask					// IMPORT后面跟随函数名或变量名，作用相当于C中的extern关键字，指出这些全局符号是在其它源文件中定义的
 	IMPORT nextTask
 	
-	MRS R0, PSP
-	CBZ R0, PendSVHander_nosave
-	NOP
+	MRS R0, PSP							// MRS <gp_reg>, <special_reg> ;读特殊功能寄存器的值到通用寄存器
+	CBZ R0, PendSVHander_nosave			// 比较，如果结果为 0 就转移
+	STMDB R0!, {R4-R11}					// 存储R4-R11到 R0 地址处。每存一个字后(!) Rd 自增一次，32位宽度
+	LDR R1, =currentTask				// R1 = currentTask
+	LDR R1, [R1]						// R1= *R1
+	STR R0, [R1]						// 把R0存储到R1地址处
 	
 PendSVHander_nosave
 	LDR R0, =currentTask
@@ -25,11 +28,11 @@ PendSVHander_nosave
 	STR R2, [R0]
 	
 	LDR R0, [R2]
-	LDMIA R0!, {R4-R11}
+	LDMIA R0!, {R4-R11}					// 从 R0 处读取多个字。写入R4-R11中, 每读一个字后 R0 自增一次，16位宽度
 	
-	MSR PSP, R0
-	ORR LR, LR, #0X04
-	BX LR
+	MSR PSP, R0							// MRS <special_reg>,  <gp_reg> ;存储gp_reg的值到特殊功能寄存器
+	ORR LR, LR, #0X04					// ORR按位或 标记使用PSP
+	BX LR								// 返回
 }
 
 void tTaskRunFirst(void)
