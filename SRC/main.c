@@ -61,6 +61,8 @@ void task1Entry(void *param)
 		delay(100);
 		task1Flag = 1;
 		delay(100);
+		
+		tTaskSched();
 	}
 }
 
@@ -73,13 +75,15 @@ void task2Entry(void *param)
 		delay(100);
 		task2Flag = 1;
 		delay(100);
+		
+		tTaskSched();
 	}
 }
 
 int main()
 {
-	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, &task2Env[1023]);
-	tTaskInit(&tTask1, task1Entry, (void *)0x22222222, &task2Env[1023]);
+	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, &task1Env[1024]);
+	tTaskInit(&tTask2, task2Entry, (void *)0x22222222, &task2Env[1024]);
 	
 	taskTable[0] = &tTask1;
 	taskTable[1] = &tTask2;
