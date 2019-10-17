@@ -17,7 +17,7 @@ __asm void PendSV_Handler(void)
 	MRS R0, PSP							// MRS <gp_reg>, <special_reg> ;读特殊功能寄存器的值到通用寄存器
 	CBZ R0, PendSVHander_nosave			// 比较，如果结果为 0 就转移
 	STMDB R0!, {R4-R11}					// 存储R4-R11到 R0 地址处。每存一个字后(!) Rd 自增一次，32位宽度
-	LDR R1, =currentTask				// R1 = currentTask
+	LDR R1, =currentTask				// 取currentTask这个变量符号的地址写到R1！注意，不是取currentTask的值
 	LDR R1, [R1]						// R1= *R1
 	STR R0, [R1]						// 把R0存储到R1地址处
 	
@@ -32,7 +32,7 @@ PendSVHander_nosave
 	
 	MSR PSP, R0							// MRS <special_reg>,  <gp_reg> ;存储gp_reg的值到特殊功能寄存器
 	ORR LR, LR, #0X04					// ORR按位或 标记使用PSP
-	BX LR								// 返回
+	BX LR								// 最后返回，此时任务就会从堆栈中取出LR值，恢复到上次运行的位
 }
 
 void tTaskRunFirst(void)
