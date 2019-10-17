@@ -1,4 +1,5 @@
 #include "rzyOS.h"
+#include "ARMCM3.h"
 
 tTask *currentTask;
 tTask *nextTask;
@@ -41,6 +42,25 @@ void tTaskSched()
 	tTaskSwitch();
 }
 
+
+//modify system_ARMCM3.C to change XTAL and SYSTEM_CLOCK
+//#define  XTAL            (12000000UL)     /* Oscillator frequency */
+//#define  SYSTEM_CLOCK    (1 * XTAL)
+void SetSysTickPeriod(uint32_t ms)
+{
+	SysTick -> LOAD = ms * SystemCoreClock / 1000 - 1;
+	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
+	SysTick -> VAL = 0;
+	SysTick -> CTRL = SysTick_CTRL_CLKSOURCE_Msk |
+						SysTick_CTRL_TICKINT_Msk |		//ÖÐ¶ÏÊ¹ÄÜ
+						SysTick_CTRL_ENABLE_Msk;
+}
+
+void SysTick_Handler()
+{
+	tTaskSched();
+}
+
 void delay(int count)
 {
 	while(--count > 0);
@@ -55,14 +75,13 @@ tTaskStack task2Env[1024];
 int task1Flag;
 void task1Entry(void *param)
 {
+	SetSysTickPeriod(10);
 	for (;;)
 	{
 		task1Flag = 0;
 		delay(100);
 		task1Flag = 1;
 		delay(100);
-		
-		tTaskSched();
 	}
 }
 
@@ -75,8 +94,6 @@ void task2Entry(void *param)
 		delay(100);
 		task2Flag = 1;
 		delay(100);
-		
-		tTaskSched();
 	}
 }
 
