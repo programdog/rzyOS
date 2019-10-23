@@ -34,6 +34,7 @@ void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stac
 
 void tTaskSched()
 {
+	uint32_t status = tTaskEnterCritical();
 	if (currentTask == idleTask)
 	{
 		if (taskTable[0] -> delayTicks == 0)
@@ -46,6 +47,7 @@ void tTaskSched()
 		}
 		else
 		{
+			tTaskExitCritical(status);
 			return ;
 		}
 	}
@@ -63,6 +65,7 @@ void tTaskSched()
 			}
 			else
 			{
+				tTaskExitCritical(status);
 				return ;
 			}
 		}
@@ -78,16 +81,21 @@ void tTaskSched()
 			}
 			else
 			{
+				tTaskExitCritical(status);
 				return ;
 			}
 		}
 	}
+	
+	tTaskExitCritical(status);
 	
 	tTaskSwitch();
 }
 
 void tTasksystemTickHandler()
 {
+	uint32_t status = tTaskEnterCritical();
+	
 	int i;
 	for (i = 0; i < 2; i ++)
 	{
@@ -99,12 +107,17 @@ void tTasksystemTickHandler()
 	
 	tickcounter ++;
 	
+	tTaskExitCritical(status);
 	tTaskSched();
 }
 
 void tTaskDelay(uint32_t delay)
 {
+	uint32_t status = tTaskEnterCritical();
+	
 	currentTask -> delayTicks = delay;
+	
+	tTaskExitCritical(status);
 	tTaskSched();
 }
 
