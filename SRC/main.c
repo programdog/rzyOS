@@ -6,6 +6,8 @@ tTask *nextTask;
 tTask *idleTask;
 tTask *taskTable[2];
 
+uint32_t tickcounter;
+
 void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stack)
 {
 	*(--stack) = (unsigned long)(1 << 24);
@@ -95,6 +97,8 @@ void tTasksystemTickHandler()
 		}
 	}
 	
+	tickcounter ++;
+	
 	tTaskSched();
 }
 
@@ -145,6 +149,16 @@ void task2Entry(void *param)
 {
 	for (;;)
 	{
+		uint32_t i;
+		
+		uint32_t status = tTaskEnterCritical();
+		uint32_t counter = tickcounter;
+		for(i = 0; i < 0xffff; i ++)
+		{
+		}
+		tickcounter = counter + 1;
+		tTaskExitCritical(status);
+		
 		task2Flag = 0;
 		tTaskDelay(1);
 		task2Flag = 1;
