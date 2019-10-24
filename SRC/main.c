@@ -6,7 +6,8 @@ tTask *nextTask;
 tTask *idleTask;
 tTask *taskTable[2];
 
-uint32_t tickcounter;
+uint8_t schedLockCount;
+
 
 void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stack)
 {
@@ -32,9 +33,15 @@ void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stac
 	task -> delayTicks = 0;
 }
 
-void tTaskSched()
+void tTaskSched(void)
 {
 	uint32_t status = tTaskEnterCritical();
+	
+	if (schedLockCount > 0)
+	{
+		tTaskExitCritical(status);
+		return ;
+	}
 	if (currentTask == idleTask)
 	{
 		if (taskTable[0] -> delayTicks == 0)
@@ -92,6 +99,39 @@ void tTaskSched()
 	tTaskSwitch();
 }
 
+void tTaskSchedInit(void)
+{
+	schedLockCount = 0;
+}
+
+void tTaskSchedDisable(void)
+{
+	uint32_t status = tTaskEnterCritical();
+	
+	if (schedLockCount < 0xff)
+	{
+		schedLockCount ++;
+	}
+	
+	tTaskExitCritical(status);
+}
+
+void tTaskschedEnable(void)
+{
+	uint32_t status = tTaskEnterCritical();
+	
+	if (schedLockCount > 0)
+	{
+		schedLockCount --;
+		if (0 == schedLockCount)
+		{
+			tTaskSched();
+		}
+	}
+	
+	tTaskExitCritical(status);
+}
+
 void tTasksystemTickHandler()
 {
 	uint32_t status = tTaskEnterCritical();
@@ -104,8 +144,6 @@ void tTasksystemTickHandler()
 			(taskTable[i] -> delayTicks) --;
 		}
 	}
-	
-	tickcounter ++;
 	
 	tTaskExitCritical(status);
 	tTaskSched();
@@ -141,8 +179,10 @@ void SysTick_Handler()
 
 void delay(int count)
 {
-	while(--count > 0);
+	while(-- count > 0);
 }
+
+int shareCount;
 
 int task1Flag;
 void task1Entry(void *param)
@@ -150,8 +190,18 @@ void task1Entry(void *param)
 	SetSysTickPeriod(10);
 	for (;;)
 	{
+		int var;
+		
+		tTaskSchedDisable();
+		var = shareCount;
+		
 		task1Flag = 0;
 		tTaskDelay(1);
+		
+		var ++;
+		shareCount = var;
+		tTaskschedEnable();
+		
 		task1Flag = 1;
 		tTaskDelay(1);
 	}
@@ -162,15 +212,9 @@ void task2Entry(void *param)
 {
 	for (;;)
 	{
-		uint32_t i;
-		
-		uint32_t status = tTaskEnterCritical();
-		uint32_t counter = tickcounter;
-		for(i = 0; i < 0xffff; i ++)
-		{
-		}
-		tickcounter = counter + 1;
-		tTaskExitCritical(status);
+		tTaskSchedDisable();
+		shareCount ++;
+		tTaskschedEnable();
 		
 		task2Flag = 0;
 		tTaskDelay(1);
@@ -196,6 +240,8 @@ void idleTaskEntry(void *param)
 
 int main()
 {
+	tTaskSchedInit();
+	
 	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, &task1Env[1024]);
 	tTaskInit(&tTask2, task2Entry, (void *)0x22222222, &task2Env[1024]);
 	

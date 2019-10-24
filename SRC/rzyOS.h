@@ -19,4 +19,9 @@ void tTaskExitCritical(uint32_t status);
 
 void tTaskRunFirst(void);
 void tTaskSwitch(void);
+
+void tTaskSched(void);
+void tTaskSchedInit(void);
+void tTaskSchedDisable(void);
+void tTaskschedEnable(void);
 #endif
