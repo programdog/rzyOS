@@ -182,26 +182,32 @@ void delay(int count)
 	while(-- count > 0);
 }
 
-int shareCount;
-
+int firstBit;
 int task1Flag;
 void task1Entry(void *param)
 {
 	SetSysTickPeriod(10);
+	
+	int i;
+	tBitMap bitmap;
+	tBitMapInit(&bitmap);
+	for (i = tBitMapSize() - 1; i >= 0; i --)
+	{
+		tBitMapSet(&bitmap, i);
+		firstBit = tBitMapGetFirstSet(&bitmap);
+	}
+	
+	for (i = 0; i < tBitMapSize(); i ++)
+	{
+		tBitMapClean(&bitmap, i);
+		firstBit = tBitMapGetFirstSet(&bitmap);
+	}
+	
 	for (;;)
 	{
-		int var;
-		
-		tTaskSchedDisable();
-		var = shareCount;
 		
 		task1Flag = 0;
 		tTaskDelay(1);
-		
-		var ++;
-		shareCount = var;
-		tTaskschedEnable();
-		
 		task1Flag = 1;
 		tTaskDelay(1);
 	}
@@ -212,10 +218,7 @@ void task2Entry(void *param)
 {
 	for (;;)
 	{
-		tTaskSchedDisable();
-		shareCount ++;
-		tTaskschedEnable();
-		
+
 		task2Flag = 0;
 		tTaskDelay(1);
 		task2Flag = 1;

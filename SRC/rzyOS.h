@@ -2,6 +2,7 @@
 #define __RZYOS_H
 
 #include <stdint.h>
+#include "bitMapLib.h"
 
 typedef uint32_t tTaskStack;
 

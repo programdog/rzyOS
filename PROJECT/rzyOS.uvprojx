@@ -392,6 +392,11 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\switch.c</FilePath>
             </File>
+            <File>
+              <FileName>bitMapLib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\bitMapLib.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
