@@ -5,8 +5,8 @@ tTask *currentTask;
 tTask *nextTask;
 tTask *idleTask;
 
-tBitMap tTaskPrioMap;
-tTask *taskTable[RZYOS_PRIO_COUNT];
+bitmap_s bitmap_taskprio;
+tTask *task_ready_table[RZYOS_PRIO_COUNT];
 
 uint8_t schedLockCount;
 
@@ -35,14 +35,14 @@ void tTaskInit(tTask *task, void (*entry)(void *), void *param, uint32_t prio, t
 	task -> delayTicks = 0;
 	task -> prio = prio;
 	
-	taskTable[prio] = task;
-	tBitMapSet(&tTaskPrioMap, prio);
+	task_ready_table[prio] = task;
+	bitmap_set(&bitmap_taskprio, prio);
 }
 
 tTask *tTaskHightestReady(void)
 {
-	uint32_t highestPrio = tBitMapGetFirstSet(&tTaskPrioMap);
-	return taskTable[highestPrio];
+	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
+	return task_ready_table[highest_prio];
 }
 void tTaskSched(void)
 {
@@ -68,7 +68,7 @@ void tTaskSched(void)
 void tTaskSchedInit(void)
 {
 	schedLockCount = 0;
-	tBitMapInit(&tTaskPrioMap);
+	bitmap_init(&bitmap_taskprio);
 }
 
 void tTaskSchedDisable(void)
@@ -106,13 +106,13 @@ void tTasksystemTickHandler()
 	int i;
 	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
 	{
-		if (taskTable[i] -> delayTicks > 0)
+		if (task_ready_table[i] -> delayTicks > 0)
 		{
-			(taskTable[i] -> delayTicks) --;
+			(task_ready_table[i] -> delayTicks) --;
 		}
 		else
 		{
-			tBitMapSet(&tTaskPrioMap, i);
+			bitmap_set(&bitmap_taskprio, i);
 		}
 	}
 	
@@ -124,7 +124,7 @@ void tTaskDelay(uint32_t delay)
 {
 	uint32_t status = tTaskEnterCritical();
 	currentTask -> delayTicks = delay;
-	tBitMapClean(&tTaskPrioMap, currentTask -> prio);
+	bitmap_clean(&bitmap_taskprio, currentTask -> prio);
 	
 	tTaskExitCritical(status);
 	tTaskSched();
@@ -153,7 +153,6 @@ void delay(int count)
 	while(-- count > 0);
 }
 
-int firstBit;
 int task1Flag;
 void task1Entry(void *param)
 {
@@ -206,8 +205,8 @@ int main()
 	tTaskInit(&tTaskIdle, idleTaskEntry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
 	idleTask = &tTaskIdle;
 	
-	taskTable[0] = &tTask1;
-	taskTable[1] = &tTask2;
+	task_ready_table[0] = &tTask1;
+	task_ready_table[1] = &tTask2;
 	
 	nextTask = tTaskHightestReady();
 	

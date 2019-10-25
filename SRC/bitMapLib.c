@@ -1,27 +1,28 @@
 #include "bitMapLib.h"
 
-void tBitMapInit(tBitMap *bitmap)
+void bitmap_init(bitmap_s *bitmap)
 {
-	bitmap -> bitMap = 0;
+	bitmap -> bitmap_32bit = 0;
 }
 
-uint32_t tBitMapSize(void)
+uint32_t bitmap_size(void)
 {
 	return 32;
 }
 
-void tBitMapSet(tBitMap *bitmap, uint32_t pos)
+void bitmap_set(bitmap_s *bitmap, uint32_t position)
 {
-	bitmap -> bitMap |= 1 << pos;
+	bitmap -> bitmap_32bit |= 1 << position;
 }
 
-void tBitMapClean(tBitMap *bitmap, uint32_t pos)
+void bitmap_clean(bitmap_s *bitmap, uint32_t position)
 {
-	bitmap -> bitMap &= ~(1 << pos);
+	bitmap -> bitmap_32bit &= ~(1 << position);
 }
-uint32_t tBitMapGetFirstSet(tBitMap *bitmap)
+
+uint32_t bitmap_get_first_set(bitmap_s *bitmap)
 {
-	static const uint8_t bitMapTable[] = 
+	static const uint8_t bitmap_table[] = 
 	{
 		/* 00 */ 0xff, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, // oxff means no bit is 1
 		/* 10 */ 4,    0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
@@ -41,24 +42,24 @@ uint32_t tBitMapGetFirstSet(tBitMap *bitmap)
 		/* F0 */ 4,    0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 	};
 	
-	if (bitmap -> bitMap & 0xff)
+	if (bitmap -> bitmap_32bit & 0xff)
 	{
-		return bitMapTable[bitmap -> bitMap & 0xff];
+		return bitmap_table[bitmap -> bitmap_32bit & 0xff];
 	}
-	else if (bitmap -> bitMap & 0xff00)
+	else if (bitmap -> bitmap_32bit & 0xff00)
 	{
-		return bitMapTable[(bitmap -> bitMap >> 8) & 0xff] + 8;
+		return bitmap_table[(bitmap -> bitmap_32bit >> 8) & 0xff] + 8;
 	}
-	else if (bitmap -> bitMap & 0xff0000)
+	else if (bitmap -> bitmap_32bit & 0xff0000)
 	{
-		return bitMapTable[(bitmap -> bitMap >> 16) & 0xff] + 16;
+		return bitmap_table[(bitmap -> bitmap_32bit >> 16) & 0xff] + 16;
 	}
-	else if (bitmap -> bitMap & 0xff000000)
+	else if (bitmap -> bitmap_32bit & 0xff000000)
 	{
-		return bitMapTable[(bitmap -> bitMap >> 24) & 0xff] + 24;
+		return bitmap_table[(bitmap -> bitmap_32bit >> 24) & 0xff] + 24;
 	}
 	else
 	{
-		return tBitMapSize();
+		return bitmap_size();
 	}
 }
