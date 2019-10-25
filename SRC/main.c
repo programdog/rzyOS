@@ -1,17 +1,17 @@
 #include "rzyOS.h"
 #include "ARMCM3.h"
 
-tTask *currentTask;
-tTask *nextTask;
-tTask *idleTask;
+task_tcb_s *currentTask;
+task_tcb_s *nextTask;
+task_tcb_s *idleTask;
 
 bitmap_s bitmap_taskprio;
-tTask *task_ready_table[RZYOS_PRIO_COUNT];
+task_tcb_s *task_ready_table[RZYOS_PRIO_COUNT];
 
 uint8_t schedLockCount;
 
 
-void tTaskInit(tTask *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
+void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
 {
 	*(--stack) = (unsigned long)(1 << 24);
 	*(--stack) = (unsigned long)entry;
@@ -39,69 +39,69 @@ void tTaskInit(tTask *task, void (*entry)(void *), void *param, uint32_t prio, t
 	bitmap_set(&bitmap_taskprio, prio);
 }
 
-tTask *tTaskHightestReady(void)
+task_tcb_s *task_highest_ready(void)
 {
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
 	return task_ready_table[highest_prio];
 }
-void tTaskSched(void)
+void task_schedule(void)
 {
-	tTask *tempTask;
-	uint32_t status = tTaskEnterCritical();
+	task_tcb_s *tempTask;
+	uint32_t status = task_enter_critical();
 	
 	if (schedLockCount > 0)
 	{
-		tTaskExitCritical(status);
+		task_exit_critical(status);
 		return ;
 	}
 	
-	tempTask = tTaskHightestReady();
+	tempTask = task_highest_ready();
 	if (tempTask != currentTask)
 	{
 		nextTask = tempTask;
-		tTaskSwitch();
+		task_switch();
 	}
 	
-	tTaskExitCritical(status);
+	task_exit_critical(status);
 }
 
-void tTaskSchedInit(void)
+void task_schedule_init(void)
 {
 	schedLockCount = 0;
 	bitmap_init(&bitmap_taskprio);
 }
 
-void tTaskSchedDisable(void)
+void task_schedule_disable(void)
 {
-	uint32_t status = tTaskEnterCritical();
+	uint32_t status = task_enter_critical();
 	
 	if (schedLockCount < 0xff)
 	{
 		schedLockCount ++;
 	}
 	
-	tTaskExitCritical(status);
+	task_exit_critical(status);
 }
 
-void tTaskschedEnable(void)
+void task_schedule_enable(void)
 {
-	uint32_t status = tTaskEnterCritical();
+	uint32_t status = task_enter_critical();
 	
 	if (schedLockCount > 0)
 	{
 		schedLockCount --;
 		if (0 == schedLockCount)
 		{
-			tTaskSched();
+			task_schedule();
 		}
 	}
 	
-	tTaskExitCritical(status);
+	task_exit_critical(status);
 }
 
-void tTasksystemTickHandler()
+void task_systemtick_handler()
 {
-	uint32_t status = tTaskEnterCritical();
+	uint32_t status = task_enter_critical();
 	
 	int i;
 	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
@@ -116,24 +116,24 @@ void tTasksystemTickHandler()
 		}
 	}
 	
-	tTaskExitCritical(status);
-	tTaskSched();
+	task_exit_critical(status);
+	task_schedule();
 }
 
-void tTaskDelay(uint32_t delay)
+void task_delay(uint32_t delay)
 {
-	uint32_t status = tTaskEnterCritical();
+	uint32_t status = task_enter_critical();
 	currentTask -> delayTicks = delay;
 	bitmap_clean(&bitmap_taskprio, currentTask -> prio);
 	
-	tTaskExitCritical(status);
-	tTaskSched();
+	task_exit_critical(status);
+	task_schedule();
 }
 
 //modify system_ARMCM3.C to change XTAL and SYSTEM_CLOCK
 //#define  XTAL            (12000000UL)     /* Oscillator frequency */
 //#define  SYSTEM_CLOCK    (1 * XTAL)
-void SetSysTickPeriod(uint32_t ms)
+void set_systick_period(uint32_t ms)
 {
 	SysTick -> LOAD = ms * SystemCoreClock / 1000 - 1;
 	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
@@ -145,7 +145,7 @@ void SetSysTickPeriod(uint32_t ms)
 
 void SysTick_Handler()
 {
-	tTasksystemTickHandler();
+	task_systemtick_handler();
 }
 
 void delay(int count)
@@ -154,41 +154,41 @@ void delay(int count)
 }
 
 int task1Flag;
-void task1Entry(void *param)
+void task1_entry(void *param)
 {
-	SetSysTickPeriod(10);
+	set_systick_period(10);
 	
 	for (;;)
 	{
 		
 		task1Flag = 0;
-		tTaskDelay(1);
+		task_delay(1);
 		task1Flag = 1;
-		tTaskDelay(1);
+		task_delay(1);
 	}
 }
 
 int task2Flag;
-void task2Entry(void *param)
+void task2_entry(void *param)
 {
 	for (;;)
 	{
 		task2Flag = 0;
-		tTaskDelay(1);
+		task_delay(1);
 		task2Flag = 1;
-		tTaskDelay(1);
+		task_delay(1);
 	}
 }
 
-tTask tTask1;
-tTask tTask2;
+task_tcb_s tcb_task1;
+task_tcb_s tcb_task2;
 
 tTaskStack task1Env[1024];
 tTaskStack task2Env[1024];
 
-tTask tTaskIdle;
+task_tcb_s tcb_task_idle;
 tTaskStack idleTaskEnv[1024];
-void idleTaskEntry(void *param)
+void idle_task_entry(void *param)
 {
 	for (;;)
 	{
@@ -197,20 +197,20 @@ void idleTaskEntry(void *param)
 
 int main()
 {
-	tTaskSchedInit();
+	task_schedule_init();
 	
-	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, 0, &task1Env[1024]);
-	tTaskInit(&tTask2, task2Entry, (void *)0x22222222, 1, &task2Env[1024]);
+	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);
+	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, &task2Env[1024]);
 	
-	tTaskInit(&tTaskIdle, idleTaskEntry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
-	idleTask = &tTaskIdle;
+	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
+	idleTask = &tcb_task_idle;
 	
-	task_ready_table[0] = &tTask1;
-	task_ready_table[1] = &tTask2;
+	task_ready_table[0] = &tcb_task1;
+	task_ready_table[1] = &tcb_task2;
 	
-	nextTask = tTaskHightestReady();
+	nextTask = task_highest_ready();
 	
-	tTaskRunFirst();
+	task_run_first();
 	
 	return 0;
 }

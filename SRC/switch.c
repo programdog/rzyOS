@@ -9,14 +9,14 @@
 #define MEM32(addr)	*(volatile unsigned long *)(addr)
 #define MEM8(addr)	*(volatile unsigned char *)(addr)
 
-uint32_t tTaskEnterCritical(void)
+uint32_t task_enter_critical(void)
 {
 	uint32_t primask = __get_PRIMASK();
 	__disable_irq();
 	return primask;
 }
 
-void tTaskExitCritical(uint32_t status)
+void task_exit_critical(uint32_t status)
 {
 	__set_PRIMASK(status);
 }
@@ -47,14 +47,14 @@ PendSVHander_nosave
 	BX LR								// 最后返回，此时任务就会从堆栈中取出LR值，恢复到上次运行的位
 }
 
-void tTaskRunFirst(void)
+void task_run_first(void)
 {
 	__set_PSP(0);
 	
 	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
 }
-void tTaskSwitch(void)
+void task_switch(void)
 {
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
 }
