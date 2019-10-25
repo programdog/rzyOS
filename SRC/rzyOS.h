@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "bitMapLib.h"
+#include "osConfig.h"
 
 typedef uint32_t tTaskStack;
 
@@ -10,6 +11,7 @@ typedef struct tTask
 {
 	tTaskStack *stack;
 	uint32_t delayTicks;
+	uint32_t prio;
 } tTask; 
 
 extern tTask *currentTask;

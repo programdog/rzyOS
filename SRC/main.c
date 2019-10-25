@@ -4,12 +4,14 @@
 tTask *currentTask;
 tTask *nextTask;
 tTask *idleTask;
-tTask *taskTable[2];
+
+tBitMap tTaskPrioMap;
+tTask *taskTable[RZYOS_PRIO_COUNT];
 
 uint8_t schedLockCount;
 
 
-void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stack)
+void tTaskInit(tTask *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
 {
 	*(--stack) = (unsigned long)(1 << 24);
 	*(--stack) = (unsigned long)entry;
@@ -31,10 +33,20 @@ void tTaskInit(tTask *task, void (*entry)(void *), void *param, tTaskStack *stac
 	
 	task -> stack = stack;
 	task -> delayTicks = 0;
+	task -> prio = prio;
+	
+	taskTable[prio] = task;
+	tBitMapSet(&tTaskPrioMap, prio);
 }
 
+tTask *tTaskHightestReady(void)
+{
+	uint32_t highestPrio = tBitMapGetFirstSet(&tTaskPrioMap);
+	return taskTable[highestPrio];
+}
 void tTaskSched(void)
 {
+	tTask *tempTask;
 	uint32_t status = tTaskEnterCritical();
 	
 	if (schedLockCount > 0)
@@ -42,66 +54,21 @@ void tTaskSched(void)
 		tTaskExitCritical(status);
 		return ;
 	}
-	if (currentTask == idleTask)
+	
+	tempTask = tTaskHightestReady();
+	if (tempTask != currentTask)
 	{
-		if (taskTable[0] -> delayTicks == 0)
-		{
-			nextTask = taskTable[0];
-		}
-		else if (taskTable[1] -> delayTicks == 0)
-		{
-			nextTask = taskTable[1];
-		}
-		else
-		{
-			tTaskExitCritical(status);
-			return ;
-		}
-	}
-	else
-	{
-		if (currentTask == taskTable[0])
-		{
-			if (taskTable[1] -> delayTicks == 0)
-			{
-				nextTask = taskTable[1];
-			}
-			else if (currentTask -> delayTicks != 0)
-			{
-				nextTask = idleTask;
-			}
-			else
-			{
-				tTaskExitCritical(status);
-				return ;
-			}
-		}
-		else if (currentTask == taskTable[1])
-		{
-			if (taskTable[0] -> delayTicks == 0)
-			{
-				nextTask = taskTable[0];
-			}
-			else if (currentTask -> delayTicks != 0)
-			{
-				nextTask = idleTask;
-			}
-			else
-			{
-				tTaskExitCritical(status);
-				return ;
-			}
-		}
+		nextTask = tempTask;
+		tTaskSwitch();
 	}
 	
 	tTaskExitCritical(status);
-	
-	tTaskSwitch();
 }
 
 void tTaskSchedInit(void)
 {
 	schedLockCount = 0;
+	tBitMapInit(&tTaskPrioMap);
 }
 
 void tTaskSchedDisable(void)
@@ -137,11 +104,15 @@ void tTasksystemTickHandler()
 	uint32_t status = tTaskEnterCritical();
 	
 	int i;
-	for (i = 0; i < 2; i ++)
+	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
 	{
 		if (taskTable[i] -> delayTicks > 0)
 		{
 			(taskTable[i] -> delayTicks) --;
+		}
+		else
+		{
+			tBitMapSet(&tTaskPrioMap, i);
 		}
 	}
 	
@@ -152,8 +123,8 @@ void tTasksystemTickHandler()
 void tTaskDelay(uint32_t delay)
 {
 	uint32_t status = tTaskEnterCritical();
-	
 	currentTask -> delayTicks = delay;
+	tBitMapClean(&tTaskPrioMap, currentTask -> prio);
 	
 	tTaskExitCritical(status);
 	tTaskSched();
@@ -188,21 +159,6 @@ void task1Entry(void *param)
 {
 	SetSysTickPeriod(10);
 	
-	int i;
-	tBitMap bitmap;
-	tBitMapInit(&bitmap);
-	for (i = tBitMapSize() - 1; i >= 0; i --)
-	{
-		tBitMapSet(&bitmap, i);
-		firstBit = tBitMapGetFirstSet(&bitmap);
-	}
-	
-	for (i = 0; i < tBitMapSize(); i ++)
-	{
-		tBitMapClean(&bitmap, i);
-		firstBit = tBitMapGetFirstSet(&bitmap);
-	}
-	
 	for (;;)
 	{
 		
@@ -218,7 +174,6 @@ void task2Entry(void *param)
 {
 	for (;;)
 	{
-
 		task2Flag = 0;
 		tTaskDelay(1);
 		task2Flag = 1;
@@ -245,16 +200,16 @@ int main()
 {
 	tTaskSchedInit();
 	
-	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, &task1Env[1024]);
-	tTaskInit(&tTask2, task2Entry, (void *)0x22222222, &task2Env[1024]);
+	tTaskInit(&tTask1, task1Entry, (void *)0x11111111, 0, &task1Env[1024]);
+	tTaskInit(&tTask2, task2Entry, (void *)0x22222222, 1, &task2Env[1024]);
 	
-	tTaskInit(&tTaskIdle, idleTaskEntry, (void *)0, &idleTaskEnv[1024]);
+	tTaskInit(&tTaskIdle, idleTaskEntry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
 	idleTask = &tTaskIdle;
 	
 	taskTable[0] = &tTask1;
 	taskTable[1] = &tTask2;
 	
-	nextTask = taskTable[0];
+	nextTask = tTaskHightestReady();
 	
 	tTaskRunFirst();
 	
