@@ -393,6 +393,11 @@
               <FilePath>..\SRC\switch.c</FilePath>
             </File>
             <File>
+              <FileName>rzyOS_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_list.c</FilePath>
+            </File>
+            <File>
               <FileName>bitMapLib.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SRC\bitMapLib.c</FilePath>

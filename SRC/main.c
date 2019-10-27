@@ -154,9 +154,25 @@ void delay(int count)
 }
 
 int task1Flag;
+list_t list;
+node_t node[8];
+
 void task1_entry(void *param)
 {
+	int i;
+	list_init(&list);
 	set_systick_period(10);
+	
+	for (i = 0; i < 8 ; i ++)
+	{
+		node_init(&node[i]);
+		list_add_first(&list, &node[i]);
+	}
+	
+	for (i = 0; i < 8 ; i ++)
+	{
+		remove_list_first(&list);
+	}
 	
 	for (;;)
 	{
