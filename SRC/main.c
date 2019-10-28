@@ -10,6 +10,7 @@ task_tcb_s *task_ready_table[RZYOS_PRIO_COUNT];
 
 uint8_t schedLockCount;
 
+list_t task_delay_list;
 
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
 {
@@ -35,6 +36,10 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task -> delayTicks = 0;
 	task -> prio = prio;
 	
+	task -> ready_status = RZYOS_TASK_STATUS_READY;
+	node_init(&(task -> delay_node));
+	
+	
 	task_ready_table[prio] = task;
 	bitmap_set(&bitmap_taskprio, prio);
 }
@@ -44,6 +49,19 @@ task_tcb_s *task_highest_ready(void)
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
 	return task_ready_table[highest_prio];
 }
+
+void task_insert_ready_list(task_tcb_s *task_tcb)
+{
+	task_ready_table[task_tcb -> prio] = task_tcb;
+	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
+}
+
+void task_remove_ready_list(task_tcb_s *task_tcb)
+{
+	task_ready_table[task_tcb -> prio] = (task_tcb_s *)0;
+	bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
+}
+
 void task_schedule(void)
 {
 	task_tcb_s *tempTask;
@@ -99,32 +117,54 @@ void task_schedule_enable(void)
 	task_exit_critical(status);
 }
 
+void task_delay_list_init(void)
+{
+	list_init(&task_delay_list);
+}
+
+void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
+{
+	task_tcb -> delayTicks = ticks;
+	list_add_first(&task_delay_list, &(task_tcb -> delay_node));
+	task_tcb -> ready_status |= RZYOS_TASK_STATUS_DELAY;
+}
+
+void delay_list_remove_time_node(task_tcb_s *task_tcb)
+{
+	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
+	task_tcb -> ready_status &= ~RZYOS_TASK_STATUS_DELAY;
+}
+
 void task_systemtick_handler()
 {
+	node_t *node;
+	
 	uint32_t status = task_enter_critical();
 	
-	int i;
-	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
+	for (node = task_delay_list.head_node.next_node; node != &(task_delay_list.head_node); node = node -> next_node)
 	{
-		if (task_ready_table[i] -> delayTicks > 0)
+		task_tcb_s *task_tcb =  (task_tcb_s *)node_parent(node, task_tcb_s, delay_node);
+		task_tcb -> delayTicks --;
+		if (0 == task_tcb -> delayTicks)
 		{
-			(task_ready_table[i] -> delayTicks) --;
-		}
-		else
-		{
-			bitmap_set(&bitmap_taskprio, i);
+			delay_list_remove_time_node(task_tcb);
+			
+			task_insert_ready_list(task_tcb);
 		}
 	}
 	
 	task_exit_critical(status);
+	
 	task_schedule();
 }
 
 void task_delay(uint32_t delay)
 {
 	uint32_t status = task_enter_critical();
-	currentTask -> delayTicks = delay;
-	bitmap_clean(&bitmap_taskprio, currentTask -> prio);
+	
+	delay_list_insert_time_node(currentTask, delay);
+
+	task_remove_ready_list(currentTask);
 	
 	task_exit_critical(status);
 	task_schedule();
@@ -159,24 +199,10 @@ node_t node[8];
 
 void task1_entry(void *param)
 {
-	int i;
-	list_init(&list);
 	set_systick_period(10);
-	
-	for (i = 0; i < 8 ; i ++)
-	{
-		node_init(&node[i]);
-		list_add_first(&list, &node[i]);
-	}
-	
-	for (i = 0; i < 8 ; i ++)
-	{
-		remove_list_first(&list);
-	}
-	
+
 	for (;;)
 	{
-		
 		task1Flag = 0;
 		task_delay(1);
 		task1Flag = 1;
@@ -214,6 +240,8 @@ void idle_task_entry(void *param)
 int main()
 {
 	task_schedule_init();
+	
+	task_delay_list_init();
 	
 	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);
 	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, &task2Env[1024]);

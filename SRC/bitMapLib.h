@@ -26,7 +26,7 @@ typedef struct list_t
 	uint32_t node_counter;
 } list_t;
 
-#define node_parent(node, parent, name) (parent *)((uint32)node - (uint32_t)&(parent *)0 -> name)
+#define node_parent(node, parent, name) (parent *)((uint32_t)node - (uint32_t)&((parent *)0) -> name)
 
 void node_init(node_t *node);
 

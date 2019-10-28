@@ -5,13 +5,18 @@
 #include "bitMapLib.h"
 #include "osConfig.h"
 
+#define RZYOS_TASK_STATUS_READY 0
+#define RZYOS_TASK_STATUS_DELAY 1
+
 typedef uint32_t tTaskStack;
 
 typedef struct task_tcb_s
 {
 	tTaskStack *stack;
 	uint32_t delayTicks;
+	node_t delay_node;
 	uint32_t prio;
+	uint32_t ready_status;
 } task_tcb_s; 
 
 extern task_tcb_s *currentTask;
@@ -27,4 +32,5 @@ void task_schedule(void);
 void task_schedule_init(void);
 void task_schedule_disable(void);
 void task_schedule_enable(void);
+
 #endif

@@ -1,13 +1,13 @@
 #include "bitMapLib.h"
 
+#define INLIST_FIRST_NODE head_node.next_node		//	headnode --> first
+#define INLIST_LAST_NODE head_node.pre_node			//	last  <-- headnode
+
 void node_init(node_t *node)
 {
 	node -> pre_node = node;
 	node -> next_node = node;
 }
-
-#define INLIST_FIRST_NODE head_node.next_node		//	headnode --> first
-#define INLIST_LAST_NODE head_node.pre_node			//	last  <-- headnode
 
 void list_init(list_t *list)
 {
