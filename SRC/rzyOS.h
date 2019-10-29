@@ -13,10 +13,12 @@ typedef uint32_t tTaskStack;
 typedef struct task_tcb_s
 {
 	tTaskStack *stack;
+	node_t link_node;
 	uint32_t delayTicks;
 	node_t delay_node;
 	uint32_t prio;
 	uint32_t ready_status;
+	uint32_t slice;
 } task_tcb_s; 
 
 extern task_tcb_s *currentTask;
@@ -32,5 +34,14 @@ void task_schedule(void);
 void task_schedule_init(void);
 void task_schedule_disable(void);
 void task_schedule_enable(void);
+
+void task_insert_ready_list(task_tcb_s *task_tcb);
+void task_remove_ready_list(task_tcb_s *task_tcb);
+void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks);
+void delay_list_remove_time_node(task_tcb_s *task_tcb);
+void task_systemtick_handler(void);
+void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack);
+void set_systick_period(uint32_t ms);
+void task_delay(uint32_t delay);
 
 #endif

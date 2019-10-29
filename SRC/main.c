@@ -6,7 +6,7 @@ task_tcb_s *nextTask;
 task_tcb_s *idleTask;
 
 bitmap_s bitmap_taskprio;
-task_tcb_s *task_ready_table[RZYOS_PRIO_COUNT];
+list_t task_ready_table[RZYOS_PRIO_COUNT];
 
 uint8_t schedLockCount;
 
@@ -33,33 +33,40 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	*(--stack) = (unsigned long)0x04;
 	
 	task -> stack = stack;
+	node_init(&(task -> link_node));
 	task -> delayTicks = 0;
 	task -> prio = prio;
-	
 	task -> ready_status = RZYOS_TASK_STATUS_READY;
+	task -> slice = RZYOS_SLICE_MAX;
 	node_init(&(task -> delay_node));
 	
+	list_add_first(&task_ready_table[prio], &(task -> link_node));
 	
-	task_ready_table[prio] = task;
+	
 	bitmap_set(&bitmap_taskprio, prio);
 }
 
 task_tcb_s *task_highest_ready(void)
 {
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
-	return task_ready_table[highest_prio];
+	node_t *node = list_first_node(&task_ready_table[highest_prio]);
+	return node_parent(node, task_tcb_s, link_node);
 }
 
 void task_insert_ready_list(task_tcb_s *task_tcb)
 {
-	task_ready_table[task_tcb -> prio] = task_tcb;
+	list_add_first(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
 
 void task_remove_ready_list(task_tcb_s *task_tcb)
 {
-	task_ready_table[task_tcb -> prio] = (task_tcb_s *)0;
-	bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
+	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
+	
+	if (0 == list_count(&task_ready_table[task_tcb -> prio]))
+	{
+		bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
+	}
 }
 
 void task_schedule(void)
@@ -85,8 +92,14 @@ void task_schedule(void)
 
 void task_schedule_init(void)
 {
+	int i;
+	
 	schedLockCount = 0;
 	bitmap_init(&bitmap_taskprio);
+	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
+	{
+		list_init(&task_ready_table[i]);
+	}
 }
 
 void task_schedule_disable(void)
@@ -135,7 +148,7 @@ void delay_list_remove_time_node(task_tcb_s *task_tcb)
 	task_tcb -> ready_status &= ~RZYOS_TASK_STATUS_DELAY;
 }
 
-void task_systemtick_handler()
+void task_systemtick_handler(void)
 {
 	node_t *node;
 	
@@ -150,6 +163,18 @@ void task_systemtick_handler()
 			delay_list_remove_time_node(task_tcb);
 			
 			task_insert_ready_list(task_tcb);
+		}
+	}
+	
+	currentTask -> slice --;
+	if (0 == currentTask -> slice)
+	{
+		if (list_count(&task_ready_table[currentTask -> prio]) > 0)
+		{
+			remove_list_first(&task_ready_table[currentTask -> prio]);
+			list_add_last(&task_ready_table[currentTask -> prio], &(currentTask -> link_node));
+			
+			currentTask -> slice = RZYOS_SLICE_MAX;
 		}
 	}
 	
@@ -216,17 +241,31 @@ void task2_entry(void *param)
 	for (;;)
 	{
 		task2Flag = 0;
-		task_delay(1);
+		delay(0xff);
 		task2Flag = 1;
-		task_delay(1);
+		delay(0xff);
+	}
+}
+
+int task3Flag;
+void task3_entry(void *param)
+{
+	for (;;)
+	{
+		task3Flag = 0;
+		delay(0xff);
+		task3Flag = 1;
+		delay(0xff);
 	}
 }
 
 task_tcb_s tcb_task1;
 task_tcb_s tcb_task2;
+task_tcb_s tcb_task3;
 
 tTaskStack task1Env[1024];
 tTaskStack task2Env[1024];
+tTaskStack task3Env[1024];
 
 task_tcb_s tcb_task_idle;
 tTaskStack idleTaskEnv[1024];
@@ -245,12 +284,11 @@ int main()
 	
 	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);
 	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, &task2Env[1024]);
+	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 1, &task3Env[1024]);
 	
 	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
 	idleTask = &tcb_task_idle;
 	
-	task_ready_table[0] = &tcb_task1;
-	task_ready_table[1] = &tcb_task2;
 	
 	nextTask = task_highest_ready();
 	
