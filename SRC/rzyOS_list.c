@@ -53,7 +53,7 @@ node_t *list_pos_node_pre(list_t *list, node_t *node)
 	}
 	else
 	{
-		return node -> pre_node;	
+		return node -> pre_node;
 	}
 }
 
@@ -65,7 +65,7 @@ node_t *list_pos_node_next(list_t *list, node_t *node)
 	}
 	else
 	{
-		return node -> next_node;	
+		return node -> next_node;
 	}
 }
 
@@ -89,6 +89,8 @@ void list_remode_all(list_t *list)
 	list -> node_counter = 0;
 }
 
+//insert a node to list at the first position
+//	(head)->(first)->(node)->(node)->(node)->(last)->(head)
 void list_add_first(list_t *list, node_t *node)
 {
 	node -> pre_node = list -> INLIST_FIRST_NODE -> pre_node;
