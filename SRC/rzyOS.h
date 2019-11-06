@@ -12,12 +12,25 @@ typedef uint32_t tTaskStack;
 
 typedef struct task_tcb_s
 {
+	//任务堆栈指针
 	tTaskStack *stack;
+
+	//任务节点
 	node_t link_node;
+
+	//任务注册延时周期
 	uint32_t delayTicks;
+
+	//任务延时节点
 	node_t delay_node;
+
+	//任务优先级
 	uint32_t prio;
+
+	//任务就绪状态(需要等待 or 已经就绪)
 	uint32_t ready_status;
+
+	//时间片
 	uint32_t slice;
 } task_tcb_s; 
 

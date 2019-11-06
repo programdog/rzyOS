@@ -40,12 +40,16 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task -> slice = RZYOS_SLICE_MAX;
 	node_init(&(task -> delay_node));
 	
+	//把任务节点添加到优先级队列中
 	list_add_first(&task_ready_table[prio], &(task -> link_node));
 	
 	
 	bitmap_set(&bitmap_taskprio, prio);
 }
 
+//从位图中找到就绪的最高优先级
+//按照就绪的最高优先级在就绪任务列表中获取第一个任务节点
+//从第一个任务节点得到对应的task的TCB
 task_tcb_s *task_highest_ready(void)
 {
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
@@ -53,12 +57,15 @@ task_tcb_s *task_highest_ready(void)
 	return node_parent(node, task_tcb_s, link_node);
 }
 
+//按照优先级,把就绪的任务的任务节点插入就绪任务list中
 void task_insert_ready_list(task_tcb_s *task_tcb)
 {
 	list_add_first(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
 
+//当task使用延时函数,会调用此函数
+//认为即将开启新的延时, 所以要在就绪list中删除当前任务的任务节点
 void task_remove_ready_list(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
@@ -69,6 +76,7 @@ void task_remove_ready_list(task_tcb_s *task_tcb)
 	}
 }
 
+//task调度, 切换到最高优先级中,延时用完的task
 void task_schedule(void)
 {
 	task_tcb_s *tempTask;
@@ -84,12 +92,14 @@ void task_schedule(void)
 	if (tempTask != currentTask)
 	{
 		nextTask = tempTask;
-		task_switch();
+		task_switch(); //触发pendSV
 	}
 	
 	task_exit_critical(status);
 }
 
+//初始化位图
+//初始化任务就绪表list数组(数组按照优先级划分)
 void task_schedule_init(void)
 {
 	int i;
@@ -130,11 +140,15 @@ void task_schedule_enable(void)
 	task_exit_critical(status);
 }
 
+//初始化延时列表list
 void task_delay_list_init(void)
 {
 	list_init(&task_delay_list);
 }
 
+//当task使用延时函数,会调用此函数
+//在当前任务的TCB中写入需要的延时
+//在延时list中加入当前任务的延时节点
 void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 {
 	task_tcb -> delayTicks = ticks;
@@ -142,12 +156,14 @@ void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 	task_tcb -> ready_status |= RZYOS_TASK_STATUS_DELAY;
 }
 
+//在延时队列中删除delay已经为0的延时节点
 void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
 	task_tcb -> ready_status &= ~RZYOS_TASK_STATUS_DELAY;
 }
 
+//systick中断调用此函数
 void task_systemtick_handler(void)
 {
 	node_t *node;
@@ -166,14 +182,21 @@ void task_systemtick_handler(void)
 		}
 	}
 	
+	//时间片轮转
+	//因为调度的nextTask总是优先级列表的地第一个节点
+	//所以基于时间片调度要对第一个节点操作,也就是currentTask
 	currentTask -> slice --;
+	//判断当前任务时间片是否用完
 	if (0 == currentTask -> slice)
 	{
+		//如果用完, 且当前任务的同优先级任务list还有任务, 则切换轮转
 		if (list_count(&task_ready_table[currentTask -> prio]) > 0)
 		{
+			//移除同优先级任务list中的任务节点, 并插入到最后一个节点, 完成基于同优先级的时间片调度
 			remove_list_first(&task_ready_table[currentTask -> prio]);
 			list_add_last(&task_ready_table[currentTask -> prio], &(currentTask -> link_node));
 			
+			//重置时间片
 			currentTask -> slice = RZYOS_SLICE_MAX;
 		}
 	}
@@ -183,18 +206,22 @@ void task_systemtick_handler(void)
 	task_schedule();
 }
 
+//task中的延时函数,使用延时队列进行处理
+//param: delay--systick周期计数
 void task_delay(uint32_t delay)
 {
 	uint32_t status = task_enter_critical();
-	
+
 	delay_list_insert_time_node(currentTask, delay);
 
 	task_remove_ready_list(currentTask);
-	
+
 	task_exit_critical(status);
+
 	task_schedule();
 }
 
+//systick中断周期配置
 //modify system_ARMCM3.C to change XTAL and SYSTEM_CLOCK
 //#define  XTAL            (12000000UL)     /* Oscillator frequency */
 //#define  SYSTEM_CLOCK    (1 * XTAL)
@@ -208,6 +235,7 @@ void set_systick_period(uint32_t ms)
 						SysTick_CTRL_ENABLE_Msk;
 }
 
+//systick中断函数
 void SysTick_Handler()
 {
 	task_systemtick_handler();
@@ -221,7 +249,6 @@ void delay(int count)
 int task1Flag;
 list_t list;
 node_t node[8];
-
 void task1_entry(void *param)
 {
 	set_systick_period(10);
@@ -269,6 +296,7 @@ tTaskStack task3Env[1024];
 
 task_tcb_s tcb_task_idle;
 tTaskStack idleTaskEnv[1024];
+
 void idle_task_entry(void *param)
 {
 	for (;;)

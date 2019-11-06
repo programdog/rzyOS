@@ -47,6 +47,7 @@ PendSVHander_nosave
 	BX LR								// 最后返回，此时任务就会从堆栈中取出LR值，恢复到上次运行的位
 }
 
+//change MSP to PSP , then setup pendSV priority and trigger pendSV
 void task_run_first(void)
 {
 	__set_PSP(0);
@@ -54,6 +55,8 @@ void task_run_first(void)
 	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
 }
+
+//trigger pendSV
 void task_switch(void)
 {
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
