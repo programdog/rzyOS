@@ -6,7 +6,8 @@
 #include "osConfig.h"
 
 #define RZYOS_TASK_STATUS_READY 0
-#define RZYOS_TASK_STATUS_DELAY 1
+#define RZYOS_TASK_STATUS_DELAY (1 << 1)
+#define RZYOS_TASK_STATUS_SUSPEND (1 << 2)
 
 typedef uint32_t tTaskStack;
 
@@ -32,10 +33,15 @@ typedef struct task_tcb_s
 
 	//时间片
 	uint32_t slice;
+	
+	//任务挂起计数器
+	uint32_t suspend_count;
 } task_tcb_s; 
 
 extern task_tcb_s *currentTask;
 extern task_tcb_s *nextTask;
+
+void delay(int count);
 
 uint32_t task_enter_critical(void);
 void task_exit_critical(uint32_t status);
@@ -56,5 +62,10 @@ void task_systemtick_handler(void);
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack);
 void set_systick_period(uint32_t ms);
 void task_delay(uint32_t delay);
+
+void rzyOS_app_init(void);
+
+void rzyOS_task_suspend(task_tcb_s *task);
+void rzyOS_task_wakeup(task_tcb_s *task);
 
 #endif

@@ -402,6 +402,26 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\bitMapLib.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_app.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

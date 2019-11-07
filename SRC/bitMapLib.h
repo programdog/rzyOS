@@ -9,10 +9,16 @@ typedef struct bitmap_s
 } bitmap_s;
 
 void bitmap_init(bitmap_s *bitmap);
+
 uint32_t bitmap_size(void);
+
 void bitmap_set(bitmap_s *bitmap, uint32_t position);
+
 void bitmap_clean(bitmap_s *bitmap, uint32_t position);
+
 uint32_t bitmap_get_first_set(bitmap_s *bitmap);
+
+
 
 typedef struct node_t
 {

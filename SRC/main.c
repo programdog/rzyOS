@@ -12,40 +12,6 @@ uint8_t schedLockCount;
 
 list_t task_delay_list;
 
-void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
-{
-	*(--stack) = (unsigned long)(1 << 24);
-	*(--stack) = (unsigned long)entry;
-	*(--stack) = (unsigned long)0x14;
-	*(--stack) = (unsigned long)0x12;
-	*(--stack) = (unsigned long)0x03;
-	*(--stack) = (unsigned long)0x02;
-	*(--stack) = (unsigned long)0x01;
-	*(--stack) = (unsigned long)param;
-	
-	*(--stack) = (unsigned long)0x11;
-	*(--stack) = (unsigned long)0x10;
-	*(--stack) = (unsigned long)0x09;
-	*(--stack) = (unsigned long)0x08;
-	*(--stack) = (unsigned long)0x07;
-	*(--stack) = (unsigned long)0x06;
-	*(--stack) = (unsigned long)0x05;
-	*(--stack) = (unsigned long)0x04;
-	
-	task -> stack = stack;
-	node_init(&(task -> link_node));
-	task -> delayTicks = 0;
-	task -> prio = prio;
-	task -> ready_status = RZYOS_TASK_STATUS_READY;
-	task -> slice = RZYOS_SLICE_MAX;
-	node_init(&(task -> delay_node));
-	
-	//把任务节点添加到优先级队列中
-	list_add_first(&task_ready_table[prio], &(task -> link_node));
-	
-	
-	bitmap_set(&bitmap_taskprio, prio);
-}
 
 //从位图中找到就绪的最高优先级
 //按照就绪的最高优先级在就绪任务列表中获取第一个任务节点
@@ -60,6 +26,7 @@ task_tcb_s *task_highest_ready(void)
 //按照优先级,把就绪的任务的任务节点插入就绪任务list中
 void task_insert_ready_list(task_tcb_s *task_tcb)
 {
+	//把任务节点添加到优先级队列中
 	list_add_first(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
@@ -206,101 +173,20 @@ void task_systemtick_handler(void)
 	task_schedule();
 }
 
-//task中的延时函数,使用延时队列进行处理
-//param: delay--systick周期计数
-void task_delay(uint32_t delay)
-{
-	uint32_t status = task_enter_critical();
-
-	delay_list_insert_time_node(currentTask, delay);
-
-	task_remove_ready_list(currentTask);
-
-	task_exit_critical(status);
-
-	task_schedule();
-}
-
-//systick中断周期配置
-//modify system_ARMCM3.C to change XTAL and SYSTEM_CLOCK
-//#define  XTAL            (12000000UL)     /* Oscillator frequency */
-//#define  SYSTEM_CLOCK    (1 * XTAL)
-void set_systick_period(uint32_t ms)
-{
-	SysTick -> LOAD = ms * SystemCoreClock / 1000 - 1;
-	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
-	SysTick -> VAL = 0;
-	SysTick -> CTRL = SysTick_CTRL_CLKSOURCE_Msk |
-						SysTick_CTRL_TICKINT_Msk |		//中断使能
-						SysTick_CTRL_ENABLE_Msk;
-}
-
-//systick中断函数
-void SysTick_Handler()
-{
-	task_systemtick_handler();
-}
-
 void delay(int count)
 {
 	while(-- count > 0);
 }
 
-int task1Flag;
-list_t list;
-node_t node[8];
-void task1_entry(void *param)
-{
-	set_systick_period(10);
-
-	for (;;)
-	{
-		task1Flag = 0;
-		task_delay(1);
-		task1Flag = 1;
-		task_delay(1);
-	}
-}
-
-int task2Flag;
-void task2_entry(void *param)
-{
-	for (;;)
-	{
-		task2Flag = 0;
-		delay(0xff);
-		task2Flag = 1;
-		delay(0xff);
-	}
-}
-
-int task3Flag;
-void task3_entry(void *param)
-{
-	for (;;)
-	{
-		task3Flag = 0;
-		delay(0xff);
-		task3Flag = 1;
-		delay(0xff);
-	}
-}
-
-task_tcb_s tcb_task1;
-task_tcb_s tcb_task2;
-task_tcb_s tcb_task3;
-
-tTaskStack task1Env[1024];
-tTaskStack task2Env[1024];
-tTaskStack task3Env[1024];
 
 task_tcb_s tcb_task_idle;
-tTaskStack idleTaskEnv[1024];
+tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
 
 void idle_task_entry(void *param)
 {
 	for (;;)
 	{
+		
 	}
 }
 
@@ -310,11 +196,9 @@ int main()
 	
 	task_delay_list_init();
 	
-	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);
-	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, &task2Env[1024]);
-	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 1, &task3Env[1024]);
+	rzyOS_app_init();
 	
-	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[1024]);
+	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE]);
 	idleTask = &tcb_task_idle;
 	
 	
