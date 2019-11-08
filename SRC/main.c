@@ -43,6 +43,17 @@ void task_remove_ready_list(task_tcb_s *task_tcb)
 	}
 }
 
+//把任务从就绪队列中移出
+void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb)
+{
+	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
+	
+	if (0 == list_count(&task_ready_table[task_tcb -> prio]))
+	{
+		bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
+	}
+}
+
 //task调度, 切换到最高优先级中,延时用完的task
 void task_schedule(void)
 {
@@ -128,6 +139,12 @@ void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
 	task_tcb -> ready_status &= ~RZYOS_TASK_STATUS_DELAY;
+}
+
+//把任务在延时列表中删除
+void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb)
+{
+	delay_list_remove_time_node(task_tcb);
 }
 
 //systick中断调用此函数

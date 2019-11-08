@@ -8,6 +8,7 @@
 #define RZYOS_TASK_STATUS_READY 0
 #define RZYOS_TASK_STATUS_DELAY (1 << 1)
 #define RZYOS_TASK_STATUS_SUSPEND (1 << 2)
+#define RZYOS_TASK_STATUS_DELETE (1 << 3)
 
 typedef uint32_t tTaskStack;
 
@@ -36,6 +37,12 @@ typedef struct task_tcb_s
 	
 	//任务挂起计数器
 	uint32_t suspend_count;
+	
+	//任务清除callback函数,和参数,和任务请求删除状态
+	void (*clean)(void *param);
+	void *clean_param;
+	uint8_t request_delete_flag;
+	
 } task_tcb_s; 
 
 extern task_tcb_s *currentTask;
@@ -67,5 +74,15 @@ void rzyOS_app_init(void);
 
 void rzyOS_task_suspend(task_tcb_s *task);
 void rzyOS_task_wakeup(task_tcb_s *task);
+
+void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb);
+void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
+
+
+void rzyOS_task_clean_callback(task_tcb_s *task, void (*clean)(void *param), void *param);
+void rzyOS_task_force_delete(task_tcb_s *task);
+void rzyOS_task_request_delete(task_tcb_s *task);
+uint8_t rzyOS_task_request_delete_check(void);
+void rzyOS_task_delete_self(void);
 
 #endif
