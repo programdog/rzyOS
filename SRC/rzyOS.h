@@ -29,8 +29,8 @@ typedef struct task_tcb_s
 	//任务优先级
 	uint32_t prio;
 
-	//任务就绪状态(需要等待 or 已经就绪)
-	uint32_t ready_status;
+	//任务状态
+	uint32_t task_status;
 
 	//时间片
 	uint32_t slice;

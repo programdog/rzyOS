@@ -131,14 +131,14 @@ void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 {
 	task_tcb -> delayTicks = ticks;
 	list_add_first(&task_delay_list, &(task_tcb -> delay_node));
-	task_tcb -> ready_status |= RZYOS_TASK_STATUS_DELAY;
+	task_tcb -> task_status |= RZYOS_TASK_STATUS_DELAY;
 }
 
 //在延时队列中删除delay已经为0的延时节点
 void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
-	task_tcb -> ready_status &= ~RZYOS_TASK_STATUS_DELAY;
+	task_tcb -> task_status &= ~RZYOS_TASK_STATUS_DELAY;
 }
 
 //把任务在延时列表中删除
