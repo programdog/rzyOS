@@ -152,3 +152,16 @@ void rzyOS_task_delete_self(void)
 	
 	task_exit_critical(status);	
 }
+
+void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info *info)
+{
+	uint32_t status = task_enter_critical();
+	
+	info -> delay_ticks = task -> delayTicks;
+	info -> prio = task -> prio;
+	info -> slice = task -> slice;
+	info -> suspend_count = task -> suspend_count;
+	info -> task_status = task -> task_status;
+	
+	task_exit_critical(status);	
+}

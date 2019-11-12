@@ -70,6 +70,17 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 void set_systick_period(uint32_t ms);
 void task_delay(uint32_t delay);
 
+
+typedef struct rzyOS_task_info
+{
+	uint32_t delay_ticks;
+	uint32_t prio;
+	uint32_t task_status;
+	uint32_t slice;
+	uint32_t suspend_count;
+} rzyOS_task_info;
+
+
 void rzyOS_app_init(void);
 
 void rzyOS_task_suspend(task_tcb_s *task);
@@ -84,5 +95,7 @@ void rzyOS_task_force_delete(task_tcb_s *task);
 void rzyOS_task_request_delete(task_tcb_s *task);
 uint8_t rzyOS_task_request_delete_check(void);
 void rzyOS_task_delete_self(void);
+
+void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info *info);
 
 #endif
