@@ -4,6 +4,12 @@
 #include <stdint.h>
 #include "bitMapLib.h"
 #include "osConfig.h"
+#include "rzyOS_event.h"
+
+typedef enum rzyOS_error
+{
+	error_no_error = 0,
+} rzyOS_error;
 
 #define RZYOS_TASK_STATUS_READY 0
 #define RZYOS_TASK_STATUS_DELAY (1 << 1)
@@ -43,6 +49,8 @@ typedef struct task_tcb_s
 	void *clean_param;
 	uint8_t request_delete_flag;
 	
+	//任务事件控制块
+	rzyOS_ECB *wait_event;
 } task_tcb_s; 
 
 extern task_tcb_s *currentTask;
