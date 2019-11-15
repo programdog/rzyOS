@@ -18,6 +18,7 @@ typedef enum rzyOS_error
 
 typedef uint32_t tTaskStack;
 
+//task TCB
 typedef struct task_tcb_s
 {
 	//任务堆栈指针
@@ -50,10 +51,11 @@ typedef struct task_tcb_s
 	uint8_t request_delete_flag;
 	
 	//任务事件控制块
-	rzyOS_ECB *wait_event;
+	rzyOS_ecb *wait_event;
 	void *event_msg;
 	uint32_t wait_event_result;
-} task_tcb_s; 
+
+} task_tcb_s;
 
 extern task_tcb_s *currentTask;
 extern task_tcb_s *nextTask;
