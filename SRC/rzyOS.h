@@ -54,7 +54,10 @@ typedef struct task_tcb_s
 	rzyOS_ecb *wait_event;
 	void *event_msg;
 	uint32_t wait_event_result;
-
+	//请求的事件类型
+	uint32_t wait_flag_type; 
+	//请求的事件标志
+	uint32_t event_flag;
 } task_tcb_s;
 
 extern task_tcb_s *currentTask;
