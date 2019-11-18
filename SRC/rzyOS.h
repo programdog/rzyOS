@@ -6,10 +6,10 @@
 #include "osConfig.h"
 #include "rzyOS_event.h"
 
-typedef enum rzyOS_error
+typedef enum rzyOS_error_e
 {
 	error_no_error = 0,
-} rzyOS_error;
+} rzyOS_error_e;
 
 #define RZYOS_TASK_STATUS_READY 0
 #define RZYOS_TASK_STATUS_DELAY (1 << 1)
@@ -51,7 +51,7 @@ typedef struct task_tcb_s
 	uint8_t request_delete_flag;
 	
 	//任务事件控制块
-	rzyOS_ecb *wait_event;
+	rzyOS_ecb_s *wait_event;
 	void *event_msg;
 	uint32_t wait_event_result;
 	//请求的事件类型
@@ -86,14 +86,14 @@ void set_systick_period(uint32_t ms);
 void task_delay(uint32_t delay);
 
 
-typedef struct rzyOS_task_info
+typedef struct rzyOS_task_info_s
 {
 	uint32_t delay_ticks;
 	uint32_t prio;
 	uint32_t task_status;
 	uint32_t slice;
 	uint32_t suspend_count;
-} rzyOS_task_info;
+} rzyOS_task_info_s;
 
 
 void rzyOS_app_init(void);
@@ -111,6 +111,6 @@ void rzyOS_task_request_delete(task_tcb_s *task);
 uint8_t rzyOS_task_request_delete_check(void);
 void rzyOS_task_delete_self(void);
 
-void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info *info);
+void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info);
 
 #endif

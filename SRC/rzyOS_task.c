@@ -153,7 +153,7 @@ void rzyOS_task_delete_self(void)
 	task_exit_critical(status);	
 }
 
-void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info *info)
+void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 {
 	uint32_t status = task_enter_critical();
 	

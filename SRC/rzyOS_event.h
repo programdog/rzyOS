@@ -3,16 +3,16 @@
 
 #include "bitMapLib.h"
 
-typedef enum rzyOS_event_type
+typedef enum rzyOS_event_type_e
 {
 	event_type_unknow,
-} rzyOS_event_type;
+} rzyOS_event_type_e;
 
-typedef struct rzyOS_ecb
+typedef struct rzyOS_ecb_s
 {
-	rzyOS_event_type type;
+	rzyOS_event_type_e type;
 	list_t wait_list;
-} rzyOS_ecb;
+} rzyOS_ecb_s;
 
 //任务希望请求的事件标志组时间类型
 #define FLAGGROUP_CLEAR (0x0 << 0)
@@ -27,6 +27,6 @@ typedef struct rzyOS_ecb
 
 #define FLAGGROUP_CONSUME (1 << 7)
 
-void rzyOS_event_init(rzyOS_ecb *ecb, rzyOS_event_type type);
+void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type);
 
 #endif
