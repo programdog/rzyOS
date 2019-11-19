@@ -14,7 +14,7 @@ typedef struct rzyOS_ecb_s
 	list_t wait_list;
 } rzyOS_ecb_s;
 
-//任务希望请求的事件标志组时间类型
+//浠诲姟甯屾湜璇锋眰鐨勪簨浠舵爣蹇楃粍鏃堕棿绫诲瀷
 #define FLAGGROUP_CLEAR (0x0 << 0)
 #define FLAGGROUP_SET (0x1 << 0)
 #define FLAGGROUP_ANY (0x0 << 1)

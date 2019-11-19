@@ -1,13 +1,13 @@
 #ifndef __OSCONFIG_H
 #define __OSCONFIG_H
 
-//rzyOS Ä¿Ç°Ö§³ÖµÄÈÎÎñÊı
+//rzyOS ç›®å‰æ”¯æŒçš„ä»»åŠ¡æ•°
 #define RZYOS_PRIO_COUNT 32
 
-//rzyOS Í¬ÓÅÏÈ¼¶taskÊ±¼äÆ¬ 
+//rzyOS åŒä¼˜å…ˆçº§taskæ—¶é—´ç‰‡ 
 #define RZYOS_SLICE_MAX 10 // 10 * 10ms
 
-//rzyOS idle task ¶ÑÕ»´óĞ¡
+//rzyOS idle task å †æ ˆå¤§å°
 #define RZYOS_IDLETASK_STACK_SIZE 1024
 
 #endif
