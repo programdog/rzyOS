@@ -7,10 +7,6 @@
 #include "rzyOS_event.h"
 #include "rzyOS_task.h"
 
-typedef enum rzyOS_error_e
-{
-	error_no_error = 0,
-} rzyOS_error_e;
 
 extern task_tcb_s *currentTask;
 extern task_tcb_s *nextTask;

@@ -8,6 +8,11 @@
 
 typedef uint32_t tTaskStack;
 
+typedef enum rzyOS_error_e
+{
+	error_no_error = 0,
+} rzyOS_error_e;
+
 //task TCB
 typedef struct task_tcb_s
 {
