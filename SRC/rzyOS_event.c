@@ -56,7 +56,20 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 		task_insert_ready_list(task);
 	}
 	
-	task_exit_critical(status);
+	task_exit_critical(status);	
 	
 	return task;
+}
+
+void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
+{
+	uint32_t status = task_enter_critical();
+
+	list_remove_pos_node(&(task_tcb -> wait_event -> wait_list), &(task_tcb -> link_node));
+	task_tcb -> wait_event = (rzyOS_ecb_s *)0;
+	task_tcb -> event_msg = msg;
+	task_tcb -> wait_event_result = result;
+	task_tcb -> task_status &= ~RZYOS_TASK_WAIT_MASK;
+
+	task_exit_critical(status);	
 }
