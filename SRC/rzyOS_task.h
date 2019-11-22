@@ -7,6 +7,8 @@
 #define RZYOS_TASK_STATUS_SUSPEND (1 << 2)
 #define RZYOS_TASK_STATUS_DELETE (1 << 3)
 
+//预留高16位作为事件等待标志
+#define RZYOS_TASK_WAIT_MASK (0xff << 16)
 
 typedef uint32_t tTaskStack;
 

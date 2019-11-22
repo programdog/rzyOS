@@ -31,3 +31,32 @@ void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, u
 	
 	task_exit_critical(status);	
 }
+
+task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
+{
+	node_t *node;
+	task_tcb_s *task;
+	uint32_t status = task_enter_critical();
+	
+	node = remove_list_first(&(rzyOS_ecb -> wait_list));
+	
+	if (node != (node_t *)0)
+	{
+		task = (task_tcb_s *)node_parent(node, task_tcb_s, link_node);
+		task -> wait_event = (rzyOS_ecb_s *)0;
+		task -> event_msg = msg;
+		task -> wait_event_result = result;
+		task -> task_status &= ~RZYOS_TASK_WAIT_MASK;
+		
+		if (task -> delayTicks != 0)
+		{
+			rzyOS_task_wakeup(task);
+		}
+		
+		task_insert_ready_list(task);
+	}
+	
+	task_exit_critical(status);
+	
+	return task;
+}

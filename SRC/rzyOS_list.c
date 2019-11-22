@@ -124,6 +124,7 @@ void list_add_last(list_t *list, node_t *node)
 
 //remove the first position node
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
+//return address which node to be remove
 node_t *remove_list_first(list_t *list)
 {
 	node_t *node = (node_t *)0;
