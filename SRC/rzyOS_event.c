@@ -8,6 +8,7 @@ void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type)
 }
 
 //事件等待函数
+//把任务插入到事件的等待队列
 void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t state, uint32_t timeout)
 {
 	uint32_t status = task_enter_critical();
@@ -29,15 +30,17 @@ void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, u
 		delay_list_insert_time_node(task_tcb, timeout);
 	}
 	
-	task_exit_critical(status);	
+	task_exit_critical(status);
 }
 
+//唤醒相关事件列表    的第一个任务
 task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
 	node_t *node;
 	task_tcb_s *task;
 	uint32_t status = task_enter_critical();
 	
+	//把事件等待队列的第一个任务从列表删除
 	node = remove_list_first(&(rzyOS_ecb -> wait_list));
 	
 	if (node != (node_t *)0)
@@ -50,26 +53,32 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 		
 		if (task -> delayTicks != 0)
 		{
+			//如果有延时, 则强制从延时队列中唤醒, 以便事件到来, 及时相应
 			rzyOS_task_wakeup(task);
 		}
 		
+		//把任务插入到就绪队列, 等待运行
 		task_insert_ready_list(task);
 	}
 	
-	task_exit_critical(status);	
+	task_exit_critical(status);
 	
 	return task;
 }
 
+//把指定的任务从事件控制块强制移出
 void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
 {
 	uint32_t status = task_enter_critical();
 
+	//在事件等待列表中移除指定的任务
 	list_remove_pos_node(&(task_tcb -> wait_event -> wait_list), &(task_tcb -> link_node));
 	task_tcb -> wait_event = (rzyOS_ecb_s *)0;
 	task_tcb -> event_msg = msg;
 	task_tcb -> wait_event_result = result;
 	task_tcb -> task_status &= ~RZYOS_TASK_WAIT_MASK;
 
-	task_exit_critical(status);	
+	task_exit_critical(status);
+
+	//此函数将在systemtick中调用, 将在systick中断中唤醒, 所以不做任务强制唤醒处理
 }
