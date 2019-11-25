@@ -160,6 +160,11 @@ void task_systemtick_handler(void)
 		task_tcb -> delayTicks --;
 		if (0 == task_tcb -> delayTicks)
 		{
+			if (task_tcb -> wait_event)
+			{
+				rzyOS_event_remove(task_tcb, (void *)0, error_timeout);
+			}
+
 			delay_list_remove_time_node(task_tcb);
 			
 			task_insert_ready_list(task_tcb);

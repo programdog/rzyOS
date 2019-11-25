@@ -2,6 +2,7 @@
 #define RZYOS_EVENT_H
 
 #include "bitMapLib.h"
+#include "rzyOS_task.h"
 
 
 typedef enum rzyOS_event_type_e
@@ -32,5 +33,11 @@ typedef struct rzyOS_ecb_s
 
 
 void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type);
+
+void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t state, uint32_t timeout);
+
+task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result);
+
+void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result);
 
 #endif

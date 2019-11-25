@@ -1,6 +1,7 @@
 #ifndef RZYOS_TASK_H
 #define RZYOS_TASK_H
 
+#include "rzyOS_event.h"
 
 #define RZYOS_TASK_STATUS_READY 0
 #define RZYOS_TASK_STATUS_DELAY (1 << 1)
@@ -16,8 +17,11 @@ typedef uint32_t tTaskStack;
 typedef enum rzyOS_error_e
 {
 	error_no_error = 0,
+	error_timeout = 1,
 } rzyOS_error_e;
 
+//task.h与event.h结构体互相编译, 则做一下 原型宣告 声明
+typedef struct rzyOS_ecb_s rzyOS_ecb_s;
 
 //task TCB
 typedef struct task_tcb_s
@@ -54,6 +58,7 @@ typedef struct task_tcb_s
 	//任务事件控制块
 	rzyOS_ecb_s *wait_event;
 	void *event_msg;
+	//等待事件的结果
 	uint32_t wait_event_result;
 	//请求的事件类型
 	uint32_t wait_flag_type; 
