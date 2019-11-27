@@ -55,7 +55,7 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 		if (task -> delayTicks != 0)
 		{
 			//如果有延时, 则强制从延时队列中唤醒, 以便事件到来, 及时相应
-			rzyOS_task_wakeup(task);
+			rzyOS_task_delay_list_remove(task);
 		}
 		
 		//把任务插入到就绪队列, 等待运行
@@ -107,7 +107,7 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 		if (task -> delayTicks != 0)
 		{
 			//如果有延时, 则强制从延时队列中唤醒, 以便事件到来, 及时相应
-			rzyOS_task_wakeup(task);
+			rzyOS_task_delay_list_remove(task);
 		}
 
 		task_insert_ready_list(task);

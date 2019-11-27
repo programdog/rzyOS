@@ -20,7 +20,7 @@ list_t task_delay_list;
 task_tcb_s *task_highest_ready(void)
 {
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
-	node_t *node = list_first_node(&task_ready_tab le[highest_prio]);
+	node_t *node = list_first_node(&task_ready_table[highest_prio]);
 	return node_parent(node, task_tcb_s, link_node);
 }
 
