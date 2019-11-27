@@ -35,6 +35,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task_insert_ready_list(task);
 }
 
+//任务的挂起
 void rzyOS_task_suspend(task_tcb_s *task)
 {
 	uint32_t status = task_enter_critical();
@@ -44,7 +45,7 @@ void rzyOS_task_suspend(task_tcb_s *task)
 	{
 		//每次被调用挂起操作,都要对suspend_count加1
 		task -> suspend_count ++;
-		//如果suspend_count是1, 说明周期内第一次挂起, 则要进行切换操作 , 大于等于2ze不再需要切换操作
+		//如果suspend_count是1, 说明周期内第一次挂起, 则要进行切换操作 , 大于等于2则不再需要切换操作
 		if (1 == task -> suspend_count)
 		{
 			//设置挂起标志
@@ -62,10 +63,12 @@ void rzyOS_task_suspend(task_tcb_s *task)
 	task_exit_critical(status);
 }
 
+//任务的唤醒
 void rzyOS_task_wakeup(task_tcb_s *task)
 {
 	uint32_t status = task_enter_critical();
 	
+	//如果任务处于挂起状态
 	if (task -> task_status & RZYOS_TASK_STATUS_SUSPEND)
 	{
 		//每次调用解挂函数,都要减1

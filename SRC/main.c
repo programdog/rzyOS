@@ -134,7 +134,7 @@ void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 	task_tcb -> task_status |= RZYOS_TASK_STATUS_DELAY;
 }
 
-//在延时队列中删除delay已经为0的延时节点
+//在延时队列中删除任务节点
 void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
@@ -158,10 +158,12 @@ void task_systemtick_handler(void)
 	{
 		task_tcb_s *task_tcb =  (task_tcb_s *)node_parent(node, task_tcb_s, delay_node);
 		task_tcb -> delayTicks --;
+
 		if (0 == task_tcb -> delayTicks)
 		{
 			if (task_tcb -> wait_event)
 			{
+				//如果事件还未到来,但延时到达, 则从事件等待列表删除
 				rzyOS_event_remove(task_tcb, (void *)0, error_timeout);
 			}
 
