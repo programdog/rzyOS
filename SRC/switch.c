@@ -9,6 +9,7 @@
 #define MEM32(addr)	*(volatile unsigned long *)(addr)
 #define MEM8(addr)	*(volatile unsigned char *)(addr)
 
+//进入临界区保护
 uint32_t task_enter_critical(void)
 {
 	uint32_t primask = __get_PRIMASK();
@@ -16,6 +17,7 @@ uint32_t task_enter_critical(void)
 	return primask;
 }
 
+//退出临界区保护
 void task_exit_critical(uint32_t status)
 {
 	__set_PRIMASK(status);

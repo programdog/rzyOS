@@ -8,6 +8,7 @@ task_tcb_s *idleTask;
 bitmap_s bitmap_taskprio;
 list_t task_ready_table[RZYOS_PRIO_COUNT];
 
+//计数调度锁
 uint8_t schedLockCount;
 
 list_t task_delay_list;
@@ -19,7 +20,7 @@ list_t task_delay_list;
 task_tcb_s *task_highest_ready(void)
 {
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
-	node_t *node = list_first_node(&task_ready_table[highest_prio]);
+	node_t *node = list_first_node(&task_ready_tab le[highest_prio]);
 	return node_parent(node, task_tcb_s, link_node);
 }
 
@@ -31,10 +32,12 @@ void task_insert_ready_list(task_tcb_s *task_tcb)
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
 
-//当task使用延时函数,会调用此函数
-//认为即将开启新的延时, 所以要在就绪list中删除当前任务的任务节点
+//把任务从就绪队列中删移出()内部使用)
 void task_remove_ready_list(task_tcb_s *task_tcb)
 {
+	//当task使用延时函数,会调用此函数
+
+	//认为即将开启新的延时, 所以要在就绪list中删除当前任务的任务节点
 	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
 	
 	if (0 == list_count(&task_ready_table[task_tcb -> prio]))
@@ -60,6 +63,7 @@ void task_schedule(void)
 	task_tcb_s *tempTask;
 	uint32_t status = task_enter_critical();
 	
+	//计数调度锁 > 0 ； 禁止调度
 	if (schedLockCount > 0)
 	{
 		task_exit_critical(status);
@@ -90,6 +94,7 @@ void task_schedule_init(void)
 	}
 }
 
+//调度失能 , 计数调度锁 + 1
 void task_schedule_disable(void)
 {
 	uint32_t status = task_enter_critical();
@@ -102,6 +107,7 @@ void task_schedule_disable(void)
 	task_exit_critical(status);
 }
 
+//调度使能 , 计数调度锁 - 1
 void task_schedule_enable(void)
 {
 	uint32_t status = task_enter_critical();
@@ -109,6 +115,8 @@ void task_schedule_enable(void)
 	if (schedLockCount > 0)
 	{
 		schedLockCount --;
+
+		//当正好减到0 , 则切入调度
 		if (0 == schedLockCount)
 		{
 			task_schedule();
@@ -124,24 +132,27 @@ void task_delay_list_init(void)
 	list_init(&task_delay_list);
 }
 
-//当task使用延时函数,会调用此函数
-//在当前任务的TCB中写入需要的延时
+
+
 //在延时list中加入当前任务的延时节点
 void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 {
+	//当task使用延时函数,会调用此函数
+
+	//在当前任务的TCB中写入需要的延时
 	task_tcb -> delayTicks = ticks;
 	list_add_first(&task_delay_list, &(task_tcb -> delay_node));
 	task_tcb -> task_status |= RZYOS_TASK_STATUS_DELAY;
 }
 
-//在延时队列中删除任务节点
+//把任务在延时队列中删除(内部调用)
 void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
 	task_tcb -> task_status &= ~RZYOS_TASK_STATUS_DELAY;
 }
 
-//把任务在延时列表中删除
+//把任务在延时队列中删除(外部调用)
 void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb)
 {
 	delay_list_remove_time_node(task_tcb);
