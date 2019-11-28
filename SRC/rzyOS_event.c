@@ -85,6 +85,7 @@ void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
 	//此函数将在systemtick中调用, 将在systick中断中唤醒, 所以不做任务强制唤醒处理
 }
 
+//移出事件队列中所有的正在等待事件的任务
 uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
 	uint32_t element_count = 0;
@@ -116,4 +117,18 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 	task_exit_critical(status);
 
 	return element_count;
+}
+
+//事件等待队列中,任务的数量
+uint32_t rzyOS_event_wait_count(rzyOS_ecb_s *rzyOS_ecb)
+{
+	uint32_t count = 0;
+	
+	uint32_t status = task_enter_critical();
+	
+	count = list_count(&(rzyOS_ecb -> wait_list));
+	
+	task_exit_critical(status);
+	
+	return count;
 }

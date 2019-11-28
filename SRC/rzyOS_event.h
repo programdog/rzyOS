@@ -40,4 +40,6 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 
 void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result);
 
+uint32_t rzyOS_event_wait_count(rzyOS_ecb_s *rzyOS_ecb);
+
 #endif
