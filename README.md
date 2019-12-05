@@ -16,3 +16,6 @@
 
 -	**双向链表** -> *在TCB中加入延时节点,多任务延时使用双向链表做递减*
 -	**双向链表** -> *在TCB中加入延时节点,多任务延时使用双向链表做递减*
+
+# 2019-12-06
+*toworrow i will go to Singapore for work and life, peace*
