@@ -19,3 +19,6 @@
 
 # 2019-12-06
 *toworrow i will go to Singapore for work and life, peace*
+
+# 2019-12-10
+*now in Singapore, new stage begin, rzyOS will continue*
