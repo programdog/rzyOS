@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\SRC</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,19 +423,14 @@
               <FilePath>..\SRC\rzyOS_app.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_event.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rzyOS_event.h</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_event.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_event.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rzyOS_task.h</FilePath>
+              <FileName>rzyOS_semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\rzyOS_semaphore.c</FilePath>
             </File>
           </Files>
         </Group>

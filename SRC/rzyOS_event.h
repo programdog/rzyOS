@@ -8,6 +8,7 @@
 typedef enum rzyOS_event_type_e
 {
 	event_type_unknow,
+	event_type_semaphore,
 } rzyOS_event_type_e;
 
 
