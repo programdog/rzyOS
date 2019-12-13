@@ -22,3 +22,8 @@
 
 # 2019-12-10
 *now in Singapore, new stage begin, rzyOS will continue*
+
+# 2019-12-13
+## rzyOS 数据结构--机制
+
+-	**双向链表** --> *引入事件等待，事件触发唤醒机制*
