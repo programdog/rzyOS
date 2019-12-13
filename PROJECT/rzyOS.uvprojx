@@ -430,7 +430,7 @@
             <File>
               <FileName>rzyOS_semaphore.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\rzyOS_semaphore.c</FilePath>
+              <FilePath>..\SRC\rzyOS_semaphore.c</FilePath>
             </File>
           </Files>
         </Group>
