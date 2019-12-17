@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "rzyOS_event.h"
+#include "rzyOS.h"
 
 //不限制最大计数信号值
 #define NOLIMITE_MAX_COUNT 0
