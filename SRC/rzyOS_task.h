@@ -18,6 +18,7 @@ typedef enum rzyOS_error_e
 {
 	error_no_error = 0,
 	error_timeout = 1,
+	error_resource_unvaliable = 2,
 } rzyOS_error_e;
 
 //task.h与event.h结构体互相编译, 则做一下 原型宣告 声明
