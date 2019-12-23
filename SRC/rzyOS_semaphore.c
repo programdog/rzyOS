@@ -92,3 +92,15 @@ void rzyOS_sem_post(rzyOS_sem_s *sem)
 
 	task_exit_critical(status);
 }
+
+void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info)
+{
+	uint32_t status = task_enter_critical();
+
+	sem_info -> sem_count = sem -> count;
+	sem_info -> max_count = sem -> max_count;
+	sem_info -> task_count = rzyOS_event_wait_count(&(sem -> rzyOS_ecb));
+
+	task_exit_critical(status);
+}
+

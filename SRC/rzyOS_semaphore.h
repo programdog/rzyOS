@@ -18,6 +18,13 @@ typedef struct rzyOS_sem_s
 	uint32_t max_count;
 } rzyOS_sem_s;
 
+typedef struct rzyOS_sen_info
+{
+	uint32_t sem_count;
+	uint32_t max_count;
+	uint32_t task_count;
+} rzyOS_sen_info;
+
 //信号量初始化函数
 void rzyOS_sem_init(rzyOS_sem_s *sem, uint32_t start_count, uint32_t max_count);
 
@@ -29,5 +36,7 @@ uint32_t rzyOS_sem_no_wait(rzyOS_sem_s *sem);
 
 //信号量释放函数
 void rzyOS_sem_post(rzyOS_sem_s *sem);
+
+void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info);
 
 #endif
