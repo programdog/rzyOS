@@ -93,6 +93,7 @@ void rzyOS_sem_post(rzyOS_sem_s *sem)
 	task_exit_critical(status);
 }
 
+//信号量信息获得函数
 void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info)
 {
 	uint32_t status = task_enter_critical();
@@ -104,3 +105,20 @@ void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info)
 	task_exit_critical(status);
 }
 
+//信号量销毁
+uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
+{
+	uint32_t status = task_enter_critical();
+
+	uint32_t count = rzyOS_event_remove_all(&(sem -> rzyOS_ecb), (void *)0, error_sem_delete);
+	sem -> count = 0;
+
+	task_exit_critical(status);
+
+	if (count > 0)
+	{
+		task_schedule();
+	}
+
+	return count;
+}
