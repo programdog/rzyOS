@@ -8,8 +8,10 @@
 //不限制最大计数信号值
 #define NOLIMITE_MAX_COUNT 0
 
+//信号量结构体
 typedef struct rzyOS_sem_s
 {
+	//事件控制块
 	rzyOS_ecb_s rzyOS_ecb;
 	//计数值
 	uint32_t count;
@@ -18,10 +20,14 @@ typedef struct rzyOS_sem_s
 	uint32_t max_count;
 } rzyOS_sem_s;
 
+//信号量信息
 typedef struct rzyOS_sen_info
 {
+	//当前信号量计数值
 	uint32_t sem_count;
+	//当前信号量最大支持计数值
 	uint32_t max_count;
+	//当前信号量等待的任务数量
 	uint32_t task_count;
 } rzyOS_sen_info;
 

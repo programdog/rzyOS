@@ -86,6 +86,7 @@ void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
 }
 
 //移出事件队列中所有的正在等待事件的任务
+//返回移除的个数
 uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
 	uint32_t element_count = 0;
@@ -94,6 +95,7 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 
 	uint32_t status = task_enter_critical();
 
+	//该事件中等待队列中的任务数
 	element_count = list_count(&(rzyOS_ecb -> wait_list));
 
 	while ((node = remove_list_first(&(rzyOS_ecb -> wait_list))) != (node_t *)0)
@@ -116,6 +118,7 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 
 	task_exit_critical(status);
 
+	//返回移除的个数
 	return element_count;
 }
 

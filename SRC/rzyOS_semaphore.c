@@ -110,13 +110,16 @@ uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
 {
 	uint32_t status = task_enter_critical();
 
+	//删除等待该信号量的任务， 获取移除的个数
 	uint32_t count = rzyOS_event_remove_all(&(sem -> rzyOS_ecb), (void *)0, error_sem_delete);
+	//信号量计数值清零
 	sem -> count = 0;
 
 	task_exit_critical(status);
 
 	if (count > 0)
 	{
+		//若获取移除的个数大于0, 则进行一次调度， 看看是否有更高优先级的任务处于刚才的等待状态
 		task_schedule();
 	}
 
