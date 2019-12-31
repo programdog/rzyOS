@@ -1,5 +1,6 @@
 #include "rzyOS.h"
 
+//task初始化
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
 {
 	*(--stack) = (unsigned long)(1 << 24);
@@ -86,12 +87,14 @@ void rzyOS_task_wakeup(task_tcb_s *task)
 	task_exit_critical(status);
 }
 
+//任务清除回调函数
 void rzyOS_task_clean_callback(task_tcb_s *task, void (*clean)(void *param), void *param)
 {
 	task -> clean = clean;
 	task -> clean_param = param;
 }
 
+//任务强制删除函数
 void rzyOS_task_force_delete(task_tcb_s *task)
 {
 	uint32_t status = task_enter_critical();
@@ -118,15 +121,22 @@ void rzyOS_task_force_delete(task_tcb_s *task)
 	task_exit_critical(status);
 }
 
+//任务请求删除函数
+//parameter
+//task_tcb_s *task ： 希望删除的任务
 void rzyOS_task_request_delete(task_tcb_s *task)
 {
 	uint32_t status = task_enter_critical();
 	
+	//标注请求删除状态
 	task -> request_delete_flag = 1;
 	
 	task_exit_critical(status);
 }
 
+//对于任务请求删除的检测函数
+//return
+//返回请求删除状态
 uint8_t rzyOS_task_request_delete_check(void)
 {
 	uint8_t delete_status;
@@ -140,6 +150,7 @@ uint8_t rzyOS_task_request_delete_check(void)
 	return delete_status;
 }
 
+//任务自我删除函数
 void rzyOS_task_delete_self(void)
 {
 	uint32_t status = task_enter_critical();
@@ -153,9 +164,10 @@ void rzyOS_task_delete_self(void)
 	
 	task_schedule();
 	
-	task_exit_critical(status);	
+	task_exit_critical(status);
 }
 
+//获取任务信息
 void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 {
 	uint32_t status = task_enter_critical();
@@ -166,5 +178,5 @@ void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 	info -> suspend_count = task -> suspend_count;
 	info -> task_status = task -> task_status;
 	
-	task_exit_critical(status);	
+	task_exit_critical(status);
 }

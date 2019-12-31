@@ -142,6 +142,7 @@ void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 	//在当前任务的TCB中写入需要的延时
 	task_tcb -> delayTicks = ticks;
 	list_add_first(&task_delay_list, &(task_tcb -> delay_node));
+	//标注任务状态为延时等待
 	task_tcb -> task_status |= RZYOS_TASK_STATUS_DELAY;
 }
 
@@ -149,6 +150,7 @@ void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
 void delay_list_remove_time_node(task_tcb_s *task_tcb)
 {
 	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
+	//清除任务延时等待状态
 	task_tcb -> task_status &= ~RZYOS_TASK_STATUS_DELAY;
 }
 
@@ -165,11 +167,15 @@ void task_systemtick_handler(void)
 	
 	uint32_t status = task_enter_critical();
 	
+	//遍历延时等待队列
 	for (node = task_delay_list.head_node.next_node; node != &(task_delay_list.head_node); node = node -> next_node)
 	{
+		//根据延时节点，获取任务控制块
 		task_tcb_s *task_tcb =  (task_tcb_s *)node_parent(node, task_tcb_s, delay_node);
+		//任务延时递减
 		task_tcb -> delayTicks --;
 
+		//延时已为0
 		if (0 == task_tcb -> delayTicks)
 		{
 			if (task_tcb -> wait_event)

@@ -1,9 +1,15 @@
 #include "rzyOS_event.h"
 #include "rzyOS.h"
 
+//事件初始化
+//parameter
+//rzyOS_ecb_s *ecb ： 待初始化的任务控制快
+//rzyOS_event_type_e type ： 初始化的事件类型
 void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type)
 {
-	ecb -> type = event_type_unknow;
+	//事件类型
+	ecb -> type = type;
+	//初始化事件等待列表
 	list_init(&(ecb -> wait_list));
 }
 
@@ -33,7 +39,7 @@ void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, u
 	task_exit_critical(status);
 }
 
-//通知相关事件控制块
+//唤醒通知相关事件控制块
 //唤醒相关事件列表的第一个任务
 task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
@@ -122,13 +128,14 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 	return element_count;
 }
 
-//事件等待队列中,任务的数量
+//统计事件等待队列中任务的数量
 uint32_t rzyOS_event_wait_count(rzyOS_ecb_s *rzyOS_ecb)
 {
 	uint32_t count = 0;
 	
 	uint32_t status = task_enter_critical();
 	
+	//统计事件等待队列中任务个数
 	count = list_count(&(rzyOS_ecb -> wait_list));
 	
 	task_exit_critical(status);
