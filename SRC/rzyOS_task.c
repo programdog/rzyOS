@@ -3,6 +3,7 @@
 //task初始化
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
 {
+	//初始化任务堆栈，对应到通用寄存器
 	*(--stack) = (unsigned long)(1 << 24);
 	*(--stack) = (unsigned long)entry;
 	*(--stack) = (unsigned long)0x14;
@@ -21,7 +22,9 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	*(--stack) = (unsigned long)0x05;
 	*(--stack) = (unsigned long)0x04;
 	
+	//任务堆栈指针传递
 	task -> stack = stack;
+	//初始化任务tcb
 	node_init(&(task -> link_node));
 	task -> delayTicks = 0;
 	task -> prio = prio;
@@ -33,6 +36,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task -> clean_param = (void *)0;
 	task -> request_delete_flag = 0;
 	
+	//初始化结束后将任务插入延时队列等待调度
 	task_insert_ready_list(task);
 }
 
