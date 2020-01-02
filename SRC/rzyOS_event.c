@@ -15,11 +15,17 @@ void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type)
 
 //事件等待函数
 //把任务插入到事件的等待队列
+//parameter
+//rzyOS_ecb_s *rzyOS_ecb ： 选择需要用什么事件控制块进行管理
+//task_tcb_s *task_tcb ： 要插入的任务
+//void *msg ： 消息
+//uint32_t state ： 事件类型
+//uint32_t timeout ： 超时等待
 void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t state, uint32_t timeout)
 {
 	uint32_t status = task_enter_critical();
 	
-	task_tcb -> task_status |= state;
+	task_tcb -> wait_flag_type |= state;
 	task_tcb -> wait_event = rzyOS_ecb;
 	task_tcb -> event_msg = msg;
 	

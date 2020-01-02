@@ -123,5 +123,5 @@ uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
 		task_schedule();
 	}
 
-	return count; 
+	return count;
 }
