@@ -8,9 +8,9 @@
 typedef enum rzyOS_event_type_e
 {
 	//未知事件类型，初始化时使用
-	event_type_unknow,
+	event_type_unknow = 0,
 	//信号量事件类型
-	event_type_semaphore,
+	event_type_semaphore = 1,
 } rzyOS_event_type_e;
 
 //事件控制块
@@ -18,7 +18,7 @@ typedef struct rzyOS_ecb_s
 {
 	//事件类型
 	rzyOS_event_type_e type;
-	//时间等待列表
+	//事件等待列表
 	list_t wait_list;
 } rzyOS_ecb_s;
 

@@ -13,29 +13,33 @@ void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type)
 	list_init(&(ecb -> wait_list));
 }
 
-//事件等待函数
+//事件等待函数（作为基础组件， 不做调度处理， 在信号量等待函数中再做调度）
 //把任务插入到事件的等待队列
 //parameter
-//rzyOS_ecb_s *rzyOS_ecb ： 选择需要用什么事件控制块进行管理
+//rzyOS_ecb_s *rzyOS_ecb ： 期望要加入的事件控制块
 //task_tcb_s *task_tcb ： 要插入的任务
-//void *msg ： 消息
-//uint32_t state ： 事件类型
+//void *msg ： 消息地址
+//uint32_t state ： 任务状态
 //uint32_t timeout ： 超时等待
 void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t state, uint32_t timeout)
 {
 	uint32_t status = task_enter_critical();
 	
-	task_tcb -> wait_flag_type |= state;
+	task_tcb -> task_status |= state;
+	//设置任务等待的事件控制块
 	task_tcb -> wait_event = rzyOS_ecb;
 	task_tcb -> event_msg = msg;
 	
-	task_tcb -> wait_event_result = event_type_unknow;
+	//复位事件等待结果
+	task_tcb -> wait_event_result = error_no_error;
 	
 	//从就绪队列中移出
 	task_remove_ready_list(task_tcb);
-	//插入事件控制块的等待队列的尾部,因为先获得事件的任务先执行,所以插入到尾部
+	//插入事件控制块的等待队列的尾部, 因为先获得事件的任务先执行, 所以插入到尾部
 	list_add_last(&(rzyOS_ecb -> wait_list), &(task_tcb -> link_node));
 	
+	//如果有超时等待， 则该任务即在时间等待队列也在延时队列
+	//若超时等待生效， 则在延时处理机制中把任务从事件等待队列移除
 	if (timeout)
 	{
 		//如果有等待超时, 则加入到延时等待队列
@@ -51,22 +55,25 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 {
 	node_t *node;
 	task_tcb_s *task;
+
 	uint32_t status = task_enter_critical();
 	
-	//把事件等待队列的第一个任务从列表删除
+	//把事件等待队列的第一个任务从列表删除， 并返回事件等待队列节点指针
 	node = remove_list_first(&(rzyOS_ecb -> wait_list));
 	
 	if (node != (node_t *)0)
 	{
+		//设置相应的TCB值
 		task = (task_tcb_s *)node_parent(node, task_tcb_s, link_node);
 		task -> wait_event = (rzyOS_ecb_s *)0;
 		task -> event_msg = msg;
 		task -> wait_event_result = result;
 		task -> task_status &= ~RZYOS_TASK_WAIT_MASK;
 		
+		//若设置了超时等待
 		if (task -> delayTicks != 0)
 		{
-			//如果有延时, 则强制从延时队列中唤醒, 以便事件到来, 及时相应
+			//则强制从延时队列中唤醒, 以便事件到来, 及时相应
 			rzyOS_task_delay_list_remove(task);
 		}
 		
@@ -107,7 +114,7 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 
 	uint32_t status = task_enter_critical();
 
-	//该事件中等待队列中的任务数
+	//统计事件中等待队列中的任务数
 	element_count = list_count(&(rzyOS_ecb -> wait_list));
 
 	while ((node = remove_list_first(&(rzyOS_ecb -> wait_list))) != (node_t *)0)

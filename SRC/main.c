@@ -178,6 +178,7 @@ void task_systemtick_handler(void)
 		//延时已为0
 		if (0 == task_tcb -> delayTicks)
 		{
+			//若任务仍处于事件等待状态
 			if (task_tcb -> wait_event)
 			{
 				//如果事件还未到来,但延时到达, 则从事件等待列表删除

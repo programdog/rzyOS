@@ -13,7 +13,7 @@
 #define RZYOS_TASK_STATUS_DELETE (1 << 3)
 
 
-//(任务状态)预留高16位作为事件等待标志
+//(任务状态)高16位作为事件等待标志
 #define RZYOS_TASK_WAIT_MASK (0xff << 16)
 
 
@@ -74,8 +74,9 @@ typedef struct task_tcb_s
 	//任务请求删除状态标记
 	uint8_t request_delete_flag;
 	
-	//任务事件控制块
+	//事件控制块
 	rzyOS_ecb_s *wait_event;
+	//等待事件的消息数据
 	void *event_msg;
 	//等待事件的结果
 	uint32_t wait_event_result;
