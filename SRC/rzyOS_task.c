@@ -45,7 +45,7 @@ void rzyOS_task_suspend(task_tcb_s *task)
 {
 	uint32_t status = task_enter_critical();
 	
-	//如果任务处于延时队列, 说明不在就绪队列, 则不进行挂起操作
+	//如果任务处于延时队列, 说明不在就绪队列, 则不进行挂起操作（目前不对处于延时队列的任务进行挂起）
 	if (!(task -> task_status & RZYOS_TASK_STATUS_DELAY))
 	{
 		//每次被调用挂起操作,都要对suspend_count加1
@@ -94,7 +94,9 @@ void rzyOS_task_wakeup(task_tcb_s *task)
 //任务清除回调函数
 void rzyOS_task_clean_callback(task_tcb_s *task, void (*clean)(void *param), void *param)
 {
+	//任务清除callback函数
 	task -> clean = clean;
+	//任务清除callback函数的参数
 	task -> clean_param = param;
 }
 
@@ -112,11 +114,13 @@ void rzyOS_task_force_delete(task_tcb_s *task)
 		rzyOS_task_ready_list_remove(task);
 	}
 	
+	//若该task有清理函数则调用
 	if (task -> clean)
 	{
 		task -> clean(task -> clean_param);
 	}
 	
+	//若删除的是自己，则进行调度
 	if (currentTask == task)
 	{
 		task_schedule();
@@ -159,6 +163,7 @@ void rzyOS_task_delete_self(void)
 {
 	uint32_t status = task_enter_critical();
 	
+	//运行任务本身， 即currentTask == task， 当前任务仍然处于就绪列表
 	rzyOS_task_ready_list_remove(currentTask);
 	
 	if (currentTask -> clean)

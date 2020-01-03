@@ -66,9 +66,12 @@ typedef struct task_tcb_s
 	//任务挂起计数器
 	uint32_t suspend_count;
 	
-	//任务删除 ; 任务清除callback函数,和参数,和任务请求删除状态
+	//任务删除
+	//任务清除callback函数
 	void (*clean)(void *param);
+	//任务清除callback函数参数
 	void *clean_param;
+	//任务请求删除状态标记
 	uint8_t request_delete_flag;
 	
 	//任务事件控制块
