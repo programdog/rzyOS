@@ -53,12 +53,14 @@ uint32_t rzyOS_sem_no_wait(rzyOS_sem_s *sem)
 	{
 		sem -> count --;
 		task_exit_critical(status);
+
 		return error_no_error;
 	}
 	else
 	{
 		//非阻塞， 直接返回资源不可用的flag， 让应用自己去选择处理
 		task_exit_critical(status);
+		
 		return error_resource_unvaliable;
 	}
 }
