@@ -65,6 +65,7 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 	{
 		//设置相应的TCB值
 		task = (task_tcb_s *)node_parent(node, task_tcb_s, link_node);
+		//事件块清零
 		task -> wait_event = (rzyOS_ecb_s *)0;
 		task -> event_msg = msg;
 		task -> wait_event_result = result;
