@@ -1,7 +1,7 @@
 #ifndef RZYOS_MBOX_H
 #define RZYOS_MBOX_H
 
-#include "rzyOS_event.h"
+#include "rzyOS.h"
 
 typedef struct rzyOS_mbox_s
 {

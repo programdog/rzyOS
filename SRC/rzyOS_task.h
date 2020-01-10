@@ -28,7 +28,7 @@ typedef enum rzyOS_error_e
 	error_no_error = 0,
 	//超时等待
 	error_timeout = 1,
-	//事件(信号量)无资源
+	//事件(信号量&邮箱)无资源
 	error_resource_unvaliable = 2,
 	//信号量已经被删除
 	error_sem_delete = 3,

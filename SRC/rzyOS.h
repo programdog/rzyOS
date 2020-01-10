@@ -6,6 +6,7 @@
 #include "osConfig.h"
 #include "rzyOS_event.h"
 #include "rzyOS_task.h"
+#include "rzyOS_event.h"
 
 
 extern task_tcb_s *currentTask;
