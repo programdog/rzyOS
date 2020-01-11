@@ -32,6 +32,8 @@ typedef enum rzyOS_error_e
 	error_resource_unvaliable = 2,
 	//信号量已经被删除
 	error_sem_delete = 3,
+	//资源已满
+	error_resource_full = 4,
 } rzyOS_error_e;
 
 

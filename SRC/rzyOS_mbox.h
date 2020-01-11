@@ -3,6 +3,10 @@
 
 #include "rzyOS.h"
 
+#define rzyOS_mbox_send_normal 0x00
+//插入到消息缓冲区前面
+#define rzyOS_mbox_send_front 0x01
+
 typedef struct rzyOS_mbox_s
 {
 	//事件控制块
