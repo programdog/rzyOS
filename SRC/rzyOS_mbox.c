@@ -32,6 +32,7 @@ uint32_t rzyOS_mbox_wait(rzyOS_mbox_s *rzyOS_mbox, void **msg, uint32_t wait_tic
 		//读索引向后移动
 		rzyOS_mbox -> read ++;
 
+		//读索引已经到末尾了， 需要回头部
 		if (rzyOS_mbox -> read >= rzyOS_mbox -> max_count)
 		{
 			rzyOS_mbox -> read = 0;
@@ -49,7 +50,7 @@ uint32_t rzyOS_mbox_wait(rzyOS_mbox_s *rzyOS_mbox, void **msg, uint32_t wait_tic
 		//调度切换
 		task_schedule();
 		
-		//从event_msg中获取消息
+		//被切换回来后，从event_msg中获取消息
 		*msg = currentTask -> event_msg;
 		
 		return currentTask -> wait_event_result;
@@ -61,27 +62,37 @@ uint32_t rzyOS_mbox_nowait(rzyOS_mbox_s *rzyOS_mbox, void **msg)
 {
 	uint32_t status = task_enter_critical();
 	
+	//缓冲区中是否有消息
 	if (rzyOS_mbox -> count > 0)
 	{
+		//如果 > 0 ， 取出消息
 		rzyOS_mbox -> count --;
+		//取出消息指针
 		*msg = rzyOS_mbox -> msg_buffer[rzyOS_mbox -> read];
+		//读索引向后移动
 		rzyOS_mbox -> read ++;
-		
+
+		//读索引已经到末尾了， 需要回头部
 		if (rzyOS_mbox -> read >= rzyOS_mbox -> max_count)
 		{
 			rzyOS_mbox -> read = 0;
 		}
+
 		task_exit_critical(status);
+
 		return error_no_error;
 	}
+	//缓冲区中无消息， 不进行阻塞等待，继续运行
 	else
 	{
 		task_exit_critical(status);
 		
+		//返回无资源
 		return error_resource_unvaliable;
 	}
 }
 
+//消息释放函数
 uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_option)
 {
 	uint32_t status = task_enter_critical();
