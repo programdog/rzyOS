@@ -26,4 +26,14 @@ typedef struct rzyOS_mbox_s
 //邮箱初始化
 void rzyOS_mbox_init(rzyOS_mbox_s *rzyOS_mbox, void **msg_buffer, uint32_t max_count);
 
+//消息等待函数（阻塞模式）
+uint32_t rzyOS_mbox_wait(rzyOS_mbox_s *rzyOS_mbox, void **msg, uint32_t wait_tick);
+
+//消息等待函数（非阻塞模式）
+uint32_t rzyOS_mbox_nowait(rzyOS_mbox_s *rzyOS_mbox, void **msg);
+
+//post一个消息
+uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_option);
+
+
 #endif

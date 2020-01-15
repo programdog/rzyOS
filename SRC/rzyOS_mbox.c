@@ -18,6 +18,10 @@ void rzyOS_mbox_init(rzyOS_mbox_s *rzyOS_mbox, void **msg_buffer, uint32_t max_c
 }
 
 //消息等待函数（阻塞模式）
+//parameter
+//rzyOS_mbox_s *rzyOS_mbox : 邮箱结构
+//void **msg ： 消息指针
+//uint32_t wait_tick ： 超时等待
 uint32_t rzyOS_mbox_wait(rzyOS_mbox_s *rzyOS_mbox, void **msg, uint32_t wait_tick)
 {
 	uint32_t status = task_enter_critical();
@@ -92,7 +96,7 @@ uint32_t rzyOS_mbox_nowait(rzyOS_mbox_s *rzyOS_mbox, void **msg)
 	}
 }
 
-//消息释放函数
+//post一个消息
 uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_option)
 {
 	uint32_t status = task_enter_critical();
@@ -100,38 +104,54 @@ uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_op
 	//统计是否有等待的任务， 如果有任务等待
 	if (rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb)) > 0)
 	{
+		//唤醒事件控制块中第一个task，并传递消息指针
 		task_tcb_s *task_tcb = rzyOS_event_wakeup(&(rzyOS_mbox -> rzyOS_ecb), (void *)msg, error_no_error);
+		//判断优先级，是否需要调度
 		if (task_tcb -> prio < currentTask -> prio)
 		{
 			task_schedule();
 		}
 	}
+	//没有等待任务，进行消息插入
 	else
 	{
+		//消息已经超出了最大消息计数值
 		if (rzyOS_mbox -> count >= rzyOS_mbox -> max_count)
 		{
 			task_exit_critical(status);
+
 			return error_resource_full;
 		}
+		//消息未超出最大消息计数值
 		else
 		{
+			//消息插入模式为向前插入，并不做数据覆盖，而是向前写入
 			if (notify_option & rzyOS_mbox_send_front)
 			{
+				//如果读索引在头部
 				if (rzyOS_mbox -> read <= 0)
 				{
+					//让读索引指向尾部
 					rzyOS_mbox -> read = rzyOS_mbox -> max_count -1;
 				}
+				//如果读索引不在头部
 				else
 				{
+					//读索引向前移动
 					rzyOS_mbox -> read --;
 				}
 				
+				//插入消息
 				rzyOS_mbox -> msg_buffer[rzyOS_mbox -> read] = msg;
 			}
+			//消息向后插入
 			else
 			{
+				//插入消息
 				rzyOS_mbox -> msg_buffer[rzyOS_mbox -> write] = msg;
 				rzyOS_mbox -> write ++;
+
+				//写索引已经到了最大值，则写索引回到头部
 				if (rzyOS_mbox -> write >= rzyOS_mbox -> max_count)
 				{
 					rzyOS_mbox -> write = 0;
@@ -139,6 +159,7 @@ uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_op
 			}
 		}
 		
+		//消息计数+1
 		rzyOS_mbox -> count ++;
 	}
 	
