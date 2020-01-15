@@ -97,7 +97,8 @@ uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_op
 {
 	uint32_t status = task_enter_critical();
 	
-	if (rzyOS_mbox -> count > 0)
+	//统计是否有等待的任务， 如果有任务等待
+	if (rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb)) > 0)
 	{
 		task_tcb_s *task_tcb = rzyOS_event_wakeup(&(rzyOS_mbox -> rzyOS_ecb), (void *)msg, error_no_error);
 		if (task_tcb -> prio < currentTask -> prio)
