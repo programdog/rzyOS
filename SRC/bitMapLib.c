@@ -1,25 +1,30 @@
 #include "bitMapLib.h"
 
+//初始化位图结构
 void bitmap_init(bitmap_s *bitmap)
 {
 	bitmap -> bitmap_32bit = 0;
 }
 
+//位图长度， 目前为32bit
 uint32_t bitmap_size(void)
 {
 	return 32;
 }
 
+//按照位置设置位图一个bit
 void bitmap_set(bitmap_s *bitmap, uint32_t position)
 {
 	bitmap -> bitmap_32bit |= 1 << position;
 }
 
+//按照位置清空位图一个bit
 void bitmap_clean(bitmap_s *bitmap, uint32_t position)
 {
 	bitmap -> bitmap_32bit &= ~(1 << position);
 }
 
+//获取位图第一个bit为1的位置
 uint32_t bitmap_get_first_set(bitmap_s *bitmap)
 {
 	static const uint8_t bitmap_table[] = 
