@@ -47,22 +47,27 @@ uint32_t bitmap_get_first_set(bitmap_s *bitmap)
 		/* F0 */ 4,    0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 	};
 	
+	//如果在第一个8bit内，则返回第一个8位内位置
 	if (bitmap -> bitmap_32bit & 0xff)
 	{
 		return bitmap_table[bitmap -> bitmap_32bit & 0xff];
 	}
+	//如果在第二个8bit内，则返回第二个8位内位置
 	else if (bitmap -> bitmap_32bit & 0xff00)
 	{
 		return bitmap_table[(bitmap -> bitmap_32bit >> 8) & 0xff] + 8;
 	}
+	//如果在第三个8bit内，则返回第三个8位内位置
 	else if (bitmap -> bitmap_32bit & 0xff0000)
 	{
 		return bitmap_table[(bitmap -> bitmap_32bit >> 16) & 0xff] + 16;
 	}
+	//如果在第四个8bit内，则返回第四个8位内位置
 	else if (bitmap -> bitmap_32bit & 0xff000000)
 	{
 		return bitmap_table[(bitmap -> bitmap_32bit >> 24) & 0xff] + 24;
 	}
+	//其他情况
 	else
 	{
 		return bitmap_size();

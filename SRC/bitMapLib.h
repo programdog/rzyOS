@@ -25,19 +25,30 @@ void bitmap_clean(bitmap_s *bitmap, uint32_t position);
 uint32_t bitmap_get_first_set(bitmap_s *bitmap);
 
 
-
+//节点结构
 typedef struct node_t
 {
+	//前节点地址
 	struct node_t *pre_node;
+	//后节点地址
 	struct node_t *next_node;
 } node_t;
 
+
+//双向链表管理结构
 typedef struct list_t
 {
+	//首节点
 	node_t head_node;
+	//节点计数
 	uint32_t node_counter;
 } list_t;
 
+//返回父结构（parent）的地址
+//parameter ： 
+//node ： 节点地址
+//parent ： 父结构类型（我们这里用任务TCB）
+//name ： 节点类型（比如是延时节点还是就绪节点或其他节点）
 #define node_parent(node, parent, name) (parent *)((uint32_t)node - (uint32_t)&((parent *)0) -> name)
 
 void node_init(node_t *node);

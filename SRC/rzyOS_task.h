@@ -47,7 +47,7 @@ typedef struct task_tcb_s
 	//任务堆栈指针
 	tTaskStack *stack;
 
-	//任务节点
+	//任务节点（就绪）
 	node_t link_node;
 
 	//任务注册延时周期
