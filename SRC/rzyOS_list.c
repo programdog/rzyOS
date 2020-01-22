@@ -3,6 +3,7 @@
 #define INLIST_FIRST_NODE head_node.next_node		//	headnode --> first
 #define INLIST_LAST_NODE head_node.pre_node			//	last  <-- headnode
 
+//初始化前节点与后节点的指针指向自己
 //init pre_node and next_node of node_t to point itself
 void node_init(node_t *node)
 {
@@ -10,6 +11,7 @@ void node_init(node_t *node)
 	node -> next_node = node;
 }
 
+//初始化头节点指针指向头节点自己
 //init pre_node and next_node of the list head_node to point itself 
 void list_init(list_t *list)
 {
@@ -18,12 +20,14 @@ void list_init(list_t *list)
 	list -> node_counter = 0;
 }
 
+//返回链表中的节点个数
 //return how many node of this list
 uint32_t list_count(list_t *list)
 {
 	return list -> node_counter;
 }
 
+//返回链表中第一个节点的地址
 //return the first node address
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 node_t *list_first_node(list_t *list)
@@ -38,6 +42,7 @@ node_t *list_first_node(list_t *list)
 	return node;
 }
 
+//返回链表中最后一个节点的地址
 //return the last node address
 node_t *list_last_node(list_t *list)
 {
@@ -51,6 +56,7 @@ node_t *list_last_node(list_t *list)
 	return node;
 }
 
+//返回链表中目标节点的前一个节点地址
 //return address of the target node's pre_node
 node_t *list_pos_node_pre(list_t *list, node_t *node)
 {
@@ -64,6 +70,7 @@ node_t *list_pos_node_pre(list_t *list, node_t *node)
 	}
 }
 
+//返回链表中目标节点的后一个节点地址
 //return address of the target node's next_node
 node_t *list_pos_node_next(list_t *list, node_t *node)
 {
@@ -77,6 +84,8 @@ node_t *list_pos_node_next(list_t *list, node_t *node)
 	}
 }
 
+//删除所有节点
+//断开所有的节点， 并让所有的节点中前节点和后节点的地址指向自己，
 // break all notes , then make next_node and pre_node of the struct node_t point itself
 void list_remode_all(list_t *list)
 {

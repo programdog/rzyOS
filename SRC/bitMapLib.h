@@ -51,20 +51,28 @@ typedef struct list_t
 //name ： 节点类型（比如是延时节点还是就绪节点或其他节点）
 #define node_parent(node, parent, name) (parent *)((uint32_t)node - (uint32_t)&((parent *)0) -> name)
 
+//初始化前节点与后节点的指针指向自己
 void node_init(node_t *node);
 
+//初始化头节点指针指向头节点自己
 void list_init(list_t *list);
 
+//返回链表中的节点个数
 uint32_t list_count(list_t *list);
 
+//返回链表中第一个节点的地址
 node_t *list_first_node(list_t *list);
 
+//返回链表中最后一个节点的地址
 node_t *list_last_node(list_t *list);
 
+//返回链表中目标节点的前一个节点地址
 node_t *list_pos_node_pre(list_t *list, node_t *node);
 
+//返回链表中目标节点的后一个节点地址
 node_t *list_pos_node_next(list_t *list, node_t *node);
 
+//删除所有节点
 void list_remode_all(list_t *list);
 
 void list_add_first(list_t *list, node_t *node);
