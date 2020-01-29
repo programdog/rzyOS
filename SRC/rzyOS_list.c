@@ -107,6 +107,7 @@ void list_remode_all(list_t *list)
 	list -> node_counter = 0;
 }
 
+//在第一个位置插入节点
 //insert a node to list at the first position
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 void list_add_first(list_t *list, node_t *node)
@@ -119,6 +120,7 @@ void list_add_first(list_t *list, node_t *node)
 	list -> node_counter ++;
 }
 
+//在在最后的位置插入节点
 //insert a node to list at the last position
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 void list_add_last(list_t *list, node_t *node)
@@ -131,6 +133,7 @@ void list_add_last(list_t *list, node_t *node)
 	list -> node_counter ++;
 }
 
+//删除第一个节点，并返回删除的节点指针
 //remove the first position node
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 //return address which node to be remove
@@ -149,6 +152,7 @@ node_t *remove_list_first(list_t *list)
 	return node;
 }
 
+//在指定的节点之后插入一个节点
 //insert a node after the appoint node
 void list_insert_node_after(list_t *list, node_t *node_after, node_t *node_to_insert)
 {
@@ -161,6 +165,7 @@ void list_insert_node_after(list_t *list, node_t *node_after, node_t *node_to_in
 	list -> node_counter ++;
 }
 
+//删除指定的节点
 //remove the appoint node
 void list_remove_pos_node(list_t *list, node_t *node)
 {

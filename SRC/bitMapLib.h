@@ -75,14 +75,19 @@ node_t *list_pos_node_next(list_t *list, node_t *node);
 //删除所有节点
 void list_remode_all(list_t *list);
 
+//在第一个位置插入节点
 void list_add_first(list_t *list, node_t *node);
 
+//在在最后的位置插入节点
 void list_add_last(list_t *list, node_t *node);
 
+//删除第一个节点，并返回删除的节点指针
 node_t *remove_list_first(list_t *list);
 
+//在指定的节点之后插入一个节点
 void list_insert_node_after(list_t *list, node_t *node_after, node_t *node_to_insert);
 
+//删除指定的节点
 void list_remove_pos_node(list_t *list, node_t *node);
 
 #endif
