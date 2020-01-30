@@ -112,9 +112,12 @@ void list_remode_all(list_t *list)
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 void list_add_first(list_t *list, node_t *node)
 {
+	//把原第一个节点内部的前指向赋值给当前第一个节点内部的前指向
 	node -> pre_node = list -> INLIST_FIRST_NODE -> pre_node;
+	//把原第一个节点地址赋值给当前第一个节点内部的下一个指向
 	node -> next_node = list -> INLIST_FIRST_NODE;
 	
+	//配置列表头部管理节点的数据
 	list -> INLIST_FIRST_NODE -> pre_node = node;
 	list -> INLIST_FIRST_NODE = node;
 	list -> node_counter ++;
@@ -125,9 +128,11 @@ void list_add_first(list_t *list, node_t *node)
 //(head)->[first]->(node)->(node)->(node)->[last]->(head)
 void list_add_last(list_t *list, node_t *node)
 {
+	//配置插入节点的内部数据
 	node -> next_node = &(list -> head_node);
 	node -> pre_node = list -> INLIST_LAST_NODE;
 	
+	//配置列表头部管理节点的数据
 	list -> INLIST_LAST_NODE -> next_node = node;
 	list -> INLIST_LAST_NODE = node;
 	list -> node_counter ++;
@@ -141,11 +146,15 @@ node_t *remove_list_first(list_t *list)
 {
 	node_t *node = (node_t *)0;
 	
+	//如果了链表统计有节点
 	if (list -> node_counter != 0)
 	{
+		//获取链表的第一个节点
 		node = list -> INLIST_FIRST_NODE;
 		
+		//重新分配被删除第一个节点后边的节点的内部地址
 		node -> next_node -> pre_node = &(list -> head_node);
+		//改变头节点对第一个节点的指向
 		list -> INLIST_FIRST_NODE = node -> next_node;
 		list -> node_counter --;
 	}
@@ -156,12 +165,15 @@ node_t *remove_list_first(list_t *list)
 //insert a node after the appoint node
 void list_insert_node_after(list_t *list, node_t *node_after, node_t *node_to_insert)
 {
+	//被插入的节点的内部地址赋值
 	node_to_insert -> pre_node = node_after;
 	node_to_insert -> next_node = node_after -> next_node;
 	
+	//指定位置的节点前后节点内部赋值
 	node_after -> next_node = node_to_insert;
 	node_after -> next_node -> pre_node = node_to_insert;
 	
+	//数量统计++
 	list -> node_counter ++;
 }
 
@@ -169,8 +181,10 @@ void list_insert_node_after(list_t *list, node_t *node_after, node_t *node_to_in
 //remove the appoint node
 void list_remove_pos_node(list_t *list, node_t *node)
 {
+	//被删除的节点的前后节点的内部赋值
 	node -> pre_node -> next_node = node -> next_node;
 	node -> next_node -> pre_node = node -> pre_node;
 	
+	//数量统计--
 	list -> node_counter --;
 }
