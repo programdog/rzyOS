@@ -67,10 +67,10 @@ node_t *list_first_node(list_t *list);
 node_t *list_last_node(list_t *list);
 
 //返回链表中目标节点的前一个节点地址
-node_t *list_pos_node_pre(list_t *list, node_t *node);
+node_t *list_pos_node_pre(node_t *node);
 
 //返回链表中目标节点的后一个节点地址
-node_t *list_pos_node_next(list_t *list, node_t *node);
+node_t *list_pos_node_next(node_t *node);
 
 //删除所有节点
 void list_remode_all(list_t *list);

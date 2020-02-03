@@ -60,7 +60,7 @@ node_t *list_last_node(list_t *list)
 
 //返回链表中目标节点的前一个节点地址
 //return address of the target node's pre_node
-node_t *list_pos_node_pre(list_t *list, node_t *node)
+node_t *list_pos_node_pre(node_t *node)
 {
 	//若前一个节点是指向自己，说明没有节点，则返回null
 	if (node -> pre_node == node)
@@ -75,7 +75,7 @@ node_t *list_pos_node_pre(list_t *list, node_t *node)
 
 //返回链表中目标节点的后一个节点地址
 //return address of the target node's next_node
-node_t *list_pos_node_next(list_t *list, node_t *node)
+node_t *list_pos_node_next(node_t *node)
 {
 	//若后一个节点是指向自己，说明没有节点，则返回null
 	if (node -> next_node == node)
