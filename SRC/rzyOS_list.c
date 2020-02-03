@@ -34,6 +34,7 @@ node_t *list_first_node(list_t *list)
 {
 	node_t *node = (node_t *)0;
 	
+	//若计数不为0,则返回第一个节点地址
 	if (list -> node_counter != 0)
 	{
 		node = list -> head_node.next_node;
@@ -48,6 +49,7 @@ node_t *list_last_node(list_t *list)
 {
 	node_t *node = (node_t *)0;
 	
+	//若计数不为0,则返回最后一个节点地址
 	if (list -> node_counter != 0)
 	{
 		node = list -> head_node.pre_node;
@@ -60,6 +62,7 @@ node_t *list_last_node(list_t *list)
 //return address of the target node's pre_node
 node_t *list_pos_node_pre(list_t *list, node_t *node)
 {
+	//若前一个节点是指向自己，说明没有节点，则返回null
 	if (node -> pre_node == node)
 	{
 		return (node_t *)0;
@@ -74,6 +77,7 @@ node_t *list_pos_node_pre(list_t *list, node_t *node)
 //return address of the target node's next_node
 node_t *list_pos_node_next(list_t *list, node_t *node)
 {
+	//若后一个节点是指向自己，说明没有节点，则返回null
 	if (node -> next_node == node)
 	{
 		return (node_t *)0;
@@ -92,16 +96,20 @@ void list_remode_all(list_t *list)
 	uint32_t count;
 	node_t *next_node_temp;
 	
+	//获取第一个节点
 	next_node_temp = list -> head_node.next_node;
+	//按照count数循环
 	for (count = list -> node_counter; count > 0; count --)
 	{
 		node_t *current_node = next_node_temp;
 		next_node_temp = current_node -> next_node;
 		
+		//初始化当前节点，指向自己
 		current_node -> next_node = current_node;
 		current_node -> pre_node = current_node;
 	}
 	
+	//初始化头节点，指向自己
 	list -> INLIST_FIRST_NODE = &(list ->head_node);
 	list -> INLIST_FIRST_NODE = &(list ->head_node);
 	list -> node_counter = 0;
