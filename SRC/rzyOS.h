@@ -8,15 +8,20 @@
 #include "rzyOS_task.h"
 #include "rzyOS_event.h"
 
-
+//当前任务的指针
 extern task_tcb_s *currentTask;
+
+//下一个任务的指针
 extern task_tcb_s *nextTask;
 
+
+//不会引起任务调度的延时
 void delay(int count);
 
-
+//进入临界区保护
 uint32_t task_enter_critical(void);
 
+//退出临界区保护
 void task_exit_critical(uint32_t status);
 
 

@@ -215,6 +215,7 @@ void task_systemtick_handler(void)
 	task_schedule();
 }
 
+//不会引起任务调度的延时
 void delay(int count)
 {
 	while(-- count > 0);
