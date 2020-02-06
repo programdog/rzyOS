@@ -167,3 +167,19 @@ uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_op
 	
 	return error_no_error;
 }
+
+//邮箱的清空
+void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox)
+{
+	uint32_t status = task_enter_critical();
+
+	//若等待事件的任务为0, 则说明处于有消息且无任务等待的状态， 需要清理
+	if (rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb)) == 0)
+	{
+		rzyOS_mbox = count;
+		rzyOS_mbox = read;
+		rzyOS_mbox = write;
+	}
+
+	task_exit_critical(status);
+}
