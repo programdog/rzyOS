@@ -108,12 +108,13 @@ void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info)
 }
 
 //信号量销毁
+//在rzyOS_event_remove_all()函数中会把任务插入到就绪队列
 uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
 {
 	uint32_t status = task_enter_critical();
 
 	//删除等待该信号量的任务， 获取移除的个数
-	uint32_t count = rzyOS_event_remove_all(&(sem -> rzyOS_ecb), (void *)0, error_sem_delete);
+	uint32_t count = rzyOS_event_remove_all(&(sem -> rzyOS_ecb), (void *)0, error_delete);
 	//信号量计数值清零
 	sem -> count = 0;
 

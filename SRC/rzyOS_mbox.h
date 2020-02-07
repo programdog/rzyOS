@@ -35,5 +35,11 @@ uint32_t rzyOS_mbox_nowait(rzyOS_mbox_s *rzyOS_mbox, void **msg);
 //post一个消息
 uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_option);
 
+//邮箱的清空
+void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox);
+
+//邮箱的删除
+uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox)
+
 
 #endif

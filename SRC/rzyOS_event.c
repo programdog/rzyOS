@@ -133,6 +133,7 @@ uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resu
 			rzyOS_task_delay_list_remove(task);
 		}
 
+		//再把任务插入到就绪队列
 		task_insert_ready_list(task);
 	}
 

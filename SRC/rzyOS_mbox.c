@@ -183,3 +183,23 @@ void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox)
 
 	task_exit_critical(status);
 }
+
+//邮箱的删除
+//在rzyOS_event_remove_all()函数中会把任务插入到就绪队列
+uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox)
+{
+	uint32_t status = task_enter_critical();
+
+	//移除等待列表中的任务， 并返回个数
+	uint32_t count = rzyOS_event_remove_all(&(rzyOS_mbox -> rzyOS_ecb), (void *)0, error_delete);
+
+	task_exit_critical(status);
+
+	//若有任务在等待，则调用一次切换
+	if (count > 0)
+	{
+		task_schedule();
+	}
+
+	return count;
+}
