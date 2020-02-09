@@ -21,7 +21,7 @@ typedef struct rzyOS_sem_s
 } rzyOS_sem_s;
 
 //信号量信息
-typedef struct rzyOS_sen_info
+typedef struct rzyOS_sem_info_s
 {
 	//当前信号量计数值
 	uint32_t sem_count;
@@ -29,7 +29,7 @@ typedef struct rzyOS_sen_info
 	uint32_t max_count;
 	//当前信号量等待的任务数量
 	uint32_t task_count;
-} rzyOS_sen_info;
+} rzyOS_sem_info_s;
 
 //信号量初始化函数
 void rzyOS_sem_init(rzyOS_sem_s *sem, uint32_t start_count, uint32_t max_count);
@@ -44,7 +44,7 @@ uint32_t rzyOS_sem_no_wait(rzyOS_sem_s *sem);
 void rzyOS_sem_post(rzyOS_sem_s *sem);
 
 //信号量信息获得函数
-void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info);
+void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info);
 
 //信号量销毁
 uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem);

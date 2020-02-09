@@ -96,7 +96,7 @@ void rzyOS_sem_post(rzyOS_sem_s *sem)
 }
 
 //信号量信息获得函数
-void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sen_info *sem_info)
+void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info)
 {
 	uint32_t status = task_enter_critical();
 
