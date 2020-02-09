@@ -7,6 +7,16 @@
 //插入到消息缓冲区前面
 #define rzyOS_mbox_send_front 0x01
 
+typedef struct rzyOS_mbox_info_s
+{
+	//当前消息数量
+	uint32_t count;
+	//最大支持的消息数量
+	uint32_t max_count;
+	//等待的任务数量
+	uint32_t task_count;
+} rzyOS_mbox_info_s;
+
 typedef struct rzyOS_mbox_s
 {
 	//事件控制块
@@ -40,6 +50,9 @@ void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox);
 
 //邮箱的删除
 uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox)
+
+//邮箱状态查询
+void rzyOS_mbox_get_info(rzyOS_mbox_s *rzyOS_mbox, rzyOS_mbox_info_s rzyOS_mbox_info);
 
 
 #endif

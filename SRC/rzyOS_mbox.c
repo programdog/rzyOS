@@ -203,3 +203,15 @@ uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox)
 
 	return count;
 }
+
+//ÓÊÏä×´Ì¬²éÑ¯
+void rzyOS_mbox_get_info(rzyOS_mbox_s *rzyOS_mbox, rzyOS_mbox_info_s *rzyOS_mbox_info)
+{
+	uint32_t status = task_enter_critical();
+
+	rzyOS_mbox_info -> count = rzyOS_mbox -> count;
+	rzyOS_mbox_info -> max_count = rzyOS_mbox -> max_count;
+	rzyOS_mbox_info -> task_count = rzyOS_mbox -> rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb));
+
+	task_exit_critical(status);
+}
