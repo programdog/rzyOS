@@ -3,10 +3,12 @@
 
 #include "rzyOS.h"
 
+//正常模式， 插入到缓冲区的后边
 #define rzyOS_mbox_send_normal 0x00
 //插入到消息缓冲区前面
 #define rzyOS_mbox_send_front 0x01
 
+//邮箱信息结构
 typedef struct rzyOS_mbox_info_s
 {
 	//当前消息数量
@@ -17,6 +19,7 @@ typedef struct rzyOS_mbox_info_s
 	uint32_t task_count;
 } rzyOS_mbox_info_s;
 
+//邮箱结构
 typedef struct rzyOS_mbox_s
 {
 	//事件控制块
