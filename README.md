@@ -1,5 +1,6 @@
 ﻿# rzyOS
 **rzyOS a simple OS , create by renzhongyu**
+**rzyOS 是一款宏内核且简约的嵌入式操作系统**
 *筹备了很久的操作系统, 开始了*
 
 # 2019-09-21 
