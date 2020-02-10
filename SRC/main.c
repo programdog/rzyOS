@@ -19,8 +19,11 @@ list_t task_delay_list;
 //从第一个任务节点得到对应的task的TCB
 task_tcb_s *task_highest_ready(void)
 {
+	//先找到位图中标记的最高优先级组
 	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
+	//找到该优先级组中第一个任务就绪节点
 	node_t *node = list_first_node(&task_ready_table[highest_prio]);
+	//返回任务指针
 	return node_parent(node, task_tcb_s, link_node);
 }
 
