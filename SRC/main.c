@@ -10,12 +10,14 @@ task_tcb_s *idleTask;
 
 //定义一个以优先级划分的位图结构
 bitmap_s bitmap_taskprio;
+
 //定义 RZYOS_PRIO_COUNT（32）个双向链表管理结构， 用于同优先级的就绪任务管理
 list_t task_ready_table[RZYOS_PRIO_COUNT];
 
 //计数调度锁
 uint8_t schedLockCount;
 
+//定义延时链表
 list_t task_delay_list;
 
 

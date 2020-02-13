@@ -65,7 +65,7 @@ void task4_entry(void *param)
 	}
 }
 
-
+//任务初始化
 void rzyOS_app_init(void)
 {
 	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);

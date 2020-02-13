@@ -27,6 +27,7 @@ void task_exit_critical(uint32_t status);
 
 void task_run_first(void);
 
+
 void task_switch(void);
 
 
@@ -49,17 +50,19 @@ void delay_list_remove_time_node(task_tcb_s *task_tcb);
 
 void task_systemtick_handler(void);
 
-
+//systick中断周期配置
 void set_systick_period(uint32_t ms);
 
+//延时函数，将触发调度
 void task_delay(uint32_t delay);
 
-
+//任务初始化
 void rzyOS_app_init(void);
 
-
+//把任务从就绪队列中移出
 void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb);
 
+//把任务在延时队列中删除(外部调用)
 void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
 
 
