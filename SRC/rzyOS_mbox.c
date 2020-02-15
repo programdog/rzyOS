@@ -176,9 +176,9 @@ void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox)
 	//若等待事件的任务为0, 则说明处于有消息且无任务等待的状态， 需要清理
 	if (rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb)) == 0)
 	{
-		rzyOS_mbox = count;
-		rzyOS_mbox = read;
-		rzyOS_mbox = write;
+		rzyOS_mbox -> count = 0;
+		rzyOS_mbox -> read = 0;
+		rzyOS_mbox -> write = 0;
 	}
 
 	task_exit_critical(status);
@@ -211,7 +211,7 @@ void rzyOS_mbox_get_info(rzyOS_mbox_s *rzyOS_mbox, rzyOS_mbox_info_s *rzyOS_mbox
 
 	rzyOS_mbox_info -> count = rzyOS_mbox -> count;
 	rzyOS_mbox_info -> max_count = rzyOS_mbox -> max_count;
-	rzyOS_mbox_info -> task_count = rzyOS_mbox -> rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb));
+	rzyOS_mbox_info -> task_count = rzyOS_event_wait_count(&(rzyOS_mbox -> rzyOS_ecb));
 
 	task_exit_critical(status);
 }

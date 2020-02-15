@@ -52,10 +52,10 @@ uint32_t rzyOS_mbox_post(rzyOS_mbox_s *rzyOS_mbox, void *msg, uint32_t notify_op
 void rzyOS_mbox_flush(rzyOS_mbox_s *rzyOS_mbox);
 
 //” œ‰µƒ…æ≥˝
-uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox)
+uint32_t rzyOS_mbox_destory(rzyOS_mbox_s *rzyOS_mbox);
 
 //” œ‰◊¥Ã¨≤È—Ø
-void rzyOS_mbox_get_info(rzyOS_mbox_s *rzyOS_mbox, rzyOS_mbox_info_s rzyOS_mbox_info);
+void rzyOS_mbox_get_info(rzyOS_mbox_s *rzyOS_mbox, rzyOS_mbox_info_s *rzyOS_mbox_info);
 
 
 #endif
