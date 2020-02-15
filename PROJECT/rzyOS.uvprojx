@@ -433,14 +433,14 @@
               <FilePath>..\SRC\rzyOS_semaphore.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_mbox.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rzyOS_mbox.h</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_mbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_memory.c</FilePath>
             </File>
           </Files>
         </Group>

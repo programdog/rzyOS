@@ -13,6 +13,8 @@ typedef enum rzyOS_event_type_e
 	event_type_semaphore = 1,
 	//邮箱事件类型
 	event_type_mbox = 2,
+	//内存管理事件类型
+	event_type_mem_block = 3,
 } rzyOS_event_type_e;
 
 //事件控制块
