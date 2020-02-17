@@ -13,6 +13,7 @@ typedef struct rzyOS_mem_block_s
 	list_t block_list;
 } rzyOS_mem_block_s;
 
+//内存管理初始化函数
 void rzyOS_mem_block_init(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem_start, uint32_t bolck_size, uint32_t block_count);
 
 #endif
