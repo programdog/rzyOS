@@ -6,10 +6,15 @@
 
 typedef struct rzyOS_mem_block_s
 {
+	//任务控制块
 	rzyOS_ecb_s rzyOS_ecb;
+	//内存起始地址
 	void *mem_start;
+	//子内存块大小
 	uint32_t bolck_size;
+	//子内存块个数
 	uint32_t max_count;
+	//子内存块管理链表
 	list_t block_list;
 } rzyOS_mem_block_s;
 

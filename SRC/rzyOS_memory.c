@@ -32,10 +32,11 @@ void rzyOS_mem_block_init(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem_start
 	//遍历初始化子内存块节点，并加入链表
 	while (mem_block_start < mem_block_end)
 	{
+		//初始化子内存块节点
 		node_init((node_t *)mem_block_start);
-
+		//把子内存块加入到子内存块管理链表
 		list_add_last(&(rzyOS_mem_block -> block_list), (node_t *)mem_block_start);
-
+		//遍历地址向后偏移
 		mem_block_start += bolck_size;
 	}
 }
