@@ -44,7 +44,7 @@ typedef struct rzyOS_ecb_s
 //事件初始化
 void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type);
 
-//事件等待函数
+//把任务插入到事件的等待队列
 void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t state, uint32_t timeout);
 
 //唤醒通知相关事件控制块

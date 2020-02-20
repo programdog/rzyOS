@@ -40,3 +40,47 @@ void rzyOS_mem_block_init(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem_start
 		mem_block_start += bolck_size;
 	}
 }
+
+uint32_t rzyOS_mem_block_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem, uint32_t wait_time)
+{
+	uint32_t status = task_enter_critical();
+
+	//统计是否有空闲的内存子块
+	if (list_count(&(rzyOS_mem_block -> block_list)) > 0)
+	{
+		*mem = (uint8_t *)remove_list_first(&(rzyOS_mem_block -> block_list));
+		task_exit_critical(status);
+
+		return error_no_error;
+	}
+	else
+	{
+		rzyOS_event_wait(&(rzyOS_mem_block -> rzyOS_ecb), currentTask, (void *)0, event_type_mem_block, wait_time);
+		task_exit_critical(status);
+
+		task_schedule();
+		*mem = currentTask -> event_msg;
+
+		return currentTask -> wait_event_result;
+	}
+}
+
+uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem)
+{
+	uint32_t status = task_enter_critical();
+
+	//统计是否有空闲的内存子块
+	if (list_count(&(rzyOS_mem_block -> block_list)) > 0)
+	{
+		*mem = (uint8_t *)remove_list_first(&(rzyOS_mem_block -> block_list));
+		task_exit_critical(status);
+
+		return error_no_error;
+	}
+	else
+	{
+		task_exit_critical(status);
+
+		return error_resource_unvaliable;
+	}
+}
