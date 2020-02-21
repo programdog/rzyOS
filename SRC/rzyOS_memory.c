@@ -84,3 +84,24 @@ uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **m
 		return error_resource_unvaliable;
 	}
 }
+
+void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem)
+{
+	uint32_t status = task_enter_critical();
+
+	if (rzyOS_event_wait_count(&(rzyOS_mem_block -> rzyOS_ecb)) > 0)
+	{
+		task_tcb_s *task_tcb = rzyOS_event_wakeup(&(rzyOS_mem_block -> rzyOS_ecb), (void *)mem, error_no_error);
+
+		if (task_tcb -> prio < currentTask -> prio)
+		{
+			task_schedule();
+		}
+	}
+	else
+	{
+		list_add_last(&(rzyOS_mem_block -> block_list), (node_t *)mem);
+	}
+
+	task_exit_critical(status);
+}

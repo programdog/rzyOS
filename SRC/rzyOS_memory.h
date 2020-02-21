@@ -25,4 +25,6 @@ uint32_t rzyOS_mem_block_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem,
 
 uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem);
 
+void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem);
+
 #endif
