@@ -105,3 +105,20 @@ void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem)
 
 	task_exit_critical(status);
 }
+
+uint32_t rzyOS_mem_block_destroy(rzyOS_mem_block_s *rzyOS_mem_block)
+{
+	uint32_t status = task_enter_critical();
+
+	uint32_t count = rzyOS_event_remove_all(&(rzyOS_mem_block -> rzyOS_ecb), (void *)0, error_delete);
+
+	task_exit_critical(status);
+
+	if (count > 0)
+	{
+		//若获取移除的个数大于0, 则进行一次调度， 看看是否有更高优先级的任务处于刚才的等待状态
+		task_schedule();
+	}
+}
+
+
