@@ -85,7 +85,7 @@ uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **m
 	}
 }
 
-void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem)
+void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem)
 {
 	uint32_t status = task_enter_critical();
 
@@ -119,6 +119,18 @@ uint32_t rzyOS_mem_block_destroy(rzyOS_mem_block_s *rzyOS_mem_block)
 		//若获取移除的个数大于0, 则进行一次调度， 看看是否有更高优先级的任务处于刚才的等待状态
 		task_schedule();
 	}
+
+	return count;
 }
 
+void rzyOS_mem_block_get_info(rzyOS_mem_block_s *rzyOS_mem_block, rzyOS_mem_info_s *rzyOS_mem_info)
+{
+	uint32_t status = task_enter_critical();
 
+	rzyOS_mem_info -> mem_count = list_count(&(rzyOS_mem_block -> block_list));
+	rzyOS_mem_info -> max_count = rzyOS_mem_info -> max_count;
+	rzyOS_mem_info -> block_size = rzyOS_mem_info -> block_size;
+	rzyOS_mem_info -> task_count = rzyOS_event_wait_count(&(rzyOS_mem_block -> rzyOS_ecb));
+
+	task_exit_critical(status);
+}

@@ -41,4 +41,6 @@ void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem);
 
 uint32_t rzyOS_mem_block_destroy(rzyOS_mem_block_s *rzyOS_mem_block);
 
+void rzyOS_mem_block_get_info(rzyOS_mem_block_s *rzyOS_mem_block, rzyOS_mem_info_s *rzyOS_mem_info);
+
 #endif
