@@ -41,6 +41,7 @@ void rzyOS_mem_block_init(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t *mem_start
 	}
 }
 
+//任务获取内存块函数(阻塞)
 uint32_t rzyOS_mem_block_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem, uint32_t wait_time)
 {
 	uint32_t status = task_enter_critical();
@@ -65,6 +66,7 @@ uint32_t rzyOS_mem_block_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem,
 	}
 }
 
+//任务获取内存块函数(非阻塞)
 uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem)
 {
 	uint32_t status = task_enter_critical();
@@ -85,6 +87,7 @@ uint32_t rzyOS_mem_block_no_wait(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **m
 	}
 }
 
+//子内存块释放函数
 void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem)
 {
 	uint32_t status = task_enter_critical();
@@ -106,6 +109,7 @@ void rzyOS_mem_block_post(rzyOS_mem_block_s *rzyOS_mem_block, uint8_t **mem)
 	task_exit_critical(status);
 }
 
+//内存块销毁函数
 uint32_t rzyOS_mem_block_destroy(rzyOS_mem_block_s *rzyOS_mem_block)
 {
 	uint32_t status = task_enter_critical();
@@ -123,6 +127,7 @@ uint32_t rzyOS_mem_block_destroy(rzyOS_mem_block_s *rzyOS_mem_block)
 	return count;
 }
 
+//内存块信息获取函数
 void rzyOS_mem_block_get_info(rzyOS_mem_block_s *rzyOS_mem_block, rzyOS_mem_info_s *rzyOS_mem_info)
 {
 	uint32_t status = task_enter_critical();
