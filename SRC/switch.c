@@ -23,6 +23,7 @@ void task_exit_critical(uint32_t status)
 	__set_PRIMASK(status);
 }
 
+//pendsv中断服务函数
 __asm void PendSV_Handler(void)
 {
 	IMPORT currentTask					// IMPORT后面跟随函数名或变量名，作用相当于C中的extern关键字，指出这些全局符号是在其它源文件中定义的
@@ -49,6 +50,7 @@ PendSVHander_nosave
 	BX LR								// 最后返回，此时任务就会从堆栈中取出LR值，恢复到上次运行的位
 }
 
+//从MSP转换PSP,配置pendsv优先级
 //change MSP to PSP , then setup pendSV priority and trigger pendSV
 void task_run_first(void)
 {
@@ -58,6 +60,7 @@ void task_run_first(void)
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
 }
 
+//触发pendsv中断
 //trigger pendSV
 void task_switch(void)
 {

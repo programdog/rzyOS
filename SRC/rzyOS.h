@@ -25,9 +25,11 @@ uint32_t task_enter_critical(void);
 void task_exit_critical(uint32_t status);
 
 
+//从MSP转换PSP,配置pendsv优先级
 void task_run_first(void);
 
 
+//触发pendsv中断
 void task_switch(void);
 
 
