@@ -7,7 +7,7 @@
 //内存块管理结构体
 typedef struct rzyOS_mem_block_s
 {
-	//任务控制块
+	//事件控制块
 	rzyOS_ecb_s rzyOS_ecb;
 	//内存起始地址
 	void *mem_start;

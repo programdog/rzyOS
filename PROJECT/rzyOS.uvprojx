@@ -442,6 +442,16 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_memory.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_flag_group.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\rzyOS_flag_group.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_flag_group.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\rzyOS_flag_group.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
