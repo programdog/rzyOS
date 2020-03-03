@@ -9,4 +9,6 @@ typedef struct rzyOS_flag_group_s
 	uint32_t flag;
 } rzyOS_flag_group_s;
 
+void rzyOS_flag_group_init(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t flags);
+
 #endif
