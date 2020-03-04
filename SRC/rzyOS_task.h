@@ -82,6 +82,7 @@ typedef struct task_tcb_s
 	void *event_msg;
 	//等待事件的结果
 	uint32_t wait_event_result;
+	
 	//请求的事件类型
 	uint32_t wait_flag_type;
 	//请求的事件标志

@@ -29,20 +29,6 @@ typedef struct rzyOS_ecb_s
 } rzyOS_ecb_s;
 
 
-//任务希望请求的事件标志组时间类型
-#define FLAGGROUP_CLEAR (0x0 << 0)
-#define FLAGGROUP_SET (0x1 << 0)
-#define FLAGGROUP_ANY (0x0 << 1)
-#define FLAGGROUP_ALL (0x1 << 1)
-
-#define FLAGGROUP_SET_ALL (FLAGGROUP_SET | FLAGGROUP_ALL)
-#define FLAGGROUP_SET_ANY (FLAGGROUP_SET | FLAGGROUP_ANY)
-#define FLAGGROUP_CLEAR_ALL (FLAGGROUP_CLEAR | FLAGGROUP_ALL)
-#define FLAGGROUP_CLEAR_ANY (FLAGGROUP_CLEAR | FLAGGROUP_ANY)
-
-#define FLAGGROUP_CONSUME (1 << 7)
-
-
 //事件初始化
 void rzyOS_event_init(rzyOS_ecb_s *ecb, rzyOS_event_type_e type);
 
