@@ -19,7 +19,7 @@ typedef struct rzyOS_flag_group_s
 //所有的标志位
 #define FLAGGROUP_ALL (0x1 << 1)
 
-//标志组合
+//事件类型,标志组合
 //设置所有的标志位
 #define FLAGGROUP_SET_ALL (FLAGGROUP_SET | FLAGGROUP_ALL)
 //设置任意的标志位
@@ -36,6 +36,10 @@ typedef struct rzyOS_flag_group_s
 //时间组初始化函数
 void rzyOS_flag_group_init(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t flags);
 
-void rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks);
+uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks);
+
+uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag);
+
+void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set, uint32_t flag);
 
 #endif
