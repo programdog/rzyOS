@@ -9,7 +9,12 @@ typedef struct rzyOS_flag_group_s
 	uint32_t flag;
 } rzyOS_flag_group_s;
 
-//标志位形式
+
+//事件类型
+//bit8 : 
+
+//|__|__|__|__|---|__|__|any/all|set/clean|
+
 //清除标志位
 #define FLAGGROUP_CLEAR (0x0 << 0)
 //设置标志位
@@ -20,13 +25,13 @@ typedef struct rzyOS_flag_group_s
 #define FLAGGROUP_ALL (0x1 << 1)
 
 //事件类型,标志组合
-//设置所有的标志位
+//所有的标志位设置
 #define FLAGGROUP_SET_ALL (FLAGGROUP_SET | FLAGGROUP_ALL)
-//设置任意的标志位
+//任意的标志位设置
 #define FLAGGROUP_SET_ANY (FLAGGROUP_SET | FLAGGROUP_ANY)
-//清除所有的标志位
+//所有的标志位清除
 #define FLAGGROUP_CLEAR_ALL (FLAGGROUP_CLEAR | FLAGGROUP_ALL)
-//清除任意的标志位
+//任意的标志位清除
 #define FLAGGROUP_CLEAR_ANY (FLAGGROUP_CLEAR | FLAGGROUP_ANY)
 
 //是否需要清零或置位
