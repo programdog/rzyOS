@@ -53,7 +53,7 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 		//传递计算的标志值
 		*flag = cal_flag;
 
-		return error_no_error
+		return error_no_error;
 	}
 
 	//不满足
@@ -62,7 +62,7 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 	return error_resource_unvaliable;
 }
 
-void rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks)
+uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks)
 {
 
 }
