@@ -2,6 +2,8 @@
 #define __RZYOS_FLAG_GROUP_H
 
 #include "rzyOS_event.h"
+#include "rzyOS.h"
+
 
 typedef struct rzyOS_flag_group_s
 {

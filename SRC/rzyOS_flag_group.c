@@ -56,13 +56,45 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 		return error_no_error;
 	}
 
-	//不满足
+	//不满足	
 	//无资源
 	*flag = cal_flag;
 	return error_resource_unvaliable;
 }
 
+
+//
+//parameter : 
+//uint32_t wait_type : 等待的事件类型
+//uint32_t request_flag : 请求的标志
 uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks)
 {
+	uint32_t result;
+	uint32_t flags = request_flag;
 
+	uint32_t status = task_enter_critical();
+
+	result = rzyOS_flag_group_check(rzyOS_flag_group, wait_type, &flags);
+
+	if (result != error_no_error)
+	{
+		currentTask -> wait_flag_type = wait_type;
+		currentTask -> event_flag = request_flag;
+
+		rzyOS_event_wait(&(rzyOS_flag_group -> rzyOS_ecb), currentTask, (void *)0, event_type_flag_group, wait_ticks);
+
+		task_exit_critical(status);
+
+		task_schedule();
+
+		*result_flag = currentTask -> event_flag;
+		result = currentTask -> wait_event_result;
+	}
+	else
+	{
+		*result_flag = flags;
+		task_exit_critical(status);
+	}
+
+	return result;
 }
