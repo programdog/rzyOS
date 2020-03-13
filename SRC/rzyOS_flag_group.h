@@ -4,10 +4,11 @@
 #include "rzyOS_event.h"
 #include "rzyOS.h"
 
-
+//事件标志组结构
 typedef struct rzyOS_flag_group_s
 {
 	rzyOS_ecb_s rzyOS_ecb;
+	//事件标志组标志
 	uint32_t flag;
 } rzyOS_flag_group_s;
 

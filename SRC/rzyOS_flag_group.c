@@ -74,24 +74,34 @@ uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wa
 
 	uint32_t status = task_enter_critical();
 
+	//检查事件标志
 	result = rzyOS_flag_group_check(rzyOS_flag_group, wait_type, &flags);
 
+	//返回结果有问题的情况, 需要插入到事件等待队列
 	if (result != error_no_error)
 	{
+		//设置当前任务等待的类型
 		currentTask -> wait_flag_type = wait_type;
+		//等待的事件标志
 		currentTask -> event_flag = request_flag;
 
+		//插入到时间控制块中
 		rzyOS_event_wait(&(rzyOS_flag_group -> rzyOS_ecb), currentTask, (void *)0, event_type_flag_group, wait_ticks);
 
 		task_exit_critical(status);
 
+		//进行调度
 		task_schedule();
 
+		//取出任务的等待标志
 		*result_flag = currentTask -> event_flag;
+		//等待事件的结果
 		result = currentTask -> wait_event_result;
 	}
+	//返回的结果满足要求
 	else
 	{
+		//取出等待标志结果
 		*result_flag = flags;
 		task_exit_critical(status);
 	}
