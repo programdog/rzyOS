@@ -56,14 +56,14 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 		return error_no_error;
 	}
 
-	//不满足	
+	//不满足
 	//无资源
 	*flag = cal_flag;
 	return error_resource_unvaliable;
 }
 
 
-//
+//事件组等待函数(阻塞)
 //parameter : 
 //uint32_t wait_type : 等待的事件类型
 //uint32_t request_flag : 请求的标志
@@ -107,4 +107,23 @@ uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wa
 	}
 
 	return result;
+}
+
+//事件组等待函数(非阻塞)
+uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag)
+{
+	uint32_t result;
+	uint32_t flags = request_flag;
+
+	uint32_t status = task_enter_critical();
+
+	//检查事件标志
+	result = rzyOS_flag_group_check(rzyOS_flag_group, wait_type, &flags);
+
+	task_exit_critical(status);
+
+	//取出等待标志结果
+	*result_flag = flags;
+
+	return error_no_error;
 }
