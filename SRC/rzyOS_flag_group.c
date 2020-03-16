@@ -112,13 +112,12 @@ uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wa
 //事件组等待函数(非阻塞)
 uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag)
 {
-	uint32_t result;
 	uint32_t flags = request_flag;
 
 	uint32_t status = task_enter_critical();
 
 	//检查事件标志
-	result = rzyOS_flag_group_check(rzyOS_flag_group, wait_type, &flags);
+	rzyOS_flag_group_check(rzyOS_flag_group, wait_type, &flags);
 
 	task_exit_critical(status);
 
@@ -126,4 +125,53 @@ uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t
 	*result_flag = flags;
 
 	return error_no_error;
+}
+
+//时间组通知函数
+//parameter : 
+//uint8_t is_set : 事件类型
+//uint32_t flag : 事件标志组的标志
+void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set, uint32_t flag)
+{
+	list_t *wait_list;
+	node_t *node;
+	node_t *next_node;
+	uint8_t need_sched;
+
+	uint32_t status = task_enter_critical();
+
+	if (is_set)
+	{
+		rzyOS_flag_group -> flag |= flag;
+	}
+	else
+	{
+		rzyOS_flag_group -> flag &= ~flag;
+	}
+
+	wait_list = &(rzyOS_flag_group -> rzyOS_ecb.wait_list);
+
+	for (node = wait_list -> head_node.next_node; node != &(wait_list -> head_node); node = next_node)
+	{
+		uint32_t result;
+		task_tcb_s *task_tcb = node_parent(node, task_tcb_s, link_node);
+		uint32_t flags = task_tcb -> event_flag;
+		next_node = node -> next_node;
+
+		result = rzyOS_flag_group_check(rzyOS_flag_group, task_tcb -> wait_flag_type, &flags);
+
+		if (error_no_error == result)
+		{
+			task_tcb -> event_flag = flags;
+			rzyOS_event_wakeup_appoint_task(&(rzyOS_flag_group -> rzyOS_ecb), task_tcb, (void *)0, error_no_error);
+			need_sched = 1;
+		}
+	}
+
+	if (need_sched)
+	{
+		task_schedule();
+	}
+
+	task_exit_critical(status);
 }

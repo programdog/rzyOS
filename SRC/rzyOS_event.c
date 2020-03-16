@@ -87,6 +87,36 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 	return task;
 }
 
+//
+task_tcb_s *rzyOS_event_wakeup_appoint_task(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t result)
+{
+	uint32_t status = task_enter_critical();
+	
+	list_remove_pos_node(&(rzyOS_ecb -> wait_list), &(task_tcb -> link_node));
+	
+	//事件块清零
+	task_tcb -> wait_event = (rzyOS_ecb_s *)0;
+	task_tcb -> event_msg = msg;
+	task_tcb -> wait_event_result = result;
+	task_tcb -> task_status &= ~RZYOS_TASK_WAIT_MASK;
+		
+	//若设置了超时等待
+	if (task_tcb -> delayTicks != 0)
+	{
+		//则强制从延时队列中唤醒, 以便事件到来, 及时相应
+		rzyOS_task_delay_list_remove(task_tcb);
+	}
+		
+	//把任务插入到就绪队列, 等待运行
+	task_insert_ready_list(task_tcb);
+	
+	task_exit_critical(status);
+	
+	return task_tcb;
+
+}
+
+
 //把指定的任务从事件控制块强制移出
 void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
 {

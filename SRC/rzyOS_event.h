@@ -41,6 +41,9 @@ task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t resul
 //把指定的任务从事件控制块强制移出
 void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result);
 
+//
+task_tcb_s *rzyOS_event_wakeup_appoint_task(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, uint32_t result);
+
 //移出事件队列中所有的正在等待事件的任务
 uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result);
 
