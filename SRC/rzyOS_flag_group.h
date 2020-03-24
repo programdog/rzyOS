@@ -8,13 +8,13 @@
 typedef struct rzyOS_flag_group_s
 {
 	rzyOS_ecb_s rzyOS_ecb;
-	//事件标志组标志
+	//事件标志组置位情况
 	uint32_t flag;
 } rzyOS_flag_group_s;
 
 
 
-//事件类型
+//状态类型&标志组合
 /*========================================================================*/
 
 //BIT8 : |__7__|__6__|__5__|__4__|---|__3__|__2__|any/all|set/clean|

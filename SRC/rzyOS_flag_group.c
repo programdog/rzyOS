@@ -12,8 +12,8 @@ void rzyOS_flag_group_init(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t flags)
 
 //事件检查函数
 //parameter : 
-//uint32_t type : 等待的事件类型(标志组合)
-//uint32_t flag : 任务期望等待的事件类型标志
+//uint32_t type : 等待的事件类型(标志组合)(uint8_t)
+//uint32_t *flag : 任务期望等待的事件类型标志
 static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t type, uint32_t *flag)
 {
 	//任务希望等待的标志
@@ -29,7 +29,7 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 	//is_set ? : 对置位进行统计
 	//(rzyOS_flag_group -> flag & src_flag) : 当前事件组与任务期望等待的标志类型所匹配的置位的位
 	//(~rzyOS_flag_group -> flag & src_flag) : 当前事件组与任务期望等待的标志类型所匹配的为零的位
-	uint32_t cal_flag = is_set ? (rzyOS_flag_group -> flag & src_flag) : (~rzyOS_flag_group -> flag & src_flag);
+	uint32_t cal_flag = is_set ? (rzyOS_flag_group -> flag & src_flag) : ((~rzyOS_flag_group -> flag) & src_flag);
 
 	//判断相应的标志是否已经满足
 	//所有标志 && 计算的与请求的一样 || 任意标志 && 计算标志有统计到的
@@ -50,7 +50,7 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 			}
 		}
 
-		//传递计算的标志值
+		//传递计算的标志位
 		*flag = cal_flag;
 
 		return error_no_error;
@@ -59,18 +59,22 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 	//不满足
 	//无资源
 	*flag = cal_flag;
+
 	return error_resource_unvaliable;
 }
 
 
 //事件组等待函数(阻塞)
 //parameter : 
-//uint32_t wait_type : 等待的事件类型
+//uint32_t wait_type : 等待的事件类型(uint8_t)
 //uint32_t request_flag : 请求的标志
 //uint32_t result_flag : 等待标志的结果
+//return : emnu rzyOS_error_e
 uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks)
 {
+	//rzyOS_flag_group_check()函数返回值
 	uint32_t result;
+	//请求的标志
 	uint32_t flags = request_flag;
 
 	uint32_t status = task_enter_critical();
@@ -112,7 +116,7 @@ uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wa
 
 //事件组等待函数(非阻塞)
 //parameter : 
-//uint32_t wait_type : 等待的事件类型
+//uint32_t wait_type : 等待的事件组类型
 //uint32_t request_flag : 请求的标志
 //uint32_t result_flag : 等待标志的结果
 uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag)
