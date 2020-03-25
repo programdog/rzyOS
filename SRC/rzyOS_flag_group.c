@@ -138,8 +138,8 @@ uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t
 
 //时间组通知函数
 //parameter : 
-//uint8_t is_set : 事件类型
-//uint32_t flag : 事件标志组的标志
+//uint8_t is_set : 标志类型(event_flag)
+//uint32_t flag : 事件标志组标志值
 void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set, uint32_t flag)
 {
 	list_t *wait_list;
@@ -149,6 +149,7 @@ void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set,
 
 	uint32_t status = task_enter_critical();
 
+	//对事件组标志值清零还是置位
 	if (is_set)
 	{
 		rzyOS_flag_group -> flag |= flag;
@@ -158,21 +159,30 @@ void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set,
 		rzyOS_flag_group -> flag &= ~flag;
 	}
 
+	//取出等待队列的地址
 	wait_list = &(rzyOS_flag_group -> rzyOS_ecb.wait_list);
 
+	//遍历等待列表
 	for (node = wait_list -> head_node.next_node; node != &(wait_list -> head_node); node = next_node)
 	{
 		uint32_t result;
+		//获取等待列表中等待节点的任务指针
 		task_tcb_s *task_tcb = node_parent(node, task_tcb_s, link_node);
+		//取出任务希望等待的任务标志
 		uint32_t flags = task_tcb -> event_flag;
 		next_node = node -> next_node;
 
+		//检查任务等待的标志类型与事件标志是否已经满足
 		result = rzyOS_flag_group_check(rzyOS_flag_group, task_tcb -> wait_flag_type, &flags);
 
+		//没有错误,满足条件
 		if (error_no_error == result)
 		{
+			//则把任务等待的事件标志赋回给event_flag
 			task_tcb -> event_flag = flags;
+			//唤醒当前任务,并插入时间组等待队列
 			rzyOS_event_wakeup_appoint_task(&(rzyOS_flag_group -> rzyOS_ecb), task_tcb, (void *)0, error_no_error);
+			//需要检查优先级,进行调度
 			need_sched = 1;
 		}
 	}
