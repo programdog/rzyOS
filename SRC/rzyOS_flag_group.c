@@ -70,6 +70,14 @@ static uint32_t rzyOS_flag_group_check(rzyOS_flag_group_s *rzyOS_flag_group, uin
 //uint32_t request_flag : 请求的标志
 //uint32_t result_flag : 等待标志的结果
 //return : emnu rzyOS_error_e
+//----------------------------------------------------
+//example : 
+//rzyOS_flag_group_wait(flag_group_1, FLAGGROUP_CLEAR_ALL, 0x06, &result_flag, wait_ticks);
+//等待flag_group_1中第1位和第2位的标志全部清零,并把结果放入result_flag,超时等待wait_ticks
+//
+//rzyOS_flag_group_wait(flag_group_1, FLAGGROUP_CLEAR_ALL | FLAGGROUP_CONSUME, 0x06, &result_flag, wait_ticks);
+//等待flag_group_1中第1位和第2位的标志全部清零, 条件满足后消耗(此处为置位),并把结果放入result_flag,超时等待wait_ticks
+//----------------------------------------------------
 uint32_t rzyOS_flag_group_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t wait_type, uint32_t request_flag, uint32_t *result_flag, uint32_t wait_ticks)
 {
 	//rzyOS_flag_group_check()函数返回值
@@ -140,6 +148,11 @@ uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t
 //parameter : 
 //uint8_t is_set : 标志类型(event_flag)
 //uint32_t flag : 事件标志组标志值
+//----------------------------------------------------
+//example : 
+//rzyOS_flag_group_post(flag_group_1, 0, 0x07);
+//对 flag_group_1 事件标志组的第0位第1位第2位做清零操作
+//----------------------------------------------------
 void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set, uint32_t flag)
 {
 	list_t *wait_list;

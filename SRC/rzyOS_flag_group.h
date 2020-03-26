@@ -8,7 +8,7 @@
 typedef struct rzyOS_flag_group_s
 {
 	rzyOS_ecb_s rzyOS_ecb;
-	//事件标志组置位情况
+	//事件标志组置位情况(根据需要的情况自行设置初始值)
 	uint32_t flag;
 } rzyOS_flag_group_s;
 
