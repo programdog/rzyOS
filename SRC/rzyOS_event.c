@@ -137,6 +137,9 @@ void rzyOS_event_remove(task_tcb_s *task_tcb, void *msg, uint32_t result)
 
 //移出事件队列中所有的正在等待事件的任务
 //返回移除的个数
+//parameter : 
+//uint32_t result : 传递的事件结果, 在这里传递的是事件删除标志
+//return : 删除的个数
 uint32_t rzyOS_event_remove_all(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
 	uint32_t element_count = 0;

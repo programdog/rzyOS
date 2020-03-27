@@ -207,3 +207,32 @@ void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set,
 
 	task_exit_critical(status);
 }
+
+//事件标志组删除函数
+//return : 移除的任务个数
+uint32_t rzyOS_flag_group_destroy(rzyOS_flag_group_s *rzyOS_flag_group)
+{
+	uint32_t status = task_enter_critical();
+
+	uint32_t count = rzyOS_event_remove_all(&(rzyOS_flag_group -> rzyOS_ecb), (void *)0, error_delete);
+
+	task_exit_critical(status);
+
+	if (count > 0)
+	{
+		task_schedule();
+	}
+
+	return count;
+}
+
+//事件组消息获取函数
+void rzyOS_flag_group_get_info(rzyOS_flag_group_s *rzyOS_flag_group, rzyOS_flag_group_info_s *rzyOS_flag_group_info)
+{
+	uint32_t status = task_enter_critical();
+
+	rzyOS_flag_group_info -> flag = rzyOS_flag_group -> flag;
+	rzyOS_flag_group_info -> task_count = rzyOS_event_wait_count(&(rzyOS_flag_group -> rzyOS_ecb));
+
+	task_exit_critical(status);
+}

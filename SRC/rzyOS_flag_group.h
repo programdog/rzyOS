@@ -12,6 +12,14 @@ typedef struct rzyOS_flag_group_s
 	uint32_t flag;
 } rzyOS_flag_group_s;
 
+typedef struct rzyOS_flag_group_info_s
+{
+	//当前的事件标志
+	uint32_t flag;
+	//当前等待事件组的任务计数
+	uint32_t task_count;
+} rzyOS_flag_group_info_s;
+
 
 
 //状态类型&标志组合
@@ -55,5 +63,11 @@ uint32_t rzyOS_flag_group_no_wait(rzyOS_flag_group_s *rzyOS_flag_group, uint32_t
 
 //时间组通知函数
 void rzyOS_flag_group_post(rzyOS_flag_group_s *rzyOS_flag_group, uint8_t is_set, uint32_t flag);
+
+//事件标志组删除函数
+uint32_t rzyOS_flag_group_destroy(rzyOS_flag_group_s *rzyOS_flag_group);
+
+//事件组消息获取函数
+void rzyOS_flag_group_get_info(rzyOS_flag_group_s *rzyOS_flag_group, rzyOS_flag_group_info_s *rzyOS_flag_group_info);
 
 #endif
