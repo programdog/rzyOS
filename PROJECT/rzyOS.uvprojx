@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_flag_group.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_mutex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

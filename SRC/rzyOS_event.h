@@ -17,6 +17,8 @@ typedef enum rzyOS_event_type_e
 	event_type_mem_block = 3,
 	//事件组
 	event_type_flag_group = 4,
+	//互斥锁
+	event_type_mutex = 5,
 } rzyOS_event_type_e;
 
 //事件控制块
