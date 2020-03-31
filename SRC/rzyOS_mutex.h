@@ -4,15 +4,20 @@
 #include "rzyOS_event.h"
 #include "rzyOS.h"
 
+//互斥锁结构
 typedef struct rzyOS_mutex_s
 {
 	//事件控制块
 	rzyOS_ecb_s rzyOS_ecb;
+	//锁定次数计数
 	uint32_t lock_count;
+	//拥有者task指针
 	task_tcb_s *owner;
+	//拥有者task原始优先级
 	uint32_t owner_original_prio;
 } rzyOS_mutex_s;
 
+//互斥锁初始化函数
 void rzyOS_mutex_init(rzyOS_mutex_s *rzyOS_mutex);
 
 #endif
