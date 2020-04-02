@@ -20,4 +20,8 @@ typedef struct rzyOS_mutex_s
 //互斥锁初始化函数
 void rzyOS_mutex_init(rzyOS_mutex_s *rzyOS_mutex);
 
+uint32_t rzyOS_mutex_wait(rzyOS_mutex_s *rzyOS_mutex, uint32_t wait_time);
+
+uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex);
+
 #endif
