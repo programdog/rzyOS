@@ -24,4 +24,6 @@ uint32_t rzyOS_mutex_wait(rzyOS_mutex_s *rzyOS_mutex, uint32_t wait_time);
 
 uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex);
 
+uint32_t rzyOS_mutex_post(rzyOS_mutex_s *rzyOS_mutex);
+
 #endif

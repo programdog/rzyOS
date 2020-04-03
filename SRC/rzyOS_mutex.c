@@ -91,3 +91,62 @@ uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex)
 		return error_resource_unvaliable;
 	}
 }
+
+uint32_t rzyOS_mutex_post(rzyOS_mutex_s *rzyOS_mutex)
+{
+	uint32_t status = task_enter_critical();
+
+	if (rzyOS_mutex -> lock_count <= 0)
+	{
+		task_exit_critical(status);
+
+		return error_no_error;
+	}
+
+	if (currentTask != rzyOS_mutex -> owner)
+	{
+		task_exit_critical(status);
+
+		return error_not_owner;
+	}
+
+	rzyOS_mutex -> lock_count --;
+
+	if (rzyOS_mutex -> lock_count > 0)
+	{
+		task_exit_critical(status);
+
+		return error_no_error;
+	}
+	
+	if (rzyOS_mutex -> owner_original_prio != rzyOS_mutex -> owner -> prio)
+	{
+		if (RZYOS_TASK_STATUS_READY == rzyOS_mutex -> owner -> task_status)
+		{
+			task_remove_ready_list(rzyOS_mutex -> owner);
+			currentTask -> prio = rzyOS_mutex -> owner_original_prio;
+			task_insert_ready_list(rzyOS_mutex -> owner);
+		}
+		else
+		{
+			currentTask -> prio = rzyOS_mutex -> owner_original_prio;
+		}
+	}
+
+	if (rzyOS_event_wait_count(&(rzyOS_mutex -> rzyOS_ecb)) > 0)
+	{
+		task_tcb_s *task_tcb = rzyOS_event_wakeup(&(rzyOS_mutex -> rzyOS_ecb), (void *)0, error_no_error);
+		rzyOS_mutex -> lock_count ++;
+		rzyOS_mutex -> owner = task_tcb;
+		rzyOS_mutex -> owner_original_prio = task_tcb -> prio;
+
+		if (task_tcb -> prio < currentTask -> prio)
+		{
+			task_schedule();
+		}
+	}
+
+	task_exit_critical(status);
+
+	return error_no_error;
+}

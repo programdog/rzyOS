@@ -34,6 +34,8 @@ typedef enum rzyOS_error_e
 	error_delete = 3,
 	//资源已满
 	error_resource_full = 4,
+	//非拥有者
+	error_not_owner = 5,
 } rzyOS_error_e;
 
 
