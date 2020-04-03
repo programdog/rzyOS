@@ -85,9 +85,9 @@ uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex)
 
 			return error_no_error;
 		}
+
+		task_exit_critical(status);
+
+		return error_resource_unvaliable;
 	}
-
-	task_exit_critical(status);
-
-	return error_resource_unvaliable;
 }
