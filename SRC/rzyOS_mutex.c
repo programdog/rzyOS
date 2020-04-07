@@ -13,6 +13,7 @@ void rzyOS_mutex_init(rzyOS_mutex_s *rzyOS_mutex)
 	rzyOS_mutex -> owner_original_prio = RZYOS_PRIO_COUNT;
 }
 
+//互斥锁等待函数(阻塞)
 uint32_t rzyOS_mutex_wait(rzyOS_mutex_s *rzyOS_mutex, uint32_t wait_time)
 {
 	uint32_t status = task_enter_critical();
@@ -61,6 +62,7 @@ uint32_t rzyOS_mutex_wait(rzyOS_mutex_s *rzyOS_mutex, uint32_t wait_time)
 	}
 }
 
+//互斥锁等待函数(非阻塞)
 uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex)
 {
 	uint32_t status = task_enter_critical();
@@ -92,6 +94,7 @@ uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex)
 	}
 }
 
+//互斥锁释放函数
 uint32_t rzyOS_mutex_post(rzyOS_mutex_s *rzyOS_mutex)
 {
 	uint32_t status = task_enter_critical();
