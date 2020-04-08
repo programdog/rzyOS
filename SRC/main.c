@@ -68,6 +68,7 @@ void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb)
 }
 
 //task调度, 切换到最高优先级中,延时用完的task
+//任务处于运行状态时依然在就绪列表中
 void task_schedule(void)
 {
 	task_tcb_s *tempTask;
@@ -81,6 +82,7 @@ void task_schedule(void)
 	}
 	
 	tempTask = task_highest_ready();
+	
 	if (tempTask != currentTask)
 	{
 		nextTask = tempTask;
