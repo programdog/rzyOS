@@ -17,6 +17,21 @@ typedef struct rzyOS_mutex_s
 	uint32_t owner_original_prio;
 } rzyOS_mutex_s;
 
+////互斥锁信息
+typedef struct rzyOS_mutex_info_s
+{
+	//当前等待事件组的任务计数
+	uint32_t task_count;
+	//拥有者的优先级
+	uint32_t owner_prio;
+	//继承优先级
+	uint32_t inherit_prio;
+	//拥有者task指针
+	task_tcb_s *owner;
+	//锁定次数计数
+	uint32_t lock_count;
+} rzyOS_mutex_info_s;
+
 //互斥锁初始化函数
 void rzyOS_mutex_init(rzyOS_mutex_s *rzyOS_mutex);
 
