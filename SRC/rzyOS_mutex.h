@@ -44,4 +44,10 @@ uint32_t rzyOS_mutex_no_wait(rzyOS_mutex_s *rzyOS_mutex);
 //互斥锁释放函数
 uint32_t rzyOS_mutex_post(rzyOS_mutex_s *rzyOS_mutex);
 
+//互斥锁销毁函数
+uint32_t rzyOS_mutex_destroy(rzyOS_mutex_s *rzyOS_mutex);
+
+//互斥锁信息获取函数
+void rzyOS_mutex_get_info(rzyOS_mutex_s *rzyOS_mutex, rzyOS_mutex_info_s *rzyOS_mutex_info);
+
 #endif

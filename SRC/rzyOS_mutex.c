@@ -194,3 +194,65 @@ uint32_t rzyOS_mutex_post(rzyOS_mutex_s *rzyOS_mutex)
 
 	return error_no_error;
 }
+
+//互斥锁销毁函数
+uint32_t rzyOS_mutex_destroy(rzyOS_mutex_s *rzyOS_mutex)
+{
+	uint32_t count = 0;
+	uint32_t status = task_enter_critical();
+
+	if (rzyOS_mutex -> lock_count > 0)
+	{
+		if (rzyOS_mutex -> owner_original_prio != rzyOS_mutex -> owner -> prio)
+		{
+			//如果任务在就绪状态
+			if (RZYOS_TASK_STATUS_READY == rzyOS_mutex -> owner -> task_status)
+			{
+				//则修改在就绪列表的位置
+				task_remove_ready_list(rzyOS_mutex -> owner);
+				//优先级恢复
+				rzyOS_mutex -> owner -> prio = rzyOS_mutex -> owner_original_prio;
+				task_insert_ready_list(rzyOS_mutex -> owner);
+			}
+			//如果任务不在就绪状态， 直接恢复优先级
+			else
+			{
+				rzyOS_mutex -> owner -> prio = rzyOS_mutex -> owner_original_prio;
+			}
+		}
+
+		//删除等待互斥锁的任务， 获取移除的个数
+		count = rzyOS_event_remove_all(&(rzyOS_mutex -> rzyOS_ecb), (void *)0, error_delete);
+		
+		task_exit_critical(status);
+
+		if (count > 0)
+		{
+			//若获取移除的个数大于0, 则进行一次调度， 看看是否有更高优先级的任务处于刚才的等待状态
+			task_schedule();
+		}
+	}
+
+	return count;
+}
+
+//互斥锁信息获取函数
+void rzyOS_mutex_get_info(rzyOS_mutex_s *rzyOS_mutex, rzyOS_mutex_info_s *rzyOS_mutex_info)
+{
+	uint32_t status = task_enter_critical();
+
+	rzyOS_mutex_info -> task_count = rzyOS_event_wait_count(&(rzyOS_mutex -> rzyOS_ecb));
+	rzyOS_mutex_info -> owner_prio = rzyOS_mutex -> owner_original_prio;
+	if ((task_tcb_s *)0 != rzyOS_mutex -> owner)
+	{
+		rzyOS_mutex_info -> inherit_prio = rzyOS_mutex -> owner -> prio;
+	}
+	else
+	{
+		rzyOS_mutex_info -> inherit_prio = RZYOS_PRIO_COUNT;
+	}
+	rzyOS_mutex_info -> owner = rzyOS_mutex -> owner;
+	rzyOS_mutex_info -> lock_count = rzyOS_mutex -> lock_count;
+
+	task_exit_critical(status);
+}
