@@ -95,18 +95,6 @@ void rzyOS_sem_post(rzyOS_sem_s *sem)
 	task_exit_critical(status);
 }
 
-//信号量信息获得函数
-void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info)
-{
-	uint32_t status = task_enter_critical();
-
-	sem_info -> sem_count = sem -> count;
-	sem_info -> max_count = sem -> max_count;
-	sem_info -> task_count = rzyOS_event_wait_count(&(sem -> rzyOS_ecb));
-
-	task_exit_critical(status);
-}
-
 //信号量销毁
 //在rzyOS_event_remove_all()函数中会把任务插入到就绪队列
 uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
@@ -127,4 +115,16 @@ uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem)
 	}
 
 	return count;
+}
+
+//信号量信息获得函数
+void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info)
+{
+	uint32_t status = task_enter_critical();
+
+	sem_info -> sem_count = sem -> count;
+	sem_info -> max_count = sem -> max_count;
+	sem_info -> task_count = rzyOS_event_wait_count(&(sem -> rzyOS_ecb));
+
+	task_exit_critical(status);
 }

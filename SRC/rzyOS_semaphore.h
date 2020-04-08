@@ -43,10 +43,11 @@ uint32_t rzyOS_sem_no_wait(rzyOS_sem_s *sem);
 //信号量释放函数
 void rzyOS_sem_post(rzyOS_sem_s *sem);
 
+//信号量销毁
+uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem);
+
 //信号量信息获得函数
 void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info);
 
-//信号量销毁
-uint32_t rzyOS_sem_destroy(rzyOS_sem_s *sem);
 
 #endif
