@@ -201,8 +201,10 @@ uint32_t rzyOS_mutex_destroy(rzyOS_mutex_s *rzyOS_mutex)
 	uint32_t count = 0;
 	uint32_t status = task_enter_critical();
 
+	//互斥锁是否被锁定，未锁定说明无任务占用，不进行处理
 	if (rzyOS_mutex -> lock_count > 0)
 	{
+		//是否发生优先级继承
 		if (rzyOS_mutex -> owner_original_prio != rzyOS_mutex -> owner -> prio)
 		{
 			//如果任务在就绪状态
@@ -243,14 +245,17 @@ void rzyOS_mutex_get_info(rzyOS_mutex_s *rzyOS_mutex, rzyOS_mutex_info_s *rzyOS_
 
 	rzyOS_mutex_info -> task_count = rzyOS_event_wait_count(&(rzyOS_mutex -> rzyOS_ecb));
 	rzyOS_mutex_info -> owner_prio = rzyOS_mutex -> owner_original_prio;
+	//判断当前互斥锁是否被占用
 	if ((task_tcb_s *)0 != rzyOS_mutex -> owner)
 	{
 		rzyOS_mutex_info -> inherit_prio = rzyOS_mutex -> owner -> prio;
 	}
 	else
 	{
+		//没有被占用，则设置无效值
 		rzyOS_mutex_info -> inherit_prio = RZYOS_PRIO_COUNT;
 	}
+
 	rzyOS_mutex_info -> owner = rzyOS_mutex -> owner;
 	rzyOS_mutex_info -> lock_count = rzyOS_mutex -> lock_count;
 
