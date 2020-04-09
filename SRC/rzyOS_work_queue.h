@@ -8,11 +8,11 @@ typedef void (*worker_t)(void *arg);
 
 typedef enum rzyOS_queue_status_e
 {
-	wqueue_create;
-	wqueue_start;
-	wqueue_running;
-	wqueue_stop;
-	wqueue_destroy;
+	wqueue_create,
+	wqueue_start,
+	wqueue_running,
+	wqueue_stop,
+	wqueue_destroy,
 } rzyOS_queue_status_e;
 
 typedef struct rzyOS_wqueue_s
@@ -28,6 +28,6 @@ typedef struct rzyOS_wqueue_s
 } rzyOS_wqueue_s;
 
 #define HIGH_WORK_QUEUE 1
-#define HIGH_WORK_QUEUE 0
+#define LOW_WORK_QUEUE 0
 
 #endif
