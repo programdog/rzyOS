@@ -452,6 +452,16 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_mutex.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_work_queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SRC\rzyOS_work_queue.h</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_work_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_work_queue.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
