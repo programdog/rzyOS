@@ -9,5 +9,13 @@
 
 //rzyOS idle task 堆栈大小
 #define RZYOS_IDLETASK_STACK_SIZE 1024
+//rzyOS idle task 优先级
+#define RZYOS_IDLETASK_PRIO (RZYOS_PRIO_COUNT - 1)
+
+//work queue task 堆栈大小
+#define RZYOS_WQUEUE_STACK_SIZE 1024
+//work queue task 优先级
+#define RZYOS_WQUEUE_PRIO 1
+
 
 #endif

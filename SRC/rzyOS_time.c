@@ -1,4 +1,11 @@
 #include "rzyOS.h"
+#include "rzyOS_semaphore.h"
+
+static list_t rzyOS_high_wqueue_list;
+static list_t rzyOS_low_wqueue_list;
+
+static rzyOS_sem_s rzyOS_wqueue_protect_sem;
+static rzyOS_sem_s rzyOS_wqueue_tick_sem;
 
 //task中的延时函数,使用延时队列进行处理
 //param: delay--systick周期计数
@@ -15,4 +22,15 @@ void task_delay(uint32_t delay)
 	task_exit_critical(status);
 
 	task_schedule();
+}
+
+
+
+void rzyOS_wqueue_task_init(void)
+{
+	list_init(&rzyOS_high_wqueue_list);
+	list_init(&rzyOS_low_wqueue_list);
+
+	rzyOS_sem_init(&rzyOS_wqueue_protect_sem, 1, 1);
+	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);
 }

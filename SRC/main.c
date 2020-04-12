@@ -253,7 +253,7 @@ int main()
 	
 	rzyOS_app_init();
 	
-	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_PRIO_COUNT - 1, &idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE]);
+	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_IDLETASK_PRIO, &idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE]);
 	idleTask = &tcb_task_idle;
 	
 	

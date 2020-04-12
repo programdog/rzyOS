@@ -27,9 +27,12 @@ typedef struct rzyOS_wqueue_s
 	rzyOS_wqueue_status_e rzyOS_wqueue_status;
 } rzyOS_wqueue_s;
 
+//高速工作队列
 #define HIGH_WORK_QUEUE 1
+//低速工作队列
 #define LOW_WORK_QUEUE 0
 
+//工作队列初始化函数
 void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config);
 
 #endif
