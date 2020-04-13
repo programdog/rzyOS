@@ -6,14 +6,21 @@
 //Defines the work callback
 typedef void (*worker_t)(void *arg);
 
+//工作队列状态
 typedef enum rzyOS_wqueue_status_e
 {
+	//创建状态
 	wqueue_create,
+	//开始状态
 	wqueue_start,
+	//运行状态
 	wqueue_running,
+	//停止状态
 	wqueue_stop,
+	//销毁状态
 	wqueue_destroy,
 } rzyOS_wqueue_status_e;
+
 
 typedef struct rzyOS_wqueue_s
 {
