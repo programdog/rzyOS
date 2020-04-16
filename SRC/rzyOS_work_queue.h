@@ -21,16 +21,24 @@ typedef enum rzyOS_wqueue_status_e
 	wqueue_destroy,
 } rzyOS_wqueue_status_e;
 
-
+//工作队列结构
 typedef struct rzyOS_wqueue_s
 {
+	//工作队列节点
 	node_t node;
+	//启示执行延时时间
 	uint32_t start_delay_tick;
+	//周期执行时间
 	uint32_t period_tick;
+	//时间计数
 	uint32_t count_tick;
+	//回调函数
 	worker_t worker;
+	//回调函数参数
 	void *arg;
+	//工作队列配置
 	uint32_t wqueue_config;
+	//当前状态
 	rzyOS_wqueue_status_e rzyOS_wqueue_status;
 } rzyOS_wqueue_s;
 

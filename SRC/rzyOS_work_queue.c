@@ -26,6 +26,7 @@ void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, u
 	//跟据起始延时节拍赋值当前计数节拍
 	if (0 == start_delay_tick)
 	{
+		//为0时则一个周期后开始执行
 		rzyOS_wqueue -> count_tick = period_tick;
 	}
 	else
@@ -39,6 +40,6 @@ void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, u
 	rzyOS_wqueue -> arg = arg;
 	//工作队列模式
 	rzyOS_wqueue -> wqueue_config = wqueue_config;
-	//工作队列状态
+	//当前状态
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_create;
 }
