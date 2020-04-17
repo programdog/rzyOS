@@ -1,5 +1,4 @@
 #include "rzyOS_event.h"
-#include "rzyOS.h"
 
 //事件初始化
 //parameter

@@ -6,7 +6,7 @@
 #include "osConfig.h"
 #include "rzyOS_event.h"
 #include "rzyOS_task.h"
-#include "rzyOS_event.h"
+#include "rzyOS_work_queue.h"
 
 //当前任务的指针
 extern task_tcb_s *currentTask;

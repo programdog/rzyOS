@@ -1,5 +1,10 @@
 #include "rzyOS_work_queue.h"
 
+static list_t rzyOS_high_wqueue_list;
+static list_t rzyOS_low_wqueue_list;
+
+static rzyOS_sem_s rzyOS_wqueue_protect_sem;
+static rzyOS_sem_s rzyOS_wqueue_tick_sem;
 
 //工作队列初始化函数
 /**
@@ -43,3 +48,36 @@ void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, u
 	//当前状态
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_create;
 }
+
+static task_tcb_s rzyOS_wqueue_task_tcb;
+static tTaskStack rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE];
+
+static void rzyOS_wqueue_task(void *param)
+{
+	while(1)
+	{
+		rzyOS_sem_wait(&rzyOS_wqueue_tick_sem, 0);
+
+		rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
+
+
+		rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
+	}
+}
+
+void rzyOS_wqueue_module_init(void)
+{
+	list_init(&rzyOS_high_wqueue_list);
+	list_init(&rzyOS_low_wqueue_list);
+
+	//初始值为0, 最大值1
+	rzyOS_sem_init(&rzyOS_wqueue_protect_sem, 1, 1);
+	//初始值为0, 最大值无限制
+	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);
+
+#if (RZYOS_WQUEUE_PRIO) >= (RZYOS_IDLETASK_PRIO)
+	#error "work queue task priority must be higher then idle task"
+#endif
+	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, &rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE]);
+}
+

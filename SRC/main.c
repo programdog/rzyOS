@@ -1,6 +1,7 @@
 #include "rzyOS.h"
 #include "ARMCM3.h"
 
+
 //当前任务指针
 task_tcb_s *currentTask;
 //下一个准备执行的任务指针
@@ -250,6 +251,8 @@ int main()
 	task_schedule_init();
 	
 	task_delay_list_init();
+
+	rzyOS_wqueue_module_init();
 	
 	rzyOS_app_init();
 	
