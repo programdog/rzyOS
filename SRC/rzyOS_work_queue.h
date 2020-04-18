@@ -3,6 +3,7 @@
 
 #include "rzyOS_event.h"
 #include "rzyOS_semaphore.h"
+#include "rzyOS.h"
 
 //Defines the work callback
 typedef void (*worker_t)(void *arg);
@@ -49,7 +50,7 @@ typedef struct rzyOS_wqueue_s
 #define LOW_WORK_QUEUE 0
 
 //工作队列初始化函数
-void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config);
+void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config);
 
 void rzyOS_wqueue_module_init(void);
 

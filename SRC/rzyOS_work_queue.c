@@ -19,7 +19,7 @@ static rzyOS_sem_s rzyOS_wqueue_tick_sem;
  * @param void *arg ： 回调函数传入参数
  * @param uint32_t wqueue_config ： 工作队列模式
  */
-void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config)
+void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config)
 {
 	//队列节初始化
 	node_init(&(rzyOS_wqueue -> node));
@@ -49,6 +49,108 @@ void rzyOS_queue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, u
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_create;
 }
 
+void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
+{
+	switch (rzyOS_wqueue -> rzyOS_wqueue_status)
+	{
+		case wqueue_create:
+
+		case wqueue_stop:
+		{
+			rzyOS_wqueue -> count_tick = rzyOS_wqueue -> start_delay_tick ? rzyOS_wqueue -> start_delay_tick : rzyOS_wqueue -> period_tick;
+
+			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_start;
+
+			if (HIGH_WORK_QUEUE == rzyOS_wqueue -> wqueue_config)
+			{
+				uint32_t status = task_enter_critical();
+
+				list_add_first(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
+
+				task_exit_critical(status);
+			}
+			else
+			{
+				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
+
+				list_add_first(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
+
+				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
+			}
+
+			break ;
+		}
+
+		default :
+		{
+			break ;
+		}
+	}
+}
+
+void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
+{
+	switch (rzyOS_wqueue -> rzyOS_wqueue_status)
+	{
+		case wqueue_start:
+
+		case wqueue_running:
+		{
+			if (HIGH_WORK_QUEUE == rzyOS_wqueue -> wqueue_config)
+			{
+				uint32_t status = task_enter_critical();
+
+				list_remove_pos_node(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
+
+				task_exit_critical(status);
+			}
+			else
+			{
+				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
+
+				list_remove_pos_node(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
+
+				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
+			}
+
+			break ;
+		}
+
+		default :
+		{
+			break ;
+		}
+	}
+}
+
+static void rzyOS_wqueue_call(list_t *list)
+{
+	node_t *node;
+
+	for (node = list -> head_node.next_node; node != &(list -> head_node); node = node -> next_node)
+	{
+		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, node);
+
+		if (0 == rzyOS_wqueue -> count_tick)
+		{
+			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_running;
+			rzyOS_wqueue -> worker(rzyOS_wqueue -> arg);
+			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_start;
+
+			if (rzyOS_wqueue -> period_tick > 0)
+			{
+				rzyOS_wqueue -> count_tick = rzyOS_wqueue -> period_tick;
+			}
+			else
+			{
+				list_remove_pos_node(list, node);
+				
+				rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_stop;
+			}
+		}
+	}
+}
+
 static task_tcb_s rzyOS_wqueue_task_tcb;
 static tTaskStack rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE];
 
@@ -60,6 +162,7 @@ static void rzyOS_wqueue_task(void *param)
 
 		rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
+		rzyOS_wqueue_call(&rzyOS_low_wqueue_list);
 
 		rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
 	}
