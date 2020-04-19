@@ -144,7 +144,7 @@ static void rzyOS_wqueue_call(list_t *list)
 			else
 			{
 				list_remove_pos_node(list, node);
-				
+
 				rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_stop;
 			}
 		}
@@ -168,6 +168,17 @@ static void rzyOS_wqueue_task(void *param)
 	}
 }
 
+void rzyOS_wqueue_tick_post(void)
+{
+	uint32_t status = task_enter_critical();
+
+	rzyOS_wqueue_call(&rzyOS_high_wqueue_list);
+
+	task_exit_critical(status);
+
+	rzyOS_sem_post(&rzyOS_wqueue_tick_sem);
+}
+
 void rzyOS_wqueue_module_init(void)
 {
 	list_init(&rzyOS_high_wqueue_list);
@@ -183,4 +194,3 @@ void rzyOS_wqueue_module_init(void)
 #endif
 	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, &rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE]);
 }
-
