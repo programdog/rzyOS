@@ -1,6 +1,8 @@
 #include "rzyOS_work_queue.h"
 
+//高速工作队列链表
 static list_t rzyOS_high_wqueue_list;
+//低速工作队列链表
 static list_t rzyOS_low_wqueue_list;
 
 static rzyOS_sem_s rzyOS_wqueue_protect_sem;
@@ -127,8 +129,10 @@ static void rzyOS_wqueue_call(list_t *list)
 {
 	node_t *node;
 
+	//便利链表中的节点
 	for (node = list -> head_node.next_node; node != &(list -> head_node); node = node -> next_node)
 	{
+		//获取连接节点所处于的工作队列结构
 		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, node);
 
 		if (0 == rzyOS_wqueue -> count_tick)
@@ -151,13 +155,17 @@ static void rzyOS_wqueue_call(list_t *list)
 	}
 }
 
+//工作队列任务控制块
 static task_tcb_s rzyOS_wqueue_task_tcb;
+//工作队列任务堆栈
 static tTaskStack rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE];
 
+//工作队列任务
 static void rzyOS_wqueue_task(void *param)
 {
 	while(1)
 	{
+		//等待系统tick节拍信号量
 		rzyOS_sem_wait(&rzyOS_wqueue_tick_sem, 0);
 
 		rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
@@ -168,19 +176,24 @@ static void rzyOS_wqueue_task(void *param)
 	}
 }
 
+//系统节拍， tick周期性工作队列处理函数
 void rzyOS_wqueue_tick_handle(void)
 {
 	uint32_t status = task_enter_critical();
 
+	//处理高速工作队列
 	rzyOS_wqueue_call(&rzyOS_high_wqueue_list);
 
 	task_exit_critical(status);
 
+	//post系统节拍信号量(处理低速工作队列)
 	rzyOS_sem_post(&rzyOS_wqueue_tick_sem);
 }
 
+//工作队列模块初始化
 void rzyOS_wqueue_module_init(void)
 {
+	//工作队列管理链表初始化
 	list_init(&rzyOS_high_wqueue_list);
 	list_init(&rzyOS_low_wqueue_list);
 
@@ -189,8 +202,13 @@ void rzyOS_wqueue_module_init(void)
 	//初始值为0, 最大值无限制
 	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);
 
+//预编译判断
+//工作队列优先级必须高于空闲任务
+//我在内核中设定工作队列优先级为最高
 #if (RZYOS_WQUEUE_PRIO) >= (RZYOS_IDLETASK_PRIO)
 	#error "work queue task priority must be higher then idle task"
 #endif
+
+	//初始化工作队列任务
 	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, &rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE]);
 }

@@ -225,6 +225,7 @@ void task_systemtick_handler(void)
 	
 	task_exit_critical(status);
 
+	//系统tick， 周期性调用工作队列处理函数
 	rzyOS_wqueue_tick_handle();
 	
 	task_schedule();
