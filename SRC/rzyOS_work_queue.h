@@ -56,7 +56,7 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue);
 
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue);
 
-void rzyOS_wqueue_tick_post(void);
+void rzyOS_wqueue_tick_handle(void);
 
 void rzyOS_wqueue_module_init(void);
 

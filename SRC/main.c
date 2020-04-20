@@ -225,7 +225,7 @@ void task_systemtick_handler(void)
 	
 	task_exit_critical(status);
 
-	rzyOS_wqueue_tick_post();
+	rzyOS_wqueue_tick_handle();
 	
 	task_schedule();
 }

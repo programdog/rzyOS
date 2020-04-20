@@ -168,7 +168,7 @@ static void rzyOS_wqueue_task(void *param)
 	}
 }
 
-void rzyOS_wqueue_tick_post(void)
+void rzyOS_wqueue_tick_handle(void)
 {
 	uint32_t status = task_enter_critical();
 
