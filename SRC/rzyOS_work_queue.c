@@ -135,6 +135,8 @@ static void rzyOS_wqueue_call(list_t *list)
 		//获取连接节点所处于的工作队列结构
 		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, node);
 
+		rzyOS_wqueue -> count_tick --;
+
 		if (0 == rzyOS_wqueue -> count_tick)
 		{
 			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_running;
