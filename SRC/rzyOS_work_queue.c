@@ -5,7 +5,9 @@ static list_t rzyOS_high_wqueue_list;
 //低速工作队列链表
 static list_t rzyOS_low_wqueue_list;
 
+//工作队列链表保护操作信号量(因为其他任务(调用rzyOS_wqueue_start)和工作队列任务都会对链表做操作)
 static rzyOS_sem_s rzyOS_wqueue_protect_sem;
+//系统节拍tick信号量
 static rzyOS_sem_s rzyOS_wqueue_tick_sem;
 
 //工作队列初始化函数
@@ -51,30 +53,37 @@ void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, 
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_create;
 }
 
+//启动工作队列(外部调用)
 void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 {
+	//判断当前状态
 	switch (rzyOS_wqueue -> rzyOS_wqueue_status)
 	{
+		//只有已经初始化和停止的才能启动
 		case wqueue_create:
-
 		case wqueue_stop:
 		{
+			//对计数tick赋值
 			rzyOS_wqueue -> count_tick = rzyOS_wqueue -> start_delay_tick ? rzyOS_wqueue -> start_delay_tick : rzyOS_wqueue -> period_tick;
 
 			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_start;
 
+			//判断是否是高速工作队列
 			if (HIGH_WORK_QUEUE == rzyOS_wqueue -> wqueue_config)
 			{
 				uint32_t status = task_enter_critical();
 
+				//在高速工作队列链表中插入节点
 				list_add_first(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
 
 				task_exit_critical(status);
 			}
+			//低速工作队列
 			else
 			{
 				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
+				//在低速工作队列链表中插入节点
 				list_add_first(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
 
 				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
@@ -90,26 +99,32 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 	}
 }
 
+//停止工作队列(外部调用)
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
 {
+	//判断当前状态
 	switch (rzyOS_wqueue -> rzyOS_wqueue_status)
 	{
+		//只有已经启动和运行的工作队列才能被停止
 		case wqueue_start:
-
 		case wqueue_running:
 		{
+			//判断是否是高速工作队列
 			if (HIGH_WORK_QUEUE == rzyOS_wqueue -> wqueue_config)
 			{
 				uint32_t status = task_enter_critical();
 
+				//在高速工作队列链表中移除节点
 				list_remove_pos_node(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
 
 				task_exit_critical(status);
 			}
+			//低速工作队列
 			else
 			{
 				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
+				//在低速工作队列链表中移除节点
 				list_remove_pos_node(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
 
 				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
@@ -135,20 +150,28 @@ static void rzyOS_wqueue_call(list_t *list)
 		//获取连接节点所处于的工作队列结构
 		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, node);
 
+		//tick递减
 		rzyOS_wqueue -> count_tick --;
 
+		//当tick为0
 		if (0 == rzyOS_wqueue -> count_tick)
 		{
 			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_running;
+			//运行回调函数
 			rzyOS_wqueue -> worker(rzyOS_wqueue -> arg);
 			rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_start;
 
+			//如果period_tick大于0
+			//则对计数count_tick重新赋值
 			if (rzyOS_wqueue -> period_tick > 0)
 			{
 				rzyOS_wqueue -> count_tick = rzyOS_wqueue -> period_tick;
 			}
+			//如果period_tick等于0
+			//则认为只执行一次，
 			else
 			{
+				//把工作队列节点在链表中删除
 				list_remove_pos_node(list, node);
 
 				rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_stop;
@@ -170,10 +193,13 @@ static void rzyOS_wqueue_task(void *param)
 		//等待系统tick节拍信号量
 		rzyOS_sem_wait(&rzyOS_wqueue_tick_sem, 0);
 
+		//等待链表保护操作信号量
 		rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
+		//处理低速工作队列
 		rzyOS_wqueue_call(&rzyOS_low_wqueue_list);
 
+		//释放链表保护操作信号量
 		rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
 	}
 }

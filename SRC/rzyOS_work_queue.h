@@ -52,8 +52,10 @@ typedef struct rzyOS_wqueue_s
 //工作队列初始化函数
 void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config);
 
+//启动工作队列(外部调用)
 void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue);
 
+//停止工作队列(外部调用)
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue);
 
 //系统节拍， tick周期性工作队列处理函数
