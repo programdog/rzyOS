@@ -5,6 +5,11 @@
 #include "rzyOS_semaphore.h"
 #include "rzyOS.h"
 
+typedef struct rzyOS_wqueue_info_s
+{
+
+} rzyOS_wqueue_info_s;
+
 //Defines the work callback
 typedef void (*worker_t)(void *arg);
 
@@ -57,6 +62,9 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue);
 
 //停止工作队列(外部调用)
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue);
+
+//销毁工作队列节点
+void rzyOS_wqueue_destroy(rzyOS_wqueue_s *rzyOS_wqueue);
 
 //系统节拍， tick周期性工作队列处理函数
 void rzyOS_wqueue_tick_handle(void);

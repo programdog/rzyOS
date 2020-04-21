@@ -140,6 +140,13 @@ void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
 	}
 }
 
+//销毁工作队列节点
+void rzyOS_wqueue_destroy(rzyOS_wqueue_s *rzyOS_wqueue)
+{
+	rzyOS_wqueue_stop(rzyOS_wqueue);
+	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_destroy;
+}
+
 static void rzyOS_wqueue_call(list_t *list)
 {
 	node_t *node;
