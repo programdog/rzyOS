@@ -261,5 +261,5 @@ void rzyOS_wqueue_module_init(void)
 #endif
 
 	//初始化工作队列任务
-	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, &rzyOS_wqueue_task_stack[RZYOS_WQUEUE_STACK_SIZE]);
+	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, rzyOS_wqueue_task_stack, RZYOS_WQUEUE_STACK_SIZE);
 }

@@ -1,9 +1,8 @@
 #ifndef RZYOS_WORK_QUEUE_H
 #define RZYOS_WORK_QUEUE_H
 
-#include "rzyOS_event.h"
-#include "rzyOS_semaphore.h"
 #include "rzyOS.h"
+#include "rzyOS_semaphore.h"
 
 
 //Defines the work callback

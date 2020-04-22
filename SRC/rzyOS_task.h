@@ -1,6 +1,7 @@
 #ifndef RZYOS_TASK_H
 #define RZYOS_TASK_H
 
+#include <string.h>
 #include "rzyOS_event.h"
 
 //(任务状态)任务就绪
@@ -48,6 +49,13 @@ typedef struct task_tcb_s
 {
 	//任务堆栈指针
 	tTaskStack *stack;
+
+	//
+	uint32_t *task_bottom_base;
+
+	//
+	uint32_t task_stack_size;
+
 
 	//任务节点（就绪）
 	node_t link_node;
@@ -105,11 +113,15 @@ typedef struct rzyOS_task_info_s
 	uint32_t slice;
 	//任务挂起计数器
 	uint32_t suspend_count;
+	//
+	uint32_t task_stack_size;
+	//
+	uint32_t task_stack_free_size;
 } rzyOS_task_info_s;
 
 
 //task初始化
-void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack);
+void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack_top, uint32_t task_size);
 
 //任务的挂起
 void rzyOS_task_suspend(task_tcb_s *task);

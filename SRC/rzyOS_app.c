@@ -68,8 +68,8 @@ void task4_entry(void *param)
 //任务初始化
 void rzyOS_app_init(void)
 {
-	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, &task1Env[1024]);
-	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, &task2Env[1024]);
-	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, &task3Env[1024]);
-	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, &task4Env[1024]);
+	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, task1Env, sizeof(task1Env));
+	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task1Env));
+	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task1Env));
+	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task1Env));
 }

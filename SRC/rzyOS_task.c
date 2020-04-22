@@ -1,29 +1,41 @@
 #include "rzyOS.h"
 
 //task初始化
-void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack)
+void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack_bottom, uint32_t task_size)
 {
+	//定义栈顶(高地址)
+	uint32_t *stack_top;
+	//栈底赋值(低地址)
+	task -> task_bottom_base = stack_bottom;
+	//栈大小
+	task -> task_stack_size = task_size;
+	//栈清零
+	memset(stack_bottom, 0, task_size);
+
+	//计算栈顶地址
+	stack_top = stack_bottom + task_size / sizeof(tTaskStack);
+
 	//初始化任务堆栈，对应到通用寄存器
-	*(--stack) = (unsigned long)(1 << 24);
-	*(--stack) = (unsigned long)entry;
-	*(--stack) = (unsigned long)0x14;
-	*(--stack) = (unsigned long)0x12;
-	*(--stack) = (unsigned long)0x03;
-	*(--stack) = (unsigned long)0x02;
-	*(--stack) = (unsigned long)0x01;
-	*(--stack) = (unsigned long)param;
+	*(--stack_top) = (unsigned long)(1 << 24);
+	*(--stack_top) = (unsigned long)entry;
+	*(--stack_top) = (unsigned long)0x14;
+	*(--stack_top) = (unsigned long)0x12;
+	*(--stack_top) = (unsigned long)0x03;
+	*(--stack_top) = (unsigned long)0x02;
+	*(--stack_top) = (unsigned long)0x01;
+	*(--stack_top) = (unsigned long)param;
 	
-	*(--stack) = (unsigned long)0x11;
-	*(--stack) = (unsigned long)0x10;
-	*(--stack) = (unsigned long)0x09;
-	*(--stack) = (unsigned long)0x08;
-	*(--stack) = (unsigned long)0x07;
-	*(--stack) = (unsigned long)0x06;
-	*(--stack) = (unsigned long)0x05;
-	*(--stack) = (unsigned long)0x04;
+	*(--stack_top) = (unsigned long)0x11;
+	*(--stack_top) = (unsigned long)0x10;
+	*(--stack_top) = (unsigned long)0x09;
+	*(--stack_top) = (unsigned long)0x08;
+	*(--stack_top) = (unsigned long)0x07;
+	*(--stack_top) = (unsigned long)0x06;
+	*(--stack_top) = (unsigned long)0x05;
+	*(--stack_top) = (unsigned long)0x04;
 	
 	//任务堆栈指针传递
-	task -> stack = stack;
+	task -> stack = stack_top;
 	//初始化任务tcb
 	node_init(&(task -> link_node));
 	task -> delayTicks = 0;
@@ -179,13 +191,31 @@ void rzyOS_task_delete_self(void)
 //获取任务信息
 void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 {
+	uint32_t *task_stack_end;
+
 	uint32_t status = task_enter_critical();
 	
+	//任务基础信息
 	info -> delay_ticks = task -> delayTicks;
 	info -> prio = task -> prio;
 	info -> slice = task -> slice;
 	info -> suspend_count = task -> suspend_count;
 	info -> task_status = task -> task_status;
+
+	//堆栈统计
+	info -> task_stack_size = task -> task_stack_size;
+	//清零进行统计
+	info -> task_stack_free_size = 0;
+
+	task_stack_end = task -> task_bottom_base;
+
+	uint32_t *stack_top = task -> task_bottom_base + (task -> task_stack_size) / sizeof(tTaskStack);
+
+	while ((0 == *task_stack_end ++) && (task_stack_end <= stack_top))
+	{
+		info -> task_stack_free_size ++;
+	}
+	info -> task_stack_free_size *= sizeof(tTaskStack);
 	
 	task_exit_critical(status);
 }
