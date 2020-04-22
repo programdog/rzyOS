@@ -5,10 +5,6 @@
 #include "rzyOS_semaphore.h"
 #include "rzyOS.h"
 
-typedef struct rzyOS_wqueue_info_s
-{
-
-} rzyOS_wqueue_info_s;
 
 //Defines the work callback
 typedef void (*worker_t)(void *arg);
@@ -28,7 +24,24 @@ typedef enum rzyOS_wqueue_status_e
 	wqueue_destroy,
 } rzyOS_wqueue_status_e;
 
-//工作队列结构
+//工作队列节点信息结构
+typedef struct rzyOS_wqueue_info_s
+{
+	//启示执行延时时间
+	uint32_t start_delay_tick;
+	//周期执行时间
+	uint32_t period_tick;
+	//回调函数
+	worker_t worker;
+	//回调函数参数
+	void *arg;
+	//工作队列配置
+	uint32_t wqueue_config;
+	//当前状态
+	rzyOS_wqueue_status_e rzyOS_wqueue_status;
+} rzyOS_wqueue_info_s;
+
+//工作队列节点结构
 typedef struct rzyOS_wqueue_s
 {
 	//工作队列节点
@@ -54,17 +67,20 @@ typedef struct rzyOS_wqueue_s
 //低速工作队列
 #define LOW_WORK_QUEUE 0
 
-//工作队列初始化函数
+//工作队列节点初始化函数
 void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config);
 
-//启动工作队列(外部调用)
+//启动指定工作队列节点(工作队列组件的外部任务调用)
 void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue);
 
-//停止工作队列(外部调用)
+//停止指定工作队列节点(工作队列组件的外部任务调用)
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue);
 
 //销毁工作队列节点
 void rzyOS_wqueue_destroy(rzyOS_wqueue_s *rzyOS_wqueue);
+
+//工作队列节点信息获取函数
+void rzyOS_wqueue_get_info(rzyOS_wqueue_s *rzyOS_wqueue, rzyOS_wqueue_info_s *rzyOS_wqueue_info);
 
 //系统节拍， tick周期性工作队列处理函数
 void rzyOS_wqueue_tick_handle(void);

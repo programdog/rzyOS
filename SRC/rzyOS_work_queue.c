@@ -10,7 +10,7 @@ static rzyOS_sem_s rzyOS_wqueue_protect_sem;
 //系统节拍tick信号量
 static rzyOS_sem_s rzyOS_wqueue_tick_sem;
 
-//工作队列初始化函数
+//工作队列节点初始化函数
 /**
  * @Author    remzhongyu
  * @DateTime  2020-04-11
@@ -53,7 +53,7 @@ void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, 
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_create;
 }
 
-//启动工作队列(外部调用)
+//启动指定工作队列节点(工作队列组件的外部任务调用)
 void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 {
 	//判断当前状态
@@ -99,7 +99,7 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 	}
 }
 
-//停止工作队列(外部调用)
+//停止指定工作队列节点(工作队列组件的外部任务调用)
 void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
 {
 	//判断当前状态
@@ -147,6 +147,22 @@ void rzyOS_wqueue_destroy(rzyOS_wqueue_s *rzyOS_wqueue)
 	rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_destroy;
 }
 
+//工作队列节点信息获取函数
+void rzyOS_wqueue_get_info(rzyOS_wqueue_s *rzyOS_wqueue, rzyOS_wqueue_info_s *rzyOS_wqueue_info)
+{
+	uint32_t status = task_enter_critical();
+
+	rzyOS_wqueue_info -> start_delay_tick = rzyOS_wqueue -> start_delay_tick;
+	rzyOS_wqueue_info -> period_tick = rzyOS_wqueue -> period_tick;
+	rzyOS_wqueue_info -> worker = rzyOS_wqueue -> worker;
+	rzyOS_wqueue_info -> arg = rzyOS_wqueue -> arg;
+	rzyOS_wqueue_info -> wqueue_config = rzyOS_wqueue -> wqueue_config;
+	rzyOS_wqueue_info -> rzyOS_wqueue_status = rzyOS_wqueue -> rzyOS_wqueue_status;
+
+	task_exit_critical(status);
+}
+
+//工作队列处理函数
 static void rzyOS_wqueue_call(list_t *list)
 {
 	node_t *node;
