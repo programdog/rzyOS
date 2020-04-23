@@ -47,13 +47,11 @@ typedef struct rzyOS_ecb_s rzyOS_ecb_s;
 //task TCB
 typedef struct task_tcb_s
 {
-	//任务堆栈指针
+	//任务堆栈指针(动态)
 	tTaskStack *stack;
-
-	//
+	//任务栈底指针
 	uint32_t *task_bottom_base;
-
-	//
+	//任务堆栈大小
 	uint32_t task_stack_size;
 
 

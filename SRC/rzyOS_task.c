@@ -34,7 +34,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	*(--stack_top) = (unsigned long)0x05;
 	*(--stack_top) = (unsigned long)0x04;
 	
-	//任务堆栈指针传递
+	//任务堆栈动态指针传递
 	task -> stack = stack_top;
 	//初始化任务tcb
 	node_init(&(task -> link_node));
@@ -191,6 +191,7 @@ void rzyOS_task_delete_self(void)
 //获取任务信息
 void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 {
+	//定义栈尾指针
 	uint32_t *task_stack_end;
 
 	uint32_t status = task_enter_critical();
@@ -202,19 +203,23 @@ void rzyOS_task_get_info(task_tcb_s *task, rzyOS_task_info_s *info)
 	info -> suspend_count = task -> suspend_count;
 	info -> task_status = task -> task_status;
 
-	//堆栈统计
+	//任务堆栈大小
 	info -> task_stack_size = task -> task_stack_size;
-	//清零进行统计
+	//空闲堆栈大小清零，进行统计
 	info -> task_stack_free_size = 0;
-
+	//获取栈尾地址
 	task_stack_end = task -> task_bottom_base;
 
+	//计算栈顶地址
+	//按照4字节偏移
 	uint32_t *stack_top = task -> task_bottom_base + (task -> task_stack_size) / sizeof(tTaskStack);
 
+	//判断为0的uint32_t个数
 	while ((0 == *task_stack_end ++) && (task_stack_end <= stack_top))
 	{
 		info -> task_stack_free_size ++;
 	}
+	//按照4字节计算空闲的栈空间
 	info -> task_stack_free_size *= sizeof(tTaskStack);
 	
 	task_exit_critical(status);
