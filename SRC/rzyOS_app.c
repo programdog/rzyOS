@@ -14,8 +14,7 @@ tTaskStack task4Env[1024];
 int task1Flag;
 void task1_entry(void *param)
 {
-	set_systick_period(10);
-
+	
 	for (;;)
 	{
 		

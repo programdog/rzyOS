@@ -22,6 +22,12 @@ uint8_t schedLockCount;
 //定义延时链表
 list_t task_delay_list;
 
+uint32_t tick_count;
+uint32_t idle_count;
+uint32_t idle_max_count;
+
+void check_cpu_usage_detect(void);
+
 
 //从位图中找到就绪的最高优先级
 //按照就绪的最高优先级在就绪任务列表中获取第一个任务节点
@@ -174,6 +180,11 @@ void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb)
 	delay_list_remove_time_node(task_tcb);
 }
 
+void rzyOS_tick_count_init(void)
+{
+	tick_count = 0;
+}
+
 //systick中断调用此函数
 void task_systemtick_handler(void)
 {
@@ -223,6 +234,10 @@ void task_systemtick_handler(void)
 			currentTask -> slice = RZYOS_SLICE_MAX;
 		}
 	}
+
+	tick_count ++;
+
+	check_cpu_usage_detect();
 	
 	task_exit_critical(status);
 
@@ -238,15 +253,77 @@ void delay(int count)
 	while(-- count > 0);
 }
 
+static float cpu_usage;
+static uint32_t enable_cpu_usage_detect;
+static void cpu_usage_state_init(void)
+{
+	idle_count = 0;
+	idle_max_count = 0;
+	cpu_usage = 0.0f;
+	enable_cpu_usage_detect = 0;
+}
+
+static void check_cpu_usage_detect(void)
+{
+	if (0 == enable_cpu_usage_detect)
+	{
+		enable_cpu_usage_detect = 1;
+		return ;
+	}
+
+	if (ONE_SECOND == tick_count)
+	{
+		idle_max_count = idle_count;
+		idle_count = 0;
+
+		task_schedule_enable();
+	}
+	else if (0 == tick_count / ONE_SECOND)
+	{
+		cpu_usage = 100 - 100.0 * idle_count / idle_max_count;
+		idle_count = 0;
+	}
+}
+
+static void cpu_tick_sync(void)
+{
+	while (0 == enable_cpu_usage_detect)
+	{
+		;;;;;
+	}
+}
+
+float rzyOS_get_cpu_usage(void)
+{
+	float usage = 0.0f;
+
+	uint32_t status = task_enter_critical();
+	usage = cpu_usage;
+	task_exit_critical(status);
+
+	return usage;
+}
 
 task_tcb_s tcb_task_idle;
 tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
 
 void idle_task_entry(void *param)
 {
+	task_schedule_disable();
+
+	rzyOS_app_init();
+
+	rzyOS_wqueue_task_init();
+
+	set_systick_period(RZYOS_TICK_MS);
+
+	cpu_tick_sync();
+
 	for (;;)
 	{
-		
+		uint32_t status = task_enter_critical();
+		idle_count ++;
+		task_exit_critical(status);
 	}
 }
 
@@ -257,8 +334,12 @@ int main()
 	task_delay_list_init();
 
 	rzyOS_wqueue_module_init();
+
+	rzyOS_tick_count_init();
+
+	cpu_usage_state_init();
 	
-	rzyOS_app_init();
+	// rzyOS_app_init();
 	
 	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_IDLETASK_PRIO, idleTaskEnv, RZYOS_IDLETASK_STACK_SIZE);
 	idleTask = &tcb_task_idle;

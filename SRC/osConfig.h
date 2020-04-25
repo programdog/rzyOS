@@ -17,5 +17,9 @@
 //work queue task 优先级
 #define RZYOS_WQUEUE_PRIO 1
 
+#define RZYOS_TICK_MS 10
+
+#define ONE_SECOND (1000 / RZYOS_TICK_MS)
+
 
 #endif

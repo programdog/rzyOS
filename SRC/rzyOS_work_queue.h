@@ -87,4 +87,6 @@ void rzyOS_wqueue_tick_handle(void);
 //工作队列模块初始化
 void rzyOS_wqueue_module_init(void);
 
+void rzyOS_wqueue_task_init(void);
+
 #endif

@@ -66,5 +66,7 @@ void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb);
 //把任务在延时队列中删除(外部调用)
 void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
 
+float rzyOS_get_cpu_usage(void);
+
 
 #endif

@@ -252,7 +252,10 @@ void rzyOS_wqueue_module_init(void)
 	rzyOS_sem_init(&rzyOS_wqueue_protect_sem, 1, 1);
 	//初始值为0, 最大值无限制
 	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);
+}
 
+void rzyOS_wqueue_task_init(void)
+{
 //预编译判断
 //工作队列优先级必须高于空闲任务
 //我在内核中设定工作队列优先级为最高
