@@ -22,8 +22,11 @@ uint8_t schedLockCount;
 //定义延时链表
 list_t task_delay_list;
 
+//系统节拍计数
 uint32_t tick_count;
+//空闲任务运行节拍统计
 uint32_t idle_count;
+//空闲任务满负荷运行节拍统计
 uint32_t idle_max_count;
 
 void check_cpu_usage_detect(void);
@@ -180,6 +183,7 @@ void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb)
 	delay_list_remove_time_node(task_tcb);
 }
 
+//系统节拍初始化
 void rzyOS_tick_count_init(void)
 {
 	tick_count = 0;
@@ -235,8 +239,10 @@ void task_systemtick_handler(void)
 		}
 	}
 
+	//系统节拍累加
 	tick_count ++;
 
+	//cpu使用率检测
 	check_cpu_usage_detect();
 	
 	task_exit_critical(status);
@@ -253,24 +259,34 @@ void delay(int count)
 	while(-- count > 0);
 }
 
+//cpu使用率
 static float cpu_usage;
-static uint32_t enable_cpu_usage_detect;
+//cpu同步等待标志
+static uint32_t cpu_sync_flag;
+
+//cpu使用率检测模块变量初始化
 static void cpu_usage_state_init(void)
 {
 	idle_count = 0;
 	idle_max_count = 0;
 	cpu_usage = 0.0f;
-	enable_cpu_usage_detect = 0;
+	cpu_sync_flag = 0;
 }
 
+//cpu使用率检测函数
 static void check_cpu_usage_detect(void)
 {
-	if (0 == enable_cpu_usage_detect)
+	//进入此函数则代表cpu同步
+	//若为cpu未进入同步状态，则置位cpu_sync_flag
+	//只置位cpu_sync_flag一次
+	if (0 == cpu_sync_flag)
 	{
-		enable_cpu_usage_detect = 1;
+		//置位cpu_sync_flag
+		cpu_sync_flag = 1;
 		return ;
 	}
 
+	//系统节拍计数为1秒
 	if (ONE_SECOND == tick_count)
 	{
 		idle_max_count = idle_count;
@@ -287,7 +303,8 @@ static void check_cpu_usage_detect(void)
 
 static void cpu_tick_sync(void)
 {
-	while (0 == enable_cpu_usage_detect)
+	//cpu未同步，则while(1)等待
+	while (0 == cpu_sync_flag)
 	{
 		;;;;;
 	}
@@ -309,14 +326,19 @@ tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
 
 void idle_task_entry(void *param)
 {
+	//关闭任务调度
 	task_schedule_disable();
 
+	//app任务初始化
 	rzyOS_app_init();
 
+	//工作队列任务初始化
 	rzyOS_wqueue_task_init();
 
+	//设定systick中断时间周期
 	set_systick_period(RZYOS_TICK_MS);
 
+	//cpu同步等待
 	cpu_tick_sync();
 
 	for (;;)
@@ -335,8 +357,10 @@ int main()
 
 	rzyOS_wqueue_module_init();
 
+	//系统节拍初始化
 	rzyOS_tick_count_init();
 
+	//cpu 状态检测模块变量初始化
 	cpu_usage_state_init();
 	
 	// rzyOS_app_init();
