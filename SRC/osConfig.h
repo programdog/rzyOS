@@ -17,8 +17,10 @@
 //work queue task 优先级
 #define RZYOS_WQUEUE_PRIO 1
 
+//一个系统节拍的毫秒数
 #define RZYOS_TICK_MS 10
 
+//一秒的系统节拍数
 #define ONE_SECOND (1000 / RZYOS_TICK_MS)
 
 

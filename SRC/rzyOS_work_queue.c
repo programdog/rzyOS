@@ -241,7 +241,7 @@ void rzyOS_wqueue_tick_handle(void)
 	rzyOS_sem_post(&rzyOS_wqueue_tick_sem);
 }
 
-//工作队列模块初始化
+//工作队列模块组件初始化
 void rzyOS_wqueue_module_init(void)
 {
 	//工作队列管理链表初始化
@@ -254,6 +254,7 @@ void rzyOS_wqueue_module_init(void)
 	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);
 }
 
+//工作队列任务初始化
 void rzyOS_wqueue_task_init(void)
 {
 //预编译判断

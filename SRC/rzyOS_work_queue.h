@@ -84,9 +84,10 @@ void rzyOS_wqueue_get_info(rzyOS_wqueue_s *rzyOS_wqueue, rzyOS_wqueue_info_s *rz
 //系统节拍， tick周期性工作队列处理函数
 void rzyOS_wqueue_tick_handle(void);
 
-//工作队列模块初始化
+//工作队列模块组件初始化
 void rzyOS_wqueue_module_init(void);
 
+//工作队列任务初始化
 void rzyOS_wqueue_task_init(void);
 
 #endif

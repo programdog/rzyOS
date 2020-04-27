@@ -22,13 +22,14 @@ uint8_t schedLockCount;
 //定义延时链表
 list_t task_delay_list;
 
+
 //系统节拍计数
 uint32_t tick_count;
 //空闲任务运行节拍统计
 uint32_t idle_count;
 //空闲任务满负荷运行节拍统计
 uint32_t idle_max_count;
-
+//cpu使用率检测函数
 void check_cpu_usage_detect(void);
 
 
@@ -286,16 +287,20 @@ static void check_cpu_usage_detect(void)
 		return ;
 	}
 
-	//系统节拍计数为1秒
+	//系统节拍计数第1秒
 	if (ONE_SECOND == tick_count)
 	{
+		//把第一秒的空闲任务满负荷节拍计数赋值
 		idle_max_count = idle_count;
 		idle_count = 0;
 
+		//开启调度
 		task_schedule_enable();
 	}
+	//每当tick_count计数1秒
 	else if (0 == tick_count / ONE_SECOND)
 	{
+		//计算cpu使用率
 		cpu_usage = 100 - 100.0 * idle_count / idle_max_count;
 		idle_count = 0;
 	}
@@ -310,6 +315,7 @@ static void cpu_tick_sync(void)
 	}
 }
 
+//获取cpu使用率，并返回
 float rzyOS_get_cpu_usage(void)
 {
 	float usage = 0.0f;
@@ -344,6 +350,7 @@ void idle_task_entry(void *param)
 	for (;;)
 	{
 		uint32_t status = task_enter_critical();
+		//空闲任务运行节拍计数
 		idle_count ++;
 		task_exit_critical(status);
 	}
