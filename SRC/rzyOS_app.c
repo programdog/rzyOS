@@ -11,13 +11,15 @@ tTaskStack task3Env[1024];
 tTaskStack task4Env[1024];
 
 
+float usage = 0;
+
 int task1Flag;
 void task1_entry(void *param)
 {
-	
+
 	for (;;)
 	{
-		
+		usage = rzyOS_get_cpu_usage();
 		task1Flag = 0;
 		task_delay(1);
 		task1Flag = 1;
@@ -68,7 +70,7 @@ void task4_entry(void *param)
 void rzyOS_app_init(void)
 {
 	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, task1Env, sizeof(task1Env));
-	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task1Env));
-	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task1Env));
-	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task1Env));
+	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task2Env));
+	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task3Env));
+	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task4Env));
 }
