@@ -54,7 +54,7 @@ void task_insert_ready_list(task_tcb_s *task_tcb)
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
 
-//把任务从就绪队列中删移出()内部使用)
+//把任务从就绪队列中删移出(内部使用)
 void task_remove_ready_list(task_tcb_s *task_tcb)
 {
 	//当task使用延时函数,会调用此函数

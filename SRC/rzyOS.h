@@ -41,14 +41,19 @@ void task_schedule_disable(void);
 void task_schedule_enable(void);
 
 
+//按照优先级,把就绪的任务的任务节点插入就绪任务list中
 void task_insert_ready_list(task_tcb_s *task_tcb);
 
+//把任务从就绪队列中删移出(内部使用)
 void task_remove_ready_list(task_tcb_s *task_tcb);
 
+//在延时list中加入当前任务的延时节点
 void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks);
 
+//把任务在延时队列中删除(内部调用)
 void delay_list_remove_time_node(task_tcb_s *task_tcb);
 
+//systick中断调用此函数
 void task_systemtick_handler(void);
 
 //systick中断周期配置
@@ -66,6 +71,7 @@ void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb);
 //把任务在延时队列中删除(外部调用)
 void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
 
+//获取cpu使用率，并返回
 float rzyOS_get_cpu_usage(void);
 
 
