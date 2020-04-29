@@ -1,5 +1,5 @@
-#ifndef RZYOS_WORK_QUEUE_H
-#define RZYOS_WORK_QUEUE_H
+#ifndef RZYOS_WQUEUE_H
+#define RZYOS_WQUEUE_H
 
 #include "rzyOS.h"
 #include "rzyOS_semaphore.h"
