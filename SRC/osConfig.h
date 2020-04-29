@@ -24,4 +24,18 @@
 #define ONE_SECOND (1000 / RZYOS_TICK_MS)
 
 
+
+/***********内核编译选项***********/
+
+#define RZYOS_ENABLE_SEMAPHORE 0
+#define RZYOS_ENABLE_MUTEX 0
+#define RZYOS_ENABLE_FLAGGROUP 0
+#define RZYOS_ENABLE_MBOX 0
+#define RZYOS_ENABLE_MEMORY 0
+#define RZYOS_ENABLE_WQUEUE 0
+#define RZYOS_ENABLE_CPU_DETECT 0
+
+/********************************/
+
+
 #endif
