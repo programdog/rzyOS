@@ -1,4 +1,4 @@
-#include "rzyOS_flag_group.h"
+#include "rzyOS_eventgroup.h"
 
 //时间组初始化函数
 //parameter : 

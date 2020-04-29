@@ -443,11 +443,6 @@
               <FilePath>..\SRC\rzyOS_memory.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_flag_group.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_flag_group.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_mutex.c</FilePath>
@@ -456,6 +451,11 @@
               <FileName>rzyOS_wqueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_wqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_eventgroup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_eventgroup.c</FilePath>
             </File>
           </Files>
         </Group>

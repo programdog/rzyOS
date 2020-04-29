@@ -1,5 +1,5 @@
-#ifndef __RZYOS_FLAG_GROUP_H
-#define __RZYOS_FLAG_GROUP_H
+#ifndef __RZYOS_EVENT_GROUP_H
+#define __RZYOS_EVENT_GROUP_H
 
 #include "rzyOS_event.h"
 #include "rzyOS.h"
