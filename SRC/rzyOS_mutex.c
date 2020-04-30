@@ -1,5 +1,6 @@
 #include "rzyOS_mutex.h"
 
+#if RZYOS_ENABLE_MUTEX == 1
 
 //互斥锁初始化函数
 void rzyOS_mutex_init(rzyOS_mutex_s *rzyOS_mutex)
@@ -261,3 +262,5 @@ void rzyOS_mutex_get_info(rzyOS_mutex_s *rzyOS_mutex, rzyOS_mutex_info_s *rzyOS_
 
 	task_exit_critical(status);
 }
+
+#endif

@@ -1,5 +1,7 @@
 #include "rzyOS_memory.h"
 
+#if RZYOS_ENABLE_MEMORY == 1
+
 //内存管理初始化函数
 //parameter : 
 //rzyOS_mem_block_s *rzyOS_mem_block ： 内存管理结构
@@ -158,3 +160,5 @@ void rzyOS_mem_block_get_info(rzyOS_mem_block_s *rzyOS_mem_block, rzyOS_mem_info
 
 	task_exit_critical(status);
 }
+
+#endif

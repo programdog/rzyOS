@@ -1,5 +1,7 @@
 #include "rzyOS_eventgroup.h"
 
+#if RZYOS_ENABLE_EVENTGROUP == 1
+
 //时间组初始化函数
 //parameter : 
 //rzyOS_flag_group_s *rzyOS_flag_group : 事件标志组
@@ -236,3 +238,5 @@ void rzyOS_flag_group_get_info(rzyOS_flag_group_s *rzyOS_flag_group, rzyOS_flag_
 
 	task_exit_critical(status);
 }
+
+#endif

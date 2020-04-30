@@ -19,7 +19,7 @@ void task1_entry(void *param)
 
 	for (;;)
 	{
-		usage = rzyOS_get_cpu_usage();
+//		usage = rzyOS_get_cpu_usage();
 		task1Flag = 0;
 		task_delay(1);
 		task1Flag = 1;

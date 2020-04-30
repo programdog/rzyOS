@@ -1,5 +1,7 @@
 #include "rzyOS_semaphore.h"
 
+#if RZYOS_ENABLE_SEMAPHORE == 1
+
 //信号量初始化函数
 void rzyOS_sem_init(rzyOS_sem_s *sem, uint32_t start_count, uint32_t max_count)
 {
@@ -128,3 +130,5 @@ void rzyOS_sem_get_info(rzyOS_sem_s *sem, rzyOS_sem_info_s *sem_info)
 
 	task_exit_critical(status);
 }
+
+#endif

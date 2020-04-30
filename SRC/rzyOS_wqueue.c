@@ -1,5 +1,7 @@
 #include "rzyOS_wqueue.h"
 
+#if RZYOS_ENABLE_WQUEUE == 1
+
 //高速工作队列链表
 static list_t rzyOS_high_wqueue_list;
 //低速工作队列链表
@@ -267,3 +269,5 @@ void rzyOS_wqueue_task_init(void)
 	//初始化工作队列任务
 	task_init(&rzyOS_wqueue_task_tcb, rzyOS_wqueue_task, (void *)0, RZYOS_WQUEUE_PRIO, rzyOS_wqueue_task_stack, RZYOS_WQUEUE_STACK_SIZE);
 }
+
+#endif

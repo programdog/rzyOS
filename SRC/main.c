@@ -25,12 +25,15 @@ list_t task_delay_list;
 
 //系统节拍计数
 uint32_t tick_count;
+
+#if RZYOS_ENABLE_CPU_DETECT == 1
 //空闲任务运行节拍统计
 uint32_t idle_count;
 //空闲任务满负荷运行节拍统计
 uint32_t idle_max_count;
 //cpu使用率检测函数
 void check_cpu_usage_detect(void);
+#endif
 
 
 //从位图中找到就绪的最高优先级
@@ -243,13 +246,18 @@ void task_systemtick_handler(void)
 	//系统节拍累加
 	tick_count ++;
 
+#if RZYOS_ENABLE_CPU_DETECT == 1
+
 	//cpu使用率检测
 	check_cpu_usage_detect();
+#endif
 	
 	task_exit_critical(status);
 
+#if RZYOS_ENABLE_WQUEUE == 1
 	//系统tick， 周期性调用工作队列处理函数
 	rzyOS_wqueue_tick_handle();
+#endif
 	
 	task_schedule();
 }
@@ -259,6 +267,9 @@ void delay(int count)
 {
 	while(-- count > 0);
 }
+
+
+#if RZYOS_ENABLE_CPU_DETECT == 1
 
 //cpu使用率
 static float cpu_usage;
@@ -327,6 +338,8 @@ float rzyOS_get_cpu_usage(void)
 	return usage;
 }
 
+#endif
+
 task_tcb_s tcb_task_idle;
 tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
 
@@ -338,21 +351,27 @@ void idle_task_entry(void *param)
 	//app任务初始化
 	rzyOS_app_init();
 
+#if RZYOS_ENABLE_WQUEUE == 1
 	//工作队列任务初始化
 	rzyOS_wqueue_task_init();
+#endif
 
 	//设定systick中断时间周期
 	set_systick_period(RZYOS_TICK_MS);
 
+#if RZYOS_ENABLE_CPU_DETECT == 1
 	//cpu同步等待
 	cpu_tick_sync();
+#endif 
 
 	for (;;)
 	{
+#if RZYOS_ENABLE_CPU_DETECT == 1
 		uint32_t status = task_enter_critical();
 		//空闲任务运行节拍计数
 		idle_count ++;
 		task_exit_critical(status);
+#endif 
 	}
 }
 
@@ -362,13 +381,17 @@ int main()
 	
 	task_delay_list_init();
 
+#if RZYOS_ENABLE_WQUEUE == 1
 	rzyOS_wqueue_module_init();
+#endif
 
 	//系统节拍初始化
 	rzyOS_tick_count_init();
 
+#if RZYOS_ENABLE_CPU_DETECT == 1
 	//cpu 状态检测模块变量初始化
 	cpu_usage_state_init();
+#endif
 	
 	// rzyOS_app_init();
 	
