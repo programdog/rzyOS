@@ -28,7 +28,7 @@ static rzyOS_sem_s rzyOS_wqueue_tick_sem;
 void rzyOS_wqueue_init(rzyOS_wqueue_s *rzyOS_wqueue, uint32_t start_delay_tick, uint32_t period_tick, worker_t worker, void *arg, uint32_t wqueue_config)
 {
 	//队列节初始化
-	node_init(&(rzyOS_wqueue -> node));
+	node_init(&(rzyOS_wqueue -> link_node));
 	//起始延时节拍
 	rzyOS_wqueue -> start_delay_tick = start_delay_tick;
 	//执行周期节拍
@@ -76,7 +76,7 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 				uint32_t status = task_enter_critical();
 
 				//在高速工作队列链表中插入节点
-				list_add_first(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
+				list_add_first(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> link_node));
 
 				task_exit_critical(status);
 			}
@@ -86,7 +86,7 @@ void rzyOS_wqueue_start(rzyOS_wqueue_s *rzyOS_wqueue)
 				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
 				//在低速工作队列链表中插入节点
-				list_add_first(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
+				list_add_first(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> link_node));
 
 				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
 			}
@@ -117,7 +117,7 @@ void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
 				uint32_t status = task_enter_critical();
 
 				//在高速工作队列链表中移除节点
-				list_remove_pos_node(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> node));
+				list_remove_pos_node(&rzyOS_high_wqueue_list, &(rzyOS_wqueue -> link_node));
 
 				task_exit_critical(status);
 			}
@@ -127,7 +127,7 @@ void rzyOS_wqueue_stop(rzyOS_wqueue_s *rzyOS_wqueue)
 				rzyOS_sem_wait(&rzyOS_wqueue_protect_sem, 0);
 
 				//在低速工作队列链表中移除节点
-				list_remove_pos_node(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> node));
+				list_remove_pos_node(&rzyOS_low_wqueue_list, &(rzyOS_wqueue -> link_node));
 
 				rzyOS_sem_post(&rzyOS_wqueue_protect_sem);
 			}
@@ -173,7 +173,7 @@ static void rzyOS_wqueue_call(list_t *list)
 	for (node = list -> head_node.next_node; node != &(list -> head_node); node = node -> next_node)
 	{
 		//获取连接节点所处于的工作队列结构
-		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, node);
+		rzyOS_wqueue_s *rzyOS_wqueue = node_parent(node, rzyOS_wqueue_s, link_node);
 
 		//tick递减
 		rzyOS_wqueue -> count_tick --;
@@ -197,7 +197,7 @@ static void rzyOS_wqueue_call(list_t *list)
 			else
 			{
 				//把工作队列节点在链表中删除
-				list_remove_pos_node(list, node);
+				list_remove_pos_node(list, &(rzyOS_wqueue_s -> link_node));
 
 				rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_stop;
 			}

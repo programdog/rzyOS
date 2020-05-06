@@ -44,7 +44,7 @@ typedef struct rzyOS_wqueue_info_s
 typedef struct rzyOS_wqueue_s
 {
 	//工作队列节点
-	node_t node;
+	node_t link_node;
 	//启示执行延时时间
 	uint32_t start_delay_tick;
 	//周期执行时间
