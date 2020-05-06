@@ -3,6 +3,10 @@
 #if RZYOS_ENABLE_SEMAPHORE == 1
 
 //信号量初始化函数
+//parameter : 
+//rzyOS_sem_s *sem : 信号量结构
+//uint32_t start_count ： 初始值
+//uint32_t max_count ： 最大计数值（最大计数值为0时则不限制最大值）
 void rzyOS_sem_init(rzyOS_sem_s *sem, uint32_t start_count, uint32_t max_count)
 {
 	rzyOS_event_init(&(sem -> rzyOS_ecb), event_type_semaphore);
@@ -34,8 +38,8 @@ uint32_t rzyOS_sem_wait(rzyOS_sem_s *sem, uint32_t wait_ticks)
 		return error_no_error;
 	}
 	else
+	//信号量=0, 则把当前任务加入到信号量的等待队列， 并标注事件为sem
 	{
-		//信号量=0, 则把当前任务加入到信号量的等待队列， 并标注事件为sem
 		rzyOS_event_wait(&(sem -> rzyOS_ecb), currentTask, (void *)0, event_type_semaphore, wait_ticks);
 		task_exit_critical(status);
 

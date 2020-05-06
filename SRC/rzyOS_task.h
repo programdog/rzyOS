@@ -88,7 +88,7 @@ typedef struct task_tcb_s
 	rzyOS_ecb_s *wait_event;
 	//等待事件的消息数据
 	void *event_msg;
-	//等待事件的结果
+	//等待事件的结果（错误码）
 	uint32_t wait_event_result;
 	
 	//请求的事件类型

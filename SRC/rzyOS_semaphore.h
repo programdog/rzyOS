@@ -14,7 +14,7 @@ typedef struct rzyOS_sem_s
 {
 	//事件控制块
 	rzyOS_ecb_s rzyOS_ecb;
-	//计数值
+	//当前计数值
 	uint32_t count;
 	//最大支持计数值
 	//max_count = 0 : 计数值无限制
