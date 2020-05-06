@@ -197,7 +197,7 @@ static void rzyOS_wqueue_call(list_t *list)
 			else
 			{
 				//把工作队列节点在链表中删除
-				list_remove_pos_node(list, &(rzyOS_wqueue_s -> link_node));
+				list_remove_pos_node(list, &(rzyOS_wqueue -> link_node));
 
 				rzyOS_wqueue -> rzyOS_wqueue_status = wqueue_stop;
 			}
