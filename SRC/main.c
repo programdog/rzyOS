@@ -312,7 +312,7 @@ static void check_cpu_usage_detect(void)
 	else if (0 == tick_count % ONE_SECOND)
 	{
 		//计算cpu使用率
-		cpu_usage = 100 - 100.0 * (float)idle_count / (float)idle_max_count;
+		cpu_usage = 100 - (float)100.0 * (float)idle_count / (float)idle_max_count;
 		idle_count = 0;
 	}
 }
