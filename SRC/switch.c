@@ -1,10 +1,17 @@
 #include "rzyOS.h"
 #include "ARMCM3.h"
 
+
+//中断控制器地址
 #define NVIC_INT_CTRL	0xe000ed04
+//触发PendSV
 #define	NVIC_PENDSVSET	0X10000000
+//PendSV优先级控制地址
 #define	NVIC_SYSPRI2	0xe000ed22
+//PendSV设置为最低优先值255
 #define	NVIC_PENDSV_PRI	0x000000ff
+
+
 
 #define MEM32(addr)	*(volatile unsigned long *)(addr)
 #define MEM8(addr)	*(volatile unsigned char *)(addr)

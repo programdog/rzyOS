@@ -32,12 +32,16 @@ void task_run_first(void);
 void task_switch(void);
 
 
+//task调度
 void task_schedule(void);
 
+//初始化位图
 void task_schedule_init(void);
 
+//调度失能 , 计数调度锁 + 1
 void task_schedule_disable(void);
 
+//调度使能 , 计数调度锁 - 1
 void task_schedule_enable(void);
 
 
