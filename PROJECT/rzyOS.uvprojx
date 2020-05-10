@@ -457,6 +457,11 @@
               <FileType>1</FileType>
               <FilePath>..\SRC\rzyOS_eventgroup.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_hook.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRC\rzyOS_hook.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
