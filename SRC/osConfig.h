@@ -38,4 +38,14 @@
 /********************************/
 
 
+
+/***********内核编译选项***********/
+
+#define RZYOS_HOOK_ILDE  0
+#define RZYOS_HOOK_SYSTICK  0
+#define RZYOS_HOOK_SCHEDULE  0
+
+/********************************/
+
+
 #endif
