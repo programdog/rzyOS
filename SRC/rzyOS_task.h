@@ -99,6 +99,7 @@ typedef struct task_tcb_s
 
 
 //task info struct
+//任务信息结构
 typedef struct rzyOS_task_info_s
 {
 	//任务注册延时周期
@@ -111,9 +112,9 @@ typedef struct rzyOS_task_info_s
 	uint32_t slice;
 	//任务挂起计数器
 	uint32_t suspend_count;
-	//
+	//任务堆栈大小
 	uint32_t task_stack_size;
-	//
+	//任务剩余空闲堆栈大小
 	uint32_t task_stack_free_size;
 } rzyOS_task_info_s;
 
