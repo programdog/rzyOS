@@ -1,0 +1,11 @@
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS_semaphore.c
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS_semaphore.h
+.\objects\rzyos_semaphore.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\bitMapLib.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\osConfig.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS_task.h
+.\objects\rzyos_semaphore.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_semaphore.o: ..\..\SRC\rzyOS.h

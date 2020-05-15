@@ -1,0 +1,17 @@
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS_cpu.c
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\rzyos_cpu.o: ..\..\SRC\bitMapLib.h
+.\objects\rzyos_cpu.o: ..\..\SRC\osConfig.h
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS_task.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_cpu.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM3\Include\ARMCM3.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\core_cm3.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_version.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_compiler.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include\mpu_armv7.h
+.\objects\rzyos_cpu.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\Device\ARM\ARMCM3\Include\system_ARMCM3.h

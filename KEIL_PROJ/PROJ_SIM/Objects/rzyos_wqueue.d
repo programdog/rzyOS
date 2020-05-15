@@ -1,0 +1,12 @@
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_wqueue.c
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_wqueue.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_wqueue.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\bitMapLib.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\osConfig.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_task.h
+.\objects\rzyos_wqueue.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_wqueue.o: ..\..\SRC\rzyOS_semaphore.h

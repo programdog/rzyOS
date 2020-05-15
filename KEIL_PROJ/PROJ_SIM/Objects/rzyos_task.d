@@ -1,0 +1,10 @@
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS_task.c
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS.h
+.\objects\rzyos_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\rzyos_task.o: ..\..\SRC\bitMapLib.h
+.\objects\rzyos_task.o: ..\..\SRC\osConfig.h
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS_task.h
+.\objects\rzyos_task.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS_event.h
+.\objects\rzyos_task.o: ..\..\SRC\rzyOS.h

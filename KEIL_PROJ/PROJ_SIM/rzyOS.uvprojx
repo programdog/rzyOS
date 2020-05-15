@@ -380,87 +380,87 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>SRC</GroupName>
+          <GroupName>rzyOS_core</GroupName>
           <Files>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\switch.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_list.c</FilePath>
-            </File>
             <File>
               <FileName>bitMapLib.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\bitMapLib.c</FilePath>
+              <FilePath>..\..\SRC\bitMapLib.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_task.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_time.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_cpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_cpu.c</FilePath>
+              <FilePath>..\..\SRC\main.c</FilePath>
             </File>
             <File>
               <FileName>rzyOS_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_app.c</FilePath>
+              <FilePath>..\..\SRC\rzyOS_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_cpu.c</FilePath>
             </File>
             <File>
               <FileName>rzyOS_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_event.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_semaphore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_semaphore.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_mbox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_mbox.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_memory.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_memory.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>rzyOS_wqueue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_wqueue.c</FilePath>
+              <FilePath>..\..\SRC\rzyOS_event.c</FilePath>
             </File>
             <File>
               <FileName>rzyOS_eventgroup.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_eventgroup.c</FilePath>
+              <FilePath>..\..\SRC\rzyOS_eventgroup.c</FilePath>
             </File>
             <File>
               <FileName>rzyOS_hook.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rzyOS_hook.c</FilePath>
+              <FilePath>..\..\SRC\rzyOS_hook.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_mbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_semaphore.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_wqueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\rzyOS_wqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\SRC\switch.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,0 +1,23 @@
+--cpu Cortex-M3
+".\objects\bitmaplib.o"
+".\objects\main.o"
+".\objects\rzyos_app.o"
+".\objects\rzyos_cpu.o"
+".\objects\rzyos_event.o"
+".\objects\rzyos_eventgroup.o"
+".\objects\rzyos_hook.o"
+".\objects\rzyos_list.o"
+".\objects\rzyos_mbox.o"
+".\objects\rzyos_memory.o"
+".\objects\rzyos_mutex.o"
+".\objects\rzyos_semaphore.o"
+".\objects\rzyos_task.o"
+".\objects\rzyos_time.o"
+".\objects\rzyos_wqueue.o"
+".\objects\switch.o"
+".\objects\startup_armcm3.o"
+".\objects\system_armcm3.o"
+--strict --scatter ".\Objects\rzyOS.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Objects\rzyOS.map" -o .\Objects\rzyOS.axf
