@@ -1,21 +1,21 @@
 ##
 ## rzyOS sim keil project
 ##
-/KEIL_PROJ/PROJ_SIM/Objects
-/KEIL_PROJ/PROJ_SIM/RTE/_rzyOS
+/keil_proj/proj_sim/Objects
+/keil_proj/proj_sim/RTE/_rzyOS
 
-/KEIL_PROJ/PROJ_SIM/*.uvguix.*
-/KEIL_PROJ/PROJ_SIM/*.uvoptx
-/KEIL_PROJ/PROJ_SIM/EventRecorderStub.scvd
+/keil_proj/proj_sim/*.uvguix.*
+/keil_proj/proj_sim/*.uvoptx
+/keil_proj/proj_sim/EventRecorderStub.scvd
 
 
 ##
 ## rzyOS stm32f407vgt6(stm32f4-discovery) keil project
 ##
-/KEIL_PROJ/PROJ_STM32F407/DebugConfig
-/KEIL_PROJ/PROJ_STM32F407/Listings
-/KEIL_PROJ/PROJ_STM32F407/Objects
+/keil_proj/proj_stm32f407/DebugConfig
+/keil_proj/proj_stm32f407/Listings
+/keil_proj/proj_stm32f407/Objects
 
-/KEIL_PROJ/PROJ_STM32F407/*.uvguix.*
-/KEIL_PROJ/PROJ_STM32F407/*.uvoptx
-/KEIL_PROJ/PROJ_STM32F407/EventRecorderStub.scvd
+/keil_proj/proj_stm32f407/*.uvguix.*
+/keil_proj/proj_stm32f407/*.uvoptx
+/keil_proj/proj_stm32f407/EventRecorderStub.scvd
