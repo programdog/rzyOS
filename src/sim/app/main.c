@@ -34,9 +34,9 @@ void task2_entry(void *param)
 	for (;;)
 	{
 		task2Flag = 0;
-		task_delay(1);
+		task_delay(10);
 		task2Flag = 1;
-		task_delay(1);
+		task_delay(10);
 
 	}
 }
@@ -47,9 +47,9 @@ void task3_entry(void *param)
 	for (;;)
 	{
 		task3Flag = 0;
-		task_delay(1);
+		task_delay(10);
 		task3Flag = 1;
-		task_delay(1);
+		task_delay(10);
 	}
 }
 
@@ -60,9 +60,9 @@ void task4_entry(void *param)
 	for (;;)
 	{
 		task4Flag = 0;
-		task_delay(1);
+		task_delay(10);
 		task4Flag = 1;
-		task_delay(1);
+		task_delay(10);
 	}
 }
 

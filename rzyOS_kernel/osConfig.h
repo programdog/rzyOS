@@ -5,7 +5,7 @@
 #define RZYOS_PRIO_COUNT 32
 
 //rzyOS 同优先级task时间片 
-#define RZYOS_SLICE_MAX 10 // 10 * 10ms
+#define RZYOS_SLICE_MAX 10 // 10 * 1ms
 
 //rzyOS idle task 堆栈大小
 #define RZYOS_IDLETASK_STACK_SIZE 1024
@@ -18,7 +18,7 @@
 #define RZYOS_WQUEUE_PRIO 1
 
 //一个系统节拍的毫秒数
-#define RZYOS_TICK_MS 10
+#define RZYOS_TICK_MS 1  //1ms
 
 //一秒的系统节拍数
 #define ONE_SECOND (1000 / RZYOS_TICK_MS)
