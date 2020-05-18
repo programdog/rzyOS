@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\rzyOS_kernel</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -386,11 +386,6 @@
               <FileName>bitMapLib.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\bitMapLib.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\main.c</FilePath>
             </File>
             <File>
               <FileName>rzyOS_cpu.c</FileName>
@@ -461,6 +456,16 @@
               <FileName>rzyOS_schedule.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_schedule.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>src</GroupName>
+          <Files>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\sim\app\main.c</FilePath>
             </File>
           </Files>
         </Group>
