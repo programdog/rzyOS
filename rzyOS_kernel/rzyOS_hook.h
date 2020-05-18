@@ -1,7 +1,7 @@
 #ifndef RZYOS_HOOK_H
 #define RZYOS_HOOK_H
 
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 void rzyOS_hook_idle(void);
 

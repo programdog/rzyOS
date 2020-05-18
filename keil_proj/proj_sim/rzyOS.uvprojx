@@ -393,11 +393,6 @@
               <FilePath>..\..\rzyOS_kernel\main.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_app.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_cpu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_cpu.c</FilePath>
@@ -461,6 +456,11 @@
               <FileName>switch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\switch.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_schedule.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_schedule.c</FilePath>
             </File>
           </Files>
         </Group>

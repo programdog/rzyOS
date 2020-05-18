@@ -2,7 +2,7 @@
 #define RZYOS_MEMORY_H
 
 #include "rzyOS_event.h"
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //内存块管理结构体
 typedef struct rzyOS_mem_block_s

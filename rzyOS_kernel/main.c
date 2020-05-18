@@ -1,407 +1,92 @@
-#include "rzyOS.h"
-#include "ARMCM3.h"
-#include "rzyOS_wqueue.h"
+#include "rzyOS_api.h"
+
+task_tcb_s tcb_task1;
+task_tcb_s tcb_task2;
+task_tcb_s tcb_task3;
+task_tcb_s tcb_task4;
+
+tTaskStack task1Env[1024];
+tTaskStack task2Env[1024];
+tTaskStack task3Env[1024];
+tTaskStack task4Env[1024];
 
 
-//µ±Ç°ÈÎÎñÖ¸Õë
-task_tcb_s *currentTask;
-//ÏÂÒ»¸ö×¼±¸Ö´ĞĞµÄÈÎÎñÖ¸Õë
-task_tcb_s *nextTask;
-//¿ÕÏĞÈÎÎñÖ¸Õë
-task_tcb_s *idleTask;
+float usage = 0;
 
-//¶¨ÒåÒ»¸öÒÔÓÅÏÈ¼¶»®·ÖµÄÎ»Í¼½á¹¹
-bitmap_s bitmap_taskprio;
-
-//¶¨Òå RZYOS_PRIO_COUNT£¨32£©¸öË«ÏòÁ´±í¹ÜÀí½á¹¹£¬ ÓÃÓÚÍ¬ÓÅÏÈ¼¶µÄ¾ÍĞ÷ÈÎÎñ¹ÜÀí
-list_t task_ready_table[RZYOS_PRIO_COUNT];
-
-//¼ÆÊıµ÷¶ÈËø
-uint8_t schedLockCount;
-
-//¶¨ÒåÑÓÊ±Á´±í
-list_t task_delay_list;
-
-
-//ÏµÍ³½ÚÅÄ¼ÆÊı
-uint32_t tick_count;
-
-#if RZYOS_ENABLE_CPU_DETECT == 1
-//¿ÕÏĞÈÎÎñÔËĞĞ½ÚÅÄÍ³¼Æ
-uint32_t idle_count;
-//¿ÕÏĞÈÎÎñÂú¸ººÉÔËĞĞ½ÚÅÄÍ³¼Æ
-uint32_t idle_max_count;
-//cpuÊ¹ÓÃÂÊ¼ì²âº¯Êı
-void check_cpu_usage_detect(void);
-#endif
-
-
-//´ÓÎ»Í¼ÖĞÕÒµ½¾ÍĞ÷µÄ×î¸ßÓÅÏÈ¼¶
-//°´ÕÕ¾ÍĞ÷µÄ×î¸ßÓÅÏÈ¼¶ÔÚ¾ÍĞ÷ÈÎÎñÁĞ±íÖĞ»ñÈ¡µÚÒ»¸öÈÎÎñ½Úµã
-//´ÓµÚÒ»¸öÈÎÎñ½ÚµãµÃµ½¶ÔÓ¦µÄtaskµÄTCB
-task_tcb_s *task_highest_ready(void)
+int task1Flag;
+void task1_entry(void *param)
 {
-	//ÏÈÕÒµ½Î»Í¼ÖĞ±ê¼ÇµÄ×î¸ßÓÅÏÈ¼¶×é
-	uint32_t highest_prio = bitmap_get_first_set(&bitmap_taskprio);
-	//ÕÒµ½¸ÃÓÅÏÈ¼¶×éÖĞµÚÒ»¸öÈÎÎñ¾ÍĞ÷½Úµã
-	node_t *node = list_first_node(&task_ready_table[highest_prio]);
-	//·µ»ØÈÎÎñÖ¸Õë
-	return node_parent(node, task_tcb_s, link_node);
-}
-
-//°´ÕÕÓÅÏÈ¼¶,°Ñ¾ÍĞ÷µÄÈÎÎñµÄÈÎÎñ½Úµã²åÈë¾ÍĞ÷ÈÎÎñlistÖĞ
-void task_insert_ready_list(task_tcb_s *task_tcb)
-{
-	//°ÑÈÎÎñ½ÚµãÌí¼Óµ½ÓÅÏÈ¼¶¶ÓÁĞÖĞ
-	list_add_first(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
-	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
-}
-
-//°ÑÈÎÎñ´Ó¾ÍĞ÷¶ÓÁĞÖĞÉ¾ÒÆ³ö(ÄÚ²¿Ê¹ÓÃ)
-void task_remove_ready_list(task_tcb_s *task_tcb)
-{
-	//µ±taskÊ¹ÓÃÑÓÊ±º¯Êı,»áµ÷ÓÃ´Ëº¯Êı
-
-	//ÈÏÎª¼´½«¿ªÆôĞÂµÄÑÓÊ±, ËùÒÔÒªÔÚ¾ÍĞ÷listÖĞÉ¾³ıµ±Ç°ÈÎÎñµÄÈÎÎñ½Úµã
-	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
-	
-	if (0 == list_count(&task_ready_table[task_tcb -> prio]))
-	{
-		bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
-	}
-}
-
-//°ÑÈÎÎñ´Ó¾ÍĞ÷¶ÓÁĞÖĞÒÆ³ö
-void rzyOS_task_ready_list_remove(task_tcb_s *task_tcb)
-{
-	list_remove_pos_node(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
-	
-	if (0 == list_count(&task_ready_table[task_tcb -> prio]))
-	{
-		bitmap_clean(&bitmap_taskprio, task_tcb -> prio);
-	}
-}
-
-//taskµ÷¶È, ÇĞ»»µ½×î¸ßÓÅÏÈ¼¶ÖĞ,ÑÓÊ±ÓÃÍêµÄtask
-//ÈÎÎñ´¦ÓÚÔËĞĞ×´Ì¬Ê±ÒÀÈ»ÔÚ¾ÍĞ÷ÁĞ±íÖĞ
-void task_schedule(void)
-{
-	task_tcb_s *tempTask;
-	uint32_t status = task_enter_critical();
-	
-	//¼ÆÊıµ÷¶ÈËø > 0 £» ½ûÖ¹µ÷¶È
-	if (schedLockCount > 0)
-	{
-		task_exit_critical(status);
-		return ;
-	}
-	
-	tempTask = task_highest_ready();
-	
-	if (tempTask != currentTask)
-	{
-		nextTask = tempTask;
-		task_switch(); //´¥·¢pendSV
-	}
-	
-	task_exit_critical(status);
-}
-
-//³õÊ¼»¯Î»Í¼
-//³õÊ¼»¯ÈÎÎñ¾ÍĞ÷±ílistÊı×é(Êı×é°´ÕÕÓÅÏÈ¼¶»®·Ö)
-void task_schedule_init(void)
-{
-	int i;
-	
-	schedLockCount = 0;
-	bitmap_init(&bitmap_taskprio);
-	for (i = 0; i < RZYOS_PRIO_COUNT; i ++)
-	{
-		list_init(&task_ready_table[i]);
-	}
-}
-
-//µ÷¶ÈÊ§ÄÜ , ¼ÆÊıµ÷¶ÈËø + 1
-void task_schedule_disable(void)
-{
-	uint32_t status = task_enter_critical();
-	
-	if (schedLockCount < 0xff)
-	{
-		schedLockCount ++;
-	}
-	
-	task_exit_critical(status);
-}
-
-//µ÷¶ÈÊ¹ÄÜ , ¼ÆÊıµ÷¶ÈËø - 1
-void task_schedule_enable(void)
-{
-	uint32_t status = task_enter_critical();
-	
-	if (schedLockCount > 0)
-	{
-		schedLockCount --;
-
-		//µ±ÕıºÃ¼õµ½0 , ÔòÇĞÈëµ÷¶È
-		if (0 == schedLockCount)
-		{
-			task_schedule();
-		}
-	}
-	
-	task_exit_critical(status);
-}
-
-//³õÊ¼»¯ÑÓÊ±ÁĞ±ílist
-void task_delay_list_init(void)
-{
-	list_init(&task_delay_list);
-}
-
-
-
-//ÔÚÑÓÊ±listÖĞ¼ÓÈëµ±Ç°ÈÎÎñµÄÑÓÊ±½Úµã
-void delay_list_insert_time_node(task_tcb_s *task_tcb, uint32_t ticks)
-{
-	//µ±taskÊ¹ÓÃÑÓÊ±º¯Êı,»áµ÷ÓÃ´Ëº¯Êı
-
-	//ÔÚµ±Ç°ÈÎÎñµÄTCBÖĞĞ´ÈëĞèÒªµÄÑÓÊ±
-	task_tcb -> delayTicks = ticks;
-	list_add_first(&task_delay_list, &(task_tcb -> delay_node));
-	//±ê×¢ÈÎÎñ×´Ì¬ÎªÑÓÊ±µÈ´ı
-	task_tcb -> task_status |= RZYOS_TASK_STATUS_DELAY;
-}
-
-//°ÑÈÎÎñÔÚÑÓÊ±¶ÓÁĞÖĞÉ¾³ı(ÄÚ²¿µ÷ÓÃ)
-void delay_list_remove_time_node(task_tcb_s *task_tcb)
-{
-	list_remove_pos_node(&task_delay_list, &(task_tcb -> delay_node));
-	//Çå³ıÈÎÎñÑÓÊ±µÈ´ı×´Ì¬
-	task_tcb -> task_status &= ~RZYOS_TASK_STATUS_DELAY;
-}
-
-//°ÑÈÎÎñÔÚÑÓÊ±¶ÓÁĞÖĞÉ¾³ı(Íâ²¿µ÷ÓÃ)
-void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb)
-{
-	delay_list_remove_time_node(task_tcb);
-}
-
-//ÏµÍ³½ÚÅÄ³õÊ¼»¯
-void rzyOS_tick_count_init(void)
-{
-	tick_count = 0;
-}
-
-//systickÖĞ¶Ïµ÷ÓÃ´Ëº¯Êı
-void task_systemtick_handler(void)
-{
-	node_t *node;
-	
-	uint32_t status = task_enter_critical();
-	
-	//±éÀúÑÓÊ±µÈ´ı¶ÓÁĞ
-	for (node = task_delay_list.head_node.next_node; node != &(task_delay_list.head_node); node = node -> next_node)
-	{
-		//¸ù¾İÑÓÊ±½Úµã£¬»ñÈ¡ÈÎÎñ¿ØÖÆ¿é
-		task_tcb_s *task_tcb =  (task_tcb_s *)node_parent(node, task_tcb_s, delay_node);
-		//ÈÎÎñÑÓÊ±µİ¼õ
-		task_tcb -> delayTicks --;
-
-		//ÑÓÊ±ÒÑÎª0
-		if (0 == task_tcb -> delayTicks)
-		{
-			//ÈôÈÎÎñÈÔ´¦ÓÚÊÂ¼şµÈ´ı×´Ì¬
-			if (task_tcb -> wait_event)
-			{
-				//Èç¹ûÊÂ¼ş»¹Î´µ½À´,µ«ÑÓÊ±µ½´ï, Ôò´ÓÊÂ¼şµÈ´ıÁĞ±íÉ¾³ı
-				rzyOS_event_remove(task_tcb, (void *)0, error_timeout);
-			}
-
-			delay_list_remove_time_node(task_tcb);
-			
-			task_insert_ready_list(task_tcb);
-		}
-	}
-	
-	//Ê±¼äÆ¬ÂÖ×ª
-	//ÒòÎªµ÷¶ÈµÄnextTask×ÜÊÇÓÅÏÈ¼¶ÁĞ±íµÄµØµÚÒ»¸ö½Úµã
-	//ËùÒÔ»ùÓÚÊ±¼äÆ¬µ÷¶ÈÒª¶ÔµÚÒ»¸ö½Úµã²Ù×÷,Ò²¾ÍÊÇcurrentTask
-	currentTask -> slice --;
-	//ÅĞ¶Ïµ±Ç°ÈÎÎñÊ±¼äÆ¬ÊÇ·ñÓÃÍê
-	if (0 == currentTask -> slice)
-	{
-		//Èç¹ûÓÃÍê, ÇÒµ±Ç°ÈÎÎñµÄÍ¬ÓÅÏÈ¼¶ÈÎÎñlist»¹ÓĞÈÎÎñ, ÔòÇĞ»»ÂÖ×ª
-		if (list_count(&task_ready_table[currentTask -> prio]) > 0)
-		{
-			//ÒÆ³ıÍ¬ÓÅÏÈ¼¶ÈÎÎñlistÖĞµÄÈÎÎñ½Úµã, ²¢²åÈëµ½×îºóÒ»¸ö½Úµã, Íê³É»ùÓÚÍ¬ÓÅÏÈ¼¶µÄÊ±¼äÆ¬µ÷¶È
-			remove_list_first(&task_ready_table[currentTask -> prio]);
-			list_add_last(&task_ready_table[currentTask -> prio], &(currentTask -> link_node));
-			
-			//ÖØÖÃÊ±¼äÆ¬
-			currentTask -> slice = RZYOS_SLICE_MAX;
-		}
-	}
-
-	//ÏµÍ³½ÚÅÄÀÛ¼Ó
-	tick_count ++;
-
-#if RZYOS_ENABLE_CPU_DETECT == 1
-
-	//cpuÊ¹ÓÃÂÊ¼ì²â
-	check_cpu_usage_detect();
-#endif
-	
-	task_exit_critical(status);
-
-#if RZYOS_ENABLE_WQUEUE == 1
-	//ÏµÍ³tick£¬ ÖÜÆÚĞÔµ÷ÓÃ¹¤×÷¶ÓÁĞ´¦Àíº¯Êı
-	rzyOS_wqueue_tick_handle();
-#endif
-	
-	task_schedule();
-}
-
-//²»»áÒıÆğÈÎÎñµ÷¶ÈµÄÑÓÊ±
-void delay(int count)
-{
-	while(-- count > 0);
-}
-
-
-#if RZYOS_ENABLE_CPU_DETECT == 1
-
-//cpuÊ¹ÓÃÂÊ
-static float cpu_usage;
-//cpuÍ¬²½µÈ´ı±êÖ¾
-static uint32_t cpu_sync_flag;
-
-//cpuÊ¹ÓÃÂÊ¼ì²âÄ£¿é±äÁ¿³õÊ¼»¯
-static void cpu_usage_state_init(void)
-{
-	idle_count = 0;
-	idle_max_count = 0;
-	cpu_usage = 0.0f;
-	cpu_sync_flag = 0;
-}
-
-//cpuÊ¹ÓÃÂÊ¼ì²âº¯Êı
-static void check_cpu_usage_detect(void)
-{
-	//½øÈë´Ëº¯ÊıÔò´ú±ícpuÍ¬²½
-	//ÈôÎªcpuÎ´½øÈëÍ¬²½×´Ì¬£¬ÔòÖÃÎ»cpu_sync_flag
-	//Ö»ÖÃÎ»cpu_sync_flagÒ»´Î
-	if (0 == cpu_sync_flag)
-	{
-		//ÖÃÎ»cpu_sync_flag
-		cpu_sync_flag = 1;
-		return ;
-	}
-
-	//ÏµÍ³½ÚÅÄ¼ÆÊıµÚ1Ãë
-	if (ONE_SECOND == tick_count)
-	{
-		//°ÑµÚÒ»ÃëµÄ¿ÕÏĞÈÎÎñÂú¸ººÉ½ÚÅÄ¼ÆÊı¸³Öµ
-		idle_max_count = idle_count;
-		idle_count = 0;
-
-		//¿ªÆôµ÷¶È
-		task_schedule_enable();
-	}
-	//Ã¿µ±tick_count¼ÆÊı1Ãë
-	else if (0 == tick_count % ONE_SECOND)
-	{
-		//¼ÆËãcpuÊ¹ÓÃÂÊ
-		cpu_usage = 100 - (float)100.0 * (float)idle_count / (float)idle_max_count;
-		idle_count = 0;
-	}
-}
-
-static void cpu_tick_sync(void)
-{
-	//cpuÎ´Í¬²½£¬Ôòwhile(1)µÈ´ı
-	while (0 == cpu_sync_flag)
-	{
-		;;;;;
-	}
-}
-
-//»ñÈ¡cpuÊ¹ÓÃÂÊ£¬²¢·µ»Ø
-float rzyOS_get_cpu_usage(void)
-{
-	float usage = 0.0f;
-
-	uint32_t status = task_enter_critical();
-	usage = cpu_usage;
-	task_exit_critical(status);
-
-	return usage;
-}
-
-#endif
-
-task_tcb_s tcb_task_idle;
-tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
-
-void idle_task_entry(void *param)
-{
-	//¹Ø±ÕÈÎÎñµ÷¶È
-	task_schedule_disable();
-
-	//appÈÎÎñ³õÊ¼»¯
-	rzyOS_app_init();
-
-#if RZYOS_ENABLE_WQUEUE == 1
-	//¹¤×÷¶ÓÁĞÈÎÎñ³õÊ¼»¯
-	rzyOS_wqueue_task_init();
-#endif
-
-	//Éè¶¨systickÖĞ¶ÏÊ±¼äÖÜÆÚ
-	set_systick_period(RZYOS_TICK_MS);
-
-#if RZYOS_ENABLE_CPU_DETECT == 1
-	//cpuÍ¬²½µÈ´ı
-	cpu_tick_sync();
-#endif 
 
 	for (;;)
 	{
-#if RZYOS_ENABLE_CPU_DETECT == 1
-		uint32_t status = task_enter_critical();
-		//¿ÕÏĞÈÎÎñÔËĞĞ½ÚÅÄ¼ÆÊı
-		idle_count ++;
-		task_exit_critical(status);
-#endif 
+//		usage = rzyOS_get_cpu_usage();
+		task1Flag = 0;
+		task_delay(1);
+		task1Flag = 1;
+		task_delay(1);
 	}
+}
+
+int task2Flag;
+void task2_entry(void *param)
+{
+	
+	for (;;)
+	{
+		task2Flag = 0;
+		task_delay(1);
+		task2Flag = 1;
+		task_delay(1);
+
+	}
+}
+
+int task3Flag;
+void task3_entry(void *param)
+{
+	for (;;)
+	{
+		task3Flag = 0;
+		task_delay(1);
+		task3Flag = 1;
+		task_delay(1);
+	}
+}
+
+int task4Flag;
+void task4_entry(void *param)
+{
+
+	for (;;)
+	{
+		task4Flag = 0;
+		task_delay(1);
+		task4Flag = 1;
+		task_delay(1);
+	}
+}
+
+//ä»»åŠ¡åˆå§‹åŒ–
+void rzyOS_app_init(void)
+{
+	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, task1Env, sizeof(task1Env));
+	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task2Env));
+	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task3Env));
+	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task4Env));
 }
 
 int main()
 {
-	task_schedule_init();
-	
-	task_delay_list_init();
+	//è®¾å®šsystickä¸­æ–­æ—¶é—´å‘¨æœŸ
+	set_systick_period(RZYOS_TICK_MS);
 
-#if RZYOS_ENABLE_WQUEUE == 1
-	rzyOS_wqueue_module_init();
-#endif
+	rzyOS_kernel_init();
 
-	//ÏµÍ³½ÚÅÄ³õÊ¼»¯
-	rzyOS_tick_count_init();
 
-#if RZYOS_ENABLE_CPU_DETECT == 1
-	//cpu ×´Ì¬¼ì²âÄ£¿é±äÁ¿³õÊ¼»¯
-	cpu_usage_state_init();
-#endif
-	
-	// rzyOS_app_init();
-	
-	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_IDLETASK_PRIO, idleTaskEnv, RZYOS_IDLETASK_STACK_SIZE);
-	idleTask = &tcb_task_idle;
-	
-	
-	nextTask = task_highest_ready();
-	
-	task_run_first();
-	
+	//appä»»åŠ¡åˆå§‹åŒ–
+	rzyOS_app_init();
+	rzyOS_start();
+
+
 	return 0;
 }

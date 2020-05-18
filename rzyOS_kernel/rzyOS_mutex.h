@@ -2,7 +2,7 @@
 #define RZYOS_MUTEX_H
 
 #include "rzyOS_event.h"
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //互斥锁结构
 typedef struct rzyOS_mutex_s

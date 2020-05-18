@@ -1,4 +1,4 @@
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //task初始化
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack_bottom, uint32_t task_size)
@@ -48,7 +48,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task -> clean_param = (void *)0;
 	task -> request_delete_flag = 0;
 	
-	//初始化结束后将任务插入延时队列等待调度
+	//初始化结束后将任务插入就绪队列等待调度
 	task_insert_ready_list(task);
 }
 

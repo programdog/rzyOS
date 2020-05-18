@@ -1,5 +1,5 @@
-#ifndef __RZYOS_H
-#define __RZYOS_H
+#ifndef __RZYOS_SCHEDULE_H
+#define __RZYOS_SCHEDULE_H
 
 #include <stdint.h>
 #include "bitMapLib.h"
@@ -77,6 +77,12 @@ void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
 
 //获取cpu使用率，并返回
 float rzyOS_get_cpu_usage(void);
+
+
+
+void rzyOS_kernel_init(void);
+
+void rzyOS_start(void);
 
 
 #endif

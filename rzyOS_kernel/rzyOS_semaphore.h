@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 
 //不限制最大计数信号值

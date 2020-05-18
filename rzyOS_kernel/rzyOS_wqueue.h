@@ -1,7 +1,7 @@
 #ifndef RZYOS_WQUEUE_H
 #define RZYOS_WQUEUE_H
 
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 #include "rzyOS_semaphore.h"
 
 

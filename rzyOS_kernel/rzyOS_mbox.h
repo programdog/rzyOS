@@ -1,7 +1,7 @@
 #ifndef RZYOS_MBOX_H
 #define RZYOS_MBOX_H
 
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //正常模式， 插入到缓冲区的后边
 #define rzyOS_mbox_send_normal 0x00

@@ -2,7 +2,7 @@
 #define __RZYOS_EVENT_GROUP_H
 
 #include "rzyOS_event.h"
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //事件标志组结构
 typedef struct rzyOS_flag_group_s

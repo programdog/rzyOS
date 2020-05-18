@@ -3,7 +3,7 @@
 
 #include "bitMapLib.h"
 #include "rzyOS_task.h"
-#include "rzyOS.h"
+#include "rzyOS_schedule.h"
 
 //事件类型
 typedef enum rzyOS_event_type_e
