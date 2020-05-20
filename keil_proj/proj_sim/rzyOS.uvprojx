@@ -388,11 +388,6 @@
               <FilePath>..\..\rzyOS_kernel\bitMapLib.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_cpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_cpu.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_event.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_event.c</FilePath>
@@ -438,11 +433,6 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_task.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_time.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_wqueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_wqueue.c</FilePath>
@@ -456,6 +446,11 @@
               <FileName>rzyOS_schedule.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_schedule.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_delay.c</FilePath>
             </File>
           </Files>
         </Group>
