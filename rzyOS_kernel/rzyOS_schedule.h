@@ -2,8 +2,8 @@
 #define __RZYOS_SCHEDULE_H
 
 #include <stdint.h>
-#include "bitMapLib.h"
-#include "osConfig.h"
+#include "rzyOS_bitmap.h"
+#include "rzyOSconfig.h"
 #include "rzyOS_event.h"
 #include "rzyOS_task.h"
 

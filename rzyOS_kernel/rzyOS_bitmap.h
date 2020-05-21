@@ -1,5 +1,5 @@
-#ifndef __BITMAPLIB_H
-#define __BITMAPLIB_H
+#ifndef __RZYOS_BITMAP_H
+#define __RZYOS_BITMAP_H
 
 #include <stdint.h>
 

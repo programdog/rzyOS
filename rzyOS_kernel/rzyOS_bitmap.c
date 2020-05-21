@@ -1,4 +1,4 @@
-#include "bitMapLib.h"
+#include "rzyOS_bitmap.h"
 
 //初始化位图结构
 void bitmap_init(bitmap_s *bitmap)

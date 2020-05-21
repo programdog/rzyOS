@@ -1,5 +1,5 @@
-#ifndef __OSCONFIG_H
-#define __OSCONFIG_H
+#ifndef __RZYOSCONFIG_H
+#define __RZYOSCONFIG_H
 
 //rzyOS 目前支持的任务数
 #define RZYOS_PRIO_COUNT 32

@@ -1,7 +1,7 @@
 #ifndef RZYOS_EVENT_H
 #define RZYOS_EVENT_H
 
-#include "bitMapLib.h"
+#include "rzyOS_bitmap.h"
 #include "rzyOS_task.h"
 #include "rzyOS_schedule.h"
 

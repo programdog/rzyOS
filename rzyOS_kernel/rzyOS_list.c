@@ -1,4 +1,4 @@
-#include "bitMapLib.h"
+#include "rzyOS_bitmap.h"
 
 #define INLIST_FIRST_NODE head_node.next_node		//	headnode --> first
 #define INLIST_LAST_NODE head_node.pre_node			//	last  <-- headnode

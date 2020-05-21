@@ -383,11 +383,6 @@
           <GroupName>rzyOS_kernel</GroupName>
           <Files>
             <File>
-              <FileName>bitMapLib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\bitMapLib.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_event.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_event.c</FilePath>
@@ -438,11 +433,6 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_wqueue.c</FilePath>
             </File>
             <File>
-              <FileName>switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\switch.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_schedule.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_schedule.c</FilePath>
@@ -451,6 +441,16 @@
               <FileName>rzyOS_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_switch.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_bitmap.c</FilePath>
             </File>
           </Files>
         </Group>
