@@ -1,6 +1,7 @@
 #include "rzyOS_schedule.h"
-#include "ARMCM3.h"
+#include "rzyOSarch.h"
 
+//CM3 模拟模式
 //systick中断周期配置
 //modify system_ARMCM3.C to change XTAL and SYSTEM_CLOCK
 //#define  XTAL            (12000000UL)     /* Oscillator frequency */
@@ -13,6 +14,35 @@ void set_systick_period(uint32_t ms)
 	SysTick -> CTRL = SysTick_CTRL_CLKSOURCE_Msk |
 						SysTick_CTRL_TICKINT_Msk |		//中断使能
 						SysTick_CTRL_ENABLE_Msk;
+}
+
+//stm32
+//初始化systick函数
+//SYSTICK的时钟固定为AHB时钟，SYSTICK的时钟频率为AHB的频率
+//parameter ：
+//uint8_t sysclk ： 系统时钟频率
+void rzyOS_systick_init(uint8_t sysclk)
+{
+	uint32_t reload;
+	SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk;
+
+//	fac_us = sysclk;
+
+//	//每秒钟的计数次数 单位为M
+	reload = sysclk;
+
+	//reload为24位寄存器,最大值:16777216,在168M下,约合0.0998s左右
+	//（RZYOS_TICK_HZ = 1000 --> 1ms）
+	reload *= 1000000 / RZYOS_TICK_HZ;
+
+//	fac_ms = 1000 / RZYOS_TICK_HZ;			//代表OS可以延时的最少单位
+
+	//使能SYSTICK中断
+	SysTick -> CTRL |= SysTick_CTRL_TICKINT_Msk;
+	//每1/RZYOS_TICK_HZ (S)中断一次
+	SysTick -> LOAD = reload;
+	//开启SYSTICK
+	SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
 //systick中断函数

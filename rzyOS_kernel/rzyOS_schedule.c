@@ -1,5 +1,5 @@
 #include "rzyOS_schedule.h"
-#include "ARMCM3.h"
+#include "rzyOSarch.h"
 #include "rzyOS_wqueue.h"
 
 

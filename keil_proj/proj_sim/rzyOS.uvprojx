@@ -336,7 +336,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>ARMCM3_SIM</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\rzyOS_kernel</IncludePath>
             </VariousControls>
