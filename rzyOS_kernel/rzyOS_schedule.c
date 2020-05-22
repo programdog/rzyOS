@@ -52,8 +52,8 @@ task_tcb_s *task_highest_ready(void)
 //按照优先级,把就绪的任务的任务节点插入就绪任务list中
 void task_insert_ready_list(task_tcb_s *task_tcb)
 {
-	//把任务节点添加到优先级队列中
-	list_add_first(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
+	//把任务节点按照顺序添加到优先级队列中
+	list_add_last(&task_ready_table[task_tcb -> prio], &(task_tcb -> link_node));
 	bitmap_set(&bitmap_taskprio, task_tcb -> prio);
 }
 

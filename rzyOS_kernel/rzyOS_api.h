@@ -1,6 +1,7 @@
 #ifndef RZYOS_API_H
 #define RZYOS_API_H
 
+#include "rzyOSconfig.h"
 
 #include "rzyOS_schedule.h"
 
