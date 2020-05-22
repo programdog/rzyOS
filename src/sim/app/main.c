@@ -77,6 +77,7 @@ void rzyOS_app_init(void)
 
 int main()
 {
+	//keil设定仿真时钟为12M
 	//设定systick中断时间周期
 	set_systick_period(RZYOS_TICK_MS);
 

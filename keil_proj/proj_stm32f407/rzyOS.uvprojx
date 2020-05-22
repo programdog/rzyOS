@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Target 1</TargetName>
+      <TargetName>rzyOS_F4_demo</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
@@ -336,9 +336,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4_discovery\app;..\..\src\board\stm32f4_discovery\drvice\LED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -380,7 +380,149 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
+          <GroupName>rzyOS_kernel</GroupName>
+          <Files>
+            <File>
+              <FileName>rzyOS_bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_eventgroup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_eventgroup.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_hook.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_hook.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_mbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_schedule.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_schedule.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_semaphore.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_switch.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_wqueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_wqueue.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\board\stm32f4_discovery\app\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\chip\STM32F4xx_StdPeriph_Templates\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\chip\STM32F4xx_StdPeriph_Templates\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FWLIB</GroupName>
+          <Files>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\src\misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\src\stm32f4xx_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\src\stm32f4xx_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\src\stm32f4xx_rcc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\src\stm32f4xx_usart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hardware</GroupName>
+          <Files>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\board\stm32f4_discovery\drvice\LED\led.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>startup</GroupName>
+          <Files>
+            <File>
+              <FileName>startup_stm32f40_41xxx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS\startup_stm32f40_41xxx.s</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

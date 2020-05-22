@@ -56,7 +56,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 #endif
 
 
-#ifdef STM32F40XX
+#if defined(STM32F40_41xxx) || defined(STM32F40XX)
 //task≥ı ºªØ
 void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t prio, tTaskStack *stack_bottom, uint32_t task_size)
 {

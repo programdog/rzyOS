@@ -60,8 +60,11 @@ void delay_list_remove_time_node(task_tcb_s *task_tcb);
 //systick中断调用此函数
 void task_systemtick_handler(void);
 
-//systick中断周期配置
+//systick中断周期配置(sim)
 void set_systick_period(uint32_t ms);
+
+//systick中断周期配置(STM32F407)
+void rzyOS_systick_init(uint8_t sysclk);
 
 //延时函数，将触发调度
 void task_delay(uint32_t delay);

@@ -78,7 +78,7 @@ void rzyOS_app_init(void)
 int main()
 {
 	//设定systick中断时间周期
-	set_systick_period(RZYOS_TICK_MS);
+	rzyOS_systick_init(168);
 
 	rzyOS_kernel_init();
 

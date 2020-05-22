@@ -61,7 +61,7 @@ PendSVHander_nosave
 #endif
 
 
-#ifdef STM32F40XX
+#if defined(STM32F40_41xxx) || defined(STM32F40XX)
 //pendsv中断服务函数
 __asm void PendSV_Handler(void)
 {
