@@ -1,5 +1,9 @@
 #include "rzyOS_api.h"
 
+#include "led.h" 
+
+
+
 task_tcb_s tcb_task1;
 task_tcb_s tcb_task2;
 task_tcb_s tcb_task3;
@@ -16,28 +20,25 @@ float usage = 0;
 int task1Flag;
 void task1_entry(void *param)
 {
-
 	for (;;)
 	{
 //		usage = rzyOS_get_cpu_usage();
-		task1Flag = 0;
-		task_delay(10);
-		task1Flag = 1;
-		task_delay(10);
+		GPIO_SetBits(GPIOD, GPIO_Pin_12);
+		task_delay(100);
+		GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+		task_delay(100);
 	}
 }
 
 int task2Flag;
 void task2_entry(void *param)
 {
-	
 	for (;;)
 	{
-		task2Flag = 0;
-		task_delay(10);
-		task2Flag = 1;
-		task_delay(10);
-
+		GPIO_SetBits(GPIOD, GPIO_Pin_13);
+		task_delay(500);
+		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+		task_delay(500);
 	}
 }
 
@@ -46,23 +47,22 @@ void task3_entry(void *param)
 {
 	for (;;)
 	{
-		task3Flag = 0;
-		task_delay(10);
-		task3Flag = 1;
-		task_delay(10);
+		GPIO_SetBits(GPIOD, GPIO_Pin_14);
+		task_delay(1000);
+		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
+		task_delay(1000);
 	}
 }
 
 int task4Flag;
 void task4_entry(void *param)
 {
-
 	for (;;)
 	{
-		task4Flag = 0;
-		task_delay(10);
-		task4Flag = 1;
-		task_delay(10);
+		GPIO_SetBits(GPIOD, GPIO_Pin_15);
+		task_delay(2000);
+		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
+		task_delay(2000);
 	}
 }
 
@@ -77,6 +77,7 @@ void rzyOS_app_init(void)
 
 int main()
 {
+	LED_Init();
 	//设定systick中断时间周期
 	rzyOS_systick_init(168);
 

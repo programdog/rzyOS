@@ -24,7 +24,7 @@ void set_systick_period(uint32_t ms)
 void rzyOS_systick_init(uint8_t sysclk)
 {
 	uint32_t reload;
-	SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk;
+	SysTick -> CTRL |= SysTick_CTRL_CLKSOURCE_Msk;
 
 //	fac_us = sysclk;
 
