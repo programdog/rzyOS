@@ -84,4 +84,4 @@
 ## 构建了全新的的文件结构
 
 -	*1.构建了基于CM3的仿真MDK工程*
--	*2.构建了基于stm32f4-discovery (stm32f407vgt6) 的MDK工程*
+-	*2.构建了基于stm32f4discovery (stm32f407vgt6) 的MDK工程*

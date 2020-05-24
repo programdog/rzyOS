@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4_discovery\app;..\..\src\board\stm32f4_discovery\drvice\LED</IncludePath>
+              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4discovery\app;..\..\src\board\stm32f4discovery\drvice\LED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -458,11 +458,6 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\board\stm32f4_discovery\app\main.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\arch\chip\STM32F4xx_StdPeriph_Templates\stm32f4xx_it.c</FilePath>
@@ -471,6 +466,11 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\arch\chip\STM32F4xx_StdPeriph_Templates\system_stm32f4xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\board\stm32f4discovery\app\main.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -510,7 +510,7 @@
             <File>
               <FileName>led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\board\stm32f4_discovery\drvice\LED\led.c</FilePath>
+              <FilePath>..\..\src\board\stm32f4discovery\drvice\LED\led.c</FilePath>
             </File>
           </Files>
         </Group>
