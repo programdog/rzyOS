@@ -65,21 +65,21 @@ PendSVHander_nosave
 //pendsv中断服务函数
 __asm void PendSV_Handler(void)
 {
-    IMPORT saveAndLoadStackAddr
-    
-    // 切换第一个任务时,由于设置了PSP=MSP，所以下面的STMDB保存会将R4~R11
-    // 保存到系统启动时默认的MSP堆栈中，而不是某个任务
-    MRS     R0, PSP                 
+	IMPORT saveAndLoadStackAddr
 
-    STMDB   R0!, {R4-R11}               // 将R4~R11保存到当前任务栈，也就是PSP指向的堆栈
-    VSTMDB  R0!, {S16-S31}               // 保存浮点S16-31
-    BL      saveAndLoadStackAddr        // 调用函数：参数通过R0传递，返回值也通过R0传递 
-    VLDMIA  R0!, {S16-S31}               // 恢复浮点S16-31
-    LDMIA   R0!, {R4-R11}               // 从下一任务的堆栈中，恢复R4~R11
+	// 切换第一个任务时,由于设置了PSP=MSP，所以下面的STMDB保存会将R4~R11
+	// 保存到系统启动时默认的MSP堆栈中，而不是某个任务
+	MRS     R0, PSP
 
-    MSR     PSP, R0
-    MOV     LR, #0xFFFFFFED             // 指明返回异常时使用PSP。注意，这时LR不是程序返回地址
-    BX      LR
+	STMDB   R0!, {R4-R11}				// 将R4~R11保存到当前任务栈，也就是PSP指向的堆栈
+	VSTMDB  R0!, {S16-S31}				// 保存浮点S16-31
+	BL      saveAndLoadStackAddr		// 调用函数：参数通过R0传递，返回值也通过R0传递 
+	VLDMIA  R0!, {S16-S31}				// 恢复浮点S16-31
+	LDMIA   R0!, {R4-R11}				// 从下一任务的堆栈中，恢复R4~R11
+
+	MSR     PSP, R0
+	MOV     LR, #0xFFFFFFED				// 指明返回异常时使用PSP。注意，这时LR不是程序返回地址
+	BX      LR
 }
 
 uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
