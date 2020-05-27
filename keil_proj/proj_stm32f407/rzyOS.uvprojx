@@ -520,7 +520,7 @@
             <File>
               <FileName>startup_stm32f40_41xxx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS\startup_stm32f40_41xxx.s</FilePath>
+              <FilePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\startup\arm\startup_stm32f40_41xxx.s</FilePath>
             </File>
           </Files>
         </Group>
