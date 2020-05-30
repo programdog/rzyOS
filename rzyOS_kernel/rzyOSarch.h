@@ -3,7 +3,8 @@
 
 
 #if defined(STM32F40_41xxx) || defined(STM32F40XX)
-	#include "stm32f407xx.h"
+//	#include "stm32f407xx.h"
+	#include "stm32f4xx.h"
 #endif
 
 #ifdef ARMCM3_SIM

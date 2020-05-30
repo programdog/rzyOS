@@ -438,11 +438,6 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_semaphore.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_switch.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_task.c</FilePath>
@@ -451,6 +446,11 @@
               <FileName>rzyOS_wqueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_wqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_switch\mdk\rzyOS_switch.c</FilePath>
             </File>
           </Files>
         </Group>

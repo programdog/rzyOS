@@ -32,7 +32,7 @@ uint32_t idle_count;
 //空闲任务满负荷运行节拍统计
 uint32_t idle_max_count;
 //cpu使用率检测函数
-void check_cpu_usage_detect(void);
+static void check_cpu_usage_detect(void);
 #endif
 
 

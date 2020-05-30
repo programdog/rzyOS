@@ -443,14 +443,14 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_delay.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_switch.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_bitmap.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_switch\mdk\rzyOS_switch.c</FilePath>
             </File>
           </Files>
         </Group>
