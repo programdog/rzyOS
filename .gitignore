@@ -19,3 +19,7 @@
 /keil_proj/proj_stm32f407/*.uvguix.*
 /keil_proj/proj_stm32f407/*.uvoptx
 /keil_proj/proj_stm32f407/EventRecorderStub.scvd
+
+*.o
+*.bin
+*.elf

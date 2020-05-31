@@ -1,5 +1,14 @@
 #include "rzyOS_schedule.h"
 
+void rzyOS_memset(void *mem, int val, unsigned long size)
+{
+	char *p = (char *)mem;
+	char v = (char)val;
+	for (unsigned long i = 0; i < size; i++)
+	{
+		p[i] = v;
+	}
+}
 
 #ifdef ARMCM3_SIM
 //task初始化
@@ -67,7 +76,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	//栈大小
 	task -> task_stack_size = task_size;
 	//栈清零
-	memset(stack_bottom, 0, task_size);
+	rzyOS_memset(stack_bottom, 0, task_size);
 
 	//计算栈顶地址
 	stack_top = stack_bottom + task_size / sizeof(tTaskStack);

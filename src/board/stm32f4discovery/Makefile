@@ -10,15 +10,21 @@ OBJCOPY=arm-none-eabi-objcopy
 
 #======================================================================#
 #Flags
-CFLAGS=-Wall -g -mlittle-endian -mthumb -nostdlib -ffreestanding
+CFLAGS=-Wall
+CFLAGS+=-g
+CFLAGS+=-mlittle-endian
+CFLAGS+=-mthumb
+CFLAGS+=-nostdlib
+# CFLAGS+=-mfpu=fpv4-sp-d16
+# CFLAGS+=-mfloat-abi=hard
 CFLAGS+=-mcpu=cortex-m4
+
 CFLAGS+=-D USE_STDPERIPH_DRIVER
-CFLAGS+=-I./
 CFLAGS+=-D STM32F40_41xxx
 CFLAGS+=-D GCC_BUILD
 
 #stm32-flash
-CFLAGS+=-Wl,-T,STM32F407VGT6_FLASH.ld
+CFLAGS+=-Wl,-T,../../../arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_41xxx/STM32F407VGT6_FLASH.ld
 
 #======================================================================#
 #Libraries
@@ -35,7 +41,9 @@ CFLAGS+=-I../../../arch/chip/STM32F4xx_StdPeriph_Templates
 
 CFLAGS+=-I../../..//rzyOS_kernel
 KERNEL_DIR=../../../rzyOS_kernel
-# ARCH_DIR=../../arch/arm/armv7-m
+
+# rzyOS switch
+SWITCH_DIR=../../../rzyOS_kernel/rzyOS_switch/gcc
 
 # Driver includes
 CFLAGS+=-I./drvice/LED
@@ -54,8 +62,9 @@ SRC+=./app/main.c \
 
 SRC+=$(KERNEL_DIR)/*.c
 	
-# SRC+=$(ARCH_DIR)/switch_gcc.o \
-# 	$(ARCH_DIR)/stack.o 
+SRC+=$(SWITCH_DIR)/rzyOS_switch.o \
+	$(SWITCH_DIR)/rzyOS_critical.o \
+	$(SWITCH_DIR)/save_and_load_stack.o 
 #======================================================================#
 #STM32 startup file
 STARTUP=../../../arch/arm/STM32F4xx_StdPeriph_Driver/startup/gcc_ride7/startup_stm32f40_41xxx.s
