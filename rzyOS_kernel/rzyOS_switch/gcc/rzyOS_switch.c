@@ -1,6 +1,9 @@
 #include "rzyOS_schedule.h"
 #include "rzyOSarch.h"
 
+
+// void PendSV_Handler(void) __attribute__ (( naked ));
+
 uint32_t saveAndLoadStackAddr(uint32_t stackAddr);
 
 //中断控制器地址
@@ -48,3 +51,64 @@ void task_switch(void)
 {
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
 }
+
+uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
+{
+	//第一次切换时， 当前任务tcb为0， 所以不会保存
+	if (currentTask != (task_tcb_s *)0)
+	{
+		//保存堆栈地址
+		currentTask -> stack = (uint32_t *)stackAddr;
+	}
+
+	currentTask = nextTask;
+
+	//取下一任务堆栈地址
+	return (uint32_t)currentTask -> stack;
+}
+
+void PendSV_Handler(void)
+{
+	__asm volatile
+	(
+
+	// 切换第一个任务时,由于设置了PSP=MSP，所以下面的STMDB保存会将R4~R11
+	// 保存到系统启动时默认的MSP堆栈中，而不是某个任务
+	"MRS     R0, PSP\n"
+
+	"STMDB   R0!, {R4-R11}\n"				// 将R4~R11保存到当前任务栈，也就是PSP指向的堆栈
+	"it eq								\n"
+	"vstmdbeq  R0!, {S16-S31}\n"				// 保存浮点S16-31
+	"BL      saveAndLoadStackAddr\n"		// 调用函数：参数通过R0传递，返回值也通过R0传递
+	"it eq								\n"
+	"vldmiaeq  R0!, {S16-S31}\n"				// 恢复浮点S16-31
+	"LDMIA   R0!, {R4-R11}\n"				// 从下一任务的堆栈中，恢复R4~R11
+
+	"MSR     PSP, R0\n"
+	"MOV     LR, #0xFFFFFFED\n"				// 指明返回异常时使用PSP。注意，这时LR不是程序返回地址
+	"BX      LR\n"
+	);
+}
+
+// void PendSV_Handler(void)
+// {
+// 	__asm volatile
+// 	(
+
+// 	// 切换第一个任务时,由于设置了PSP=MSP，所以下面的STMDB保存会将R4~R11
+// 	// 保存到系统启动时默认的MSP堆栈中，而不是某个任务
+// 	"MRS     R0, PSP\n"
+
+// 	"STMDB   R0!, {R4-R11}\n"				// 将R4~R11保存到当前任务栈，也就是PSP指向的堆栈
+// 	"it eq								\n"
+// 	"vstmdbeq  R0!, {S16-S31}\n"				// 保存浮点S16-31
+// 	"BL      saveAndLoadStackAddr\n"		// 调用函数：参数通过R0传递，返回值也通过R0传递
+// 	"it eq								\n"
+// 	"vldmiaeq  R0!, {S16-S31}\n"				// 恢复浮点S16-31
+// 	"LDMIA   R0!, {R4-R11}\n"				// 从下一任务的堆栈中，恢复R4~R11
+
+// 	"MSR     PSP, R0\n"
+// 	"MOV     LR, #0xFFFFFFED\n"				// 指明返回异常时使用PSP。注意，这时LR不是程序返回地址
+// 	"BX      LR\n"
+// 	);
+// }

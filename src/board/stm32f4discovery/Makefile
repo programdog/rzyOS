@@ -10,17 +10,19 @@ OBJCOPY=arm-none-eabi-objcopy
 
 #======================================================================#
 #Flags
-CFLAGS=-Wall
+CFLAGS+=-Wall
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
-CFLAGS+=-mthumb
+CFLAGS+=-mthumb 
 CFLAGS+=-nostdlib
-# CFLAGS+=-mfpu=fpv4-sp-d16
-# CFLAGS+=-mfloat-abi=hard
+CFLAGS+=-mfloat-abi=hard
+CFLAGS+=-mfpu=fpv4-sp-d16
 CFLAGS+=-mcpu=cortex-m4
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-D STM32F40_41xxx
+CFLAGS+=-D __FPU_PRESENT=1
+CFLAGS+=-D __FPU_USED=1
 CFLAGS+=-D GCC_BUILD
 
 #stm32-flash
@@ -62,10 +64,12 @@ SRC+=./app/main.c \
 
 SRC+=$(KERNEL_DIR)/*.c
 	
-SRC+=$(SWITCH_DIR)/rzyOS_switch.o \
-	$(SWITCH_DIR)/rzyOS_critical.o \
-	$(SWITCH_DIR)/save_and_load_stack.o 
+SRC+=$(SWITCH_DIR)/rzyOS_switch.o 
+# 	$(SWITCH_DIR)/save_and_load_stack.o 
+# 	$(SWITCH_DIR)/rzyOS_critical.o 
+
 #======================================================================#
+
 #STM32 startup file
 STARTUP=../../../arch/arm/STM32F4xx_StdPeriph_Driver/startup/gcc_ride7/startup_stm32f40_41xxx.s
 
@@ -95,11 +99,11 @@ clean:
 #Make flash
 flash:
 	st-flash write $(BIN_IMAGE) 0x8000000
-# openocd:
-# 	openocd -f "../commom/openocd.cfg"
-# gdb:
-# 	arm-none-eabi-gdb -x ../commom/gdb_init.gdb
-# gdbtui:
-# 	arm-none-eabi-gdb -tui -x ../commom/gdb_init.gdb
+openocd:
+	openocd -f "../commom/openocd.cfg"
+gdb:
+	arm-none-eabi-gdb -x ../commom/gdb_init.gdb
+gdbtui:
+	arm-none-eabi-gdb -tui -x ../commom/gdb_init.gdb
 #======================================================================
 .PHONY:all clean flash
