@@ -22,7 +22,15 @@ void task1_entry(void *param)
 {
 	for (;;)
 	{
-//		usage = rzyOS_get_cpu_usage();
+		usage = rzyOS_get_cpu_usage();
+
+		static float test = 0.01f;
+		test ++;
+		if (test > 100)
+		{
+			test = 0;
+		}
+
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(100);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_12);

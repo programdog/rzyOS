@@ -42,7 +42,7 @@ void rzyOS_systick_init(uint8_t sysclk)
 	//每1/RZYOS_TICK_HZ (S)中断一次
 	SysTick -> LOAD = reload;
 	//开启SYSTICK
-	SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
+	// SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
 //systick中断函数

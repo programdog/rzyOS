@@ -396,10 +396,3 @@ void rzyOS_kernel_init(void)
 	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_IDLETASK_PRIO, idleTaskEnv, RZYOS_IDLETASK_STACK_SIZE);
 	idleTask = &tcb_task_idle;
 }
-
-void rzyOS_start(void)
-{
-	nextTask = task_highest_ready();
-	
-	task_run_first();
-}

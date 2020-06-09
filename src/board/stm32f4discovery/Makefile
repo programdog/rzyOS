@@ -16,8 +16,10 @@ CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
 CFLAGS+=-nostdlib
 CFLAGS+=-mfloat-abi=hard
+# CFLAGS+=-print-multi-lib
 CFLAGS+=-mfpu=fpv4-sp-d16
 CFLAGS+=-mcpu=cortex-m4
+CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-D STM32F40_41xxx
@@ -65,8 +67,8 @@ SRC+=./app/main.c \
 SRC+=$(KERNEL_DIR)/*.c
 	
 SRC+=$(SWITCH_DIR)/rzyOS_switch.o 
-# 	$(SWITCH_DIR)/save_and_load_stack.o 
-# 	$(SWITCH_DIR)/rzyOS_critical.o 
+# SRC+=$(SWITCH_DIR)/save_and_load_stack.o 
+# SRC+=$(SWITCH_DIR)/rzyOS_critical.o 
 
 #======================================================================#
 
@@ -95,6 +97,7 @@ clean:
 	rm -rf $(EXECUTABLE)
 	rm -rf $(BIN_IMAGE)
 	rm -f *.o
+	rm -f $(SWITCH_DIR)/*.o
 	
 #Make flash
 flash:
