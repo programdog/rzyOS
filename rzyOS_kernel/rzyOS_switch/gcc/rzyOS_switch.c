@@ -1,5 +1,6 @@
 #include "rzyOS_schedule.h"
 #include "rzyOSarch.h"
+#include "r_string.h"
 
 
 void PendSV_Handler(void) __attribute__ (( naked ));
@@ -276,7 +277,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	//栈大小
 	task -> task_stack_size = task_size;
 	//栈清零
-	rzyOS_memset(stack_bottom, 0, task_size);
+	r_memset(stack_bottom, 0, task_size);
 
 	//计算栈顶地址
 //	stack_top = stack_bottom + (task_size / sizeof(tTaskStack) - 1);

@@ -39,18 +39,26 @@ ST_LIB=../../../arch/arm/STM32F4xx_StdPeriph_Driver/FWLIB
 #CMSIS libraries
 CFLAGS+=-I../../../arch/arm/STM32F4xx_StdPeriph_Driver/CMSIS
 
-#StdPeriph includes
+#STM32 StdPeriph includes
 CFLAGS+=-I$(ST_LIB)/inc
 CFLAGS+=-I../../../arch/chip/STM32F4xx_StdPeriph_Templates
 
+#rzyOS kernel includes
 CFLAGS+=-I../../..//rzyOS_kernel
-KERNEL_DIR=../../../rzyOS_kernel
 
-# rzyOS switch
-SWITCH_DIR=../../../rzyOS_kernel/rzyOS_switch/gcc
+#rzyOS lib includes
+CFLAGS+=-I../../../rzyOS_lib
 
 # Driver includes
 CFLAGS+=-I./drvice/LED
+
+
+RZYOS_KERNEL_DIR=../../../rzyOS_kernel
+
+RZYOS_LIB_DIR=../../../rzyOS_lib
+
+# rzyOS switch
+SWITCH_DIR=../../../rzyOS_kernel/rzyOS_switch/gcc
 
 #======================================================================#
 #setup system clock
@@ -64,8 +72,10 @@ SRC+=$(ST_LIB)/src/misc.c \
 SRC+=./app/main.c \
 	./drvice/LED/led.c
 
-SRC+=$(KERNEL_DIR)/*.c
-	
+SRC+=$(RZYOS_KERNEL_DIR)/*.c
+
+SRC+=$(RZYOS_LIB_DIR)/*.c
+
 SRC+=$(SWITCH_DIR)/rzyOS_switch.o 
 # SRC+=$(SWITCH_DIR)/save_and_load_stack.o 
 # SRC+=$(SWITCH_DIR)/rzyOS_critical.o 

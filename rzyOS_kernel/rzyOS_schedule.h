@@ -14,6 +14,11 @@ extern task_tcb_s *currentTask;
 extern task_tcb_s *nextTask;
 
 
+
+//从位图中找到就绪的最高优先级
+task_tcb_s *task_highest_ready(void);
+
+
 //不会引起任务调度的延时
 void delay(int count);
 

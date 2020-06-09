@@ -1,15 +1,5 @@
 #include "rzyOS_schedule.h"
 
-void rzyOS_memset(void *mem, int val, unsigned long size)
-{
-	char *p = (char *)mem;
-	char v = (char)val;
-	for (unsigned long i = 0; i < size; i++)
-	{
-		p[i] = v;
-	}
-}
-
 
 //任务的挂起
 void rzyOS_task_suspend(task_tcb_s *task)
