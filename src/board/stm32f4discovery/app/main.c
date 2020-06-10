@@ -34,7 +34,7 @@ void task1_entry(void *param)
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(100);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_12);
-		task_delay(100);
+		task_delay(200);
 	}
 }
 
@@ -44,7 +44,7 @@ void task2_entry(void *param)
 	for (;;)
 	{
 		GPIO_SetBits(GPIOD, GPIO_Pin_13);
-		task_delay(500);
+		task_delay(50);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(500);
 	}
@@ -56,7 +56,7 @@ void task3_entry(void *param)
 	for (;;)
 	{
 		GPIO_SetBits(GPIOD, GPIO_Pin_14);
-		task_delay(1000);
+		task_delay(300);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(1000);
 	}
@@ -68,7 +68,7 @@ void task4_entry(void *param)
 	for (;;)
 	{
 		GPIO_SetBits(GPIOD, GPIO_Pin_15);
-		task_delay(2000);
+		task_delay(200);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		task_delay(2000);
 	}
@@ -94,8 +94,9 @@ int main()
 
 	//app任务初始化
 	rzyOS_app_init();
-	rzyOS_start();
 
+
+	rzyOS_start();
 
 	return 0;
 }

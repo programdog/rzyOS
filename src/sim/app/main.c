@@ -86,8 +86,9 @@ int main()
 
 	//app任务初始化
 	rzyOS_app_init();
-	rzyOS_start();
 
+
+	rzyOS_start();
 
 	return 0;
 }
