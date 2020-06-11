@@ -311,7 +311,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	*(--stack_top) = (unsigned long)0x2;					// R2, 未用
 	*(--stack_top) = (unsigned long)0x1;					// R1, 未用
 	*(--stack_top) = (unsigned long)param;					// R0 = param, 传给任务的入口函数
-	*(--stack_top) = (unsigned long)0xfffffffd;					// R0 = param, 传给任务的入口函数
+	*(--stack_top) = (unsigned long)0xfffffffd;				// A save method is being used that requires each task to maintain its own exec return value
 	*(--stack_top) = (unsigned long)0x11;					// R11, 未用
 	*(--stack_top) = (unsigned long)0x10;					// R10, 未用
 	*(--stack_top) = (unsigned long)0x9;					// R9, 未用
