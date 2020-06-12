@@ -18,11 +18,16 @@ uint32_t saveAndLoadStackAddr(uint32_t stackAddr);
 //中断控制器地址
 #define NVIC_INT_CTRL	0xe000ed04
 //触发PendSV
-#define	NVIC_PENDSVSET	0X10000000
+#define NVIC_PENDSVSET	0X10000000
 //PendSV优先级控制地址
-#define	NVIC_SYSPRI2	0xe000ed22
+#define NVIC_SYSPRI2	0xe000ed22
 //PendSV设置为最低优先值255
-#define	NVIC_PENDSV_PRI	0x000000ff
+#define NVIC_PENDSV_PRI	0x000000ff
+
+//Constants required to manipulate the VFP
+//FPU -> FPCCR地址
+#define FPCCR ((volatile uint32_t *)0xe000ef34) //Floating point context control register
+#define SET_ASPEN_AND_LSPEN_BITS (0x3UL << 30UL) //FPCCR[31:30] -> [aspen:lspen]
 
 
 
@@ -304,7 +309,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	// *(--stack_top) = (unsigned long)(0x0);					// S0
 
 	*(--stack_top) = (unsigned long)(1 << 24);				// XPSR, 设置了Thumb模式，恢复到Thumb状态而非ARM状态运行
-	*(--stack_top) = ((unsigned long)entry) & ((unsigned long)0xfffffffeUL);					// 程序的入口地址
+	*(--stack_top) = ((unsigned long)entry) & ((unsigned long)0xfffffffeUL);// 程序的入口地址
 	*(--stack_top) = (unsigned long)0x14;					// R14(LR), 任务不会通过return xxx结束自己，所以未用
 	*(--stack_top) = (unsigned long)0x12;					// R12, 未用
 	*(--stack_top) = (unsigned long)0x3;					// R3, 未用
@@ -362,7 +367,7 @@ void rzyOS_start(void)
 {
 	rzyOS_EnableVFP();
 
-	*(( volatile uint32_t * ) 0xe000ef34) |= (0x3UL << 30UL);
+	*(FPCCR) |= SET_ASPEN_AND_LSPEN_BITS;
 
 	nextTask = task_highest_ready();
 	
