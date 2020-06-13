@@ -45,6 +45,11 @@ void rzyOS_systick_init(uint8_t sysclk)
 	// SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
+void rzyOS_systick_enable(void)
+{
+	SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
 //systickÖÐ¶Ïº¯Êý
 void SysTick_Handler()
 {

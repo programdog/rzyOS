@@ -71,6 +71,9 @@ void set_systick_period(uint32_t ms);
 //systick中断周期配置(STM32F407)
 void rzyOS_systick_init(uint8_t sysclk);
 
+//systick中断使能
+void rzyOS_systick_enable(void);
+
 //延时函数，将触发调度
 void task_delay(uint32_t delay);
 

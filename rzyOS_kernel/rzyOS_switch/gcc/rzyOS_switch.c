@@ -373,7 +373,7 @@ void rzyOS_start(void)
 	
 	currentTask = nextTask;
 
-	SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
+	rzyOS_systick_enable();
 
 	task_run_first();
 }
