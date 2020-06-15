@@ -1,3 +1,0 @@
-*.c linguist-language=C
-*.S linguist-language=Assembly
-*.s linguist-language=Assembly
