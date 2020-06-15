@@ -1,6 +1,6 @@
 # 2019-08-02
-**rzyOS a simple OS , create by renzhongyu**
-**rzyOS 是一款宏内核且简约的嵌入式操作系统**
+**rzyOS create by renzhongyu**
+**rzyOS 是基于宏内核设计的操作系统**
 *筹备了很久的操作系统, 开始了*
 
 
@@ -85,3 +85,10 @@
 
 -	*1.构建了基于CM3的仿真MDK工程*
 -	*2.构建了基于stm32f4discovery (stm32f407vgt6) 的MDK工程*
+
+
+# 2020-6-15
+## 漫长以及痛苦的调试，成功的完成了基于GNU的switch.c文件
+
+-	*1.支持硬浮点*
+-	*2.添加了编译优化选项*
