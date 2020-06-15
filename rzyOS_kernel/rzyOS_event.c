@@ -53,7 +53,7 @@ void rzyOS_event_wait(rzyOS_ecb_s *rzyOS_ecb, task_tcb_s *task_tcb, void *msg, u
 task_tcb_s *rzyOS_event_wakeup(rzyOS_ecb_s *rzyOS_ecb, void *msg, uint32_t result)
 {
 	node_t *node;
-	task_tcb_s *task;
+	task_tcb_s *task = (task_tcb_s *)0;
 
 	uint32_t status = task_enter_critical();
 	
