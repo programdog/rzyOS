@@ -135,8 +135,8 @@ void SVC_Handler( void )
 {
 	
 	__asm volatile (
-					"	ldr	r3, pxCurrentTCBConst2		\n" /* Restore the context. */
-					"	ldr r1, [r3]					\n" /* Use pxCurrentTCBConst to get the pxCurrentTCB address. */
+					"	ldr	r3, CurrentTCBConst2		\n" /* Restore the context. */
+					"	ldr r1, [r3]					\n" /* Use CurrentTCBConst to get the pxCurrentTCB address. */
 					"	ldr r0, [r1]					\n" /* The first item in pxCurrentTCB is the task top of stack. */
 					"	ldmia r0!, {r4-r11, r14}		\n" /* Pop the registers that are not automatically saved on exception entry and the critical nesting count. */
 					"	msr psp, r0						\n" /* Restore the task stack pointer. */
@@ -146,7 +146,7 @@ void SVC_Handler( void )
 					"	bx r14							\n"
 					"									\n"
 					"	.align 4						\n"
-					"pxCurrentTCBConst2: .word currentTask	\n"
+					"CurrentTCBConst2: .word currentTask	\n"
 				);
 }
 
@@ -177,10 +177,10 @@ void PendSV_Handler(void)
 	"	mrs r0, psp							\n"
 	"	isb									\n"
 	"										\n"
-	"	ldr	r3, pxCurrentTCBConst			\n" /* Get the location of the current TCB. */
+	"	ldr	r3, CurrentTCBConst				\n" /* Get the location of the current TCB. */
 	"	ldr	r2, [r3]						\n"
 	"										\n"
-	"	tst r14, #0x10						\n" /* Is the task using the FPU context?  If so, push high vfp registers. */
+	"	tst r14, #0x10						\n" /* Is the task using the FPU context?  If so, push high vfp registers.（if(!EXC_RETURN[4])） */
 	"	it eq								\n"
 	"	vstmdbeq r0!, {s16-s31}				\n"
 	"										\n"
@@ -212,7 +212,7 @@ void PendSV_Handler(void)
 	"										\n"
 	"										\n"
 	"	bx r14								\n"
-	"pxCurrentTCBConst: .word currentTask	\n"
+	"CurrentTCBConst: .word currentTask		\n"
 	);
 }
 

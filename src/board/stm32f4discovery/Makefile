@@ -1,4 +1,10 @@
 #====================================================================#
+# @file         Makefile
+# @author       renzhongyu
+# @version      V1.0
+# @copyright    open source
+# @date         2020-6
+#====================================================================#
 #Output files
 EXECUTABLE=rzyOS.elf
 BIN_IMAGE=rzyOS.bin
@@ -25,7 +31,10 @@ CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-D STM32F40_41xxx
 CFLAGS+=-D __FPU_PRESENT=1
 CFLAGS+=-D __FPU_USED=1
-CFLAGS+=-D GCC_BUILD
+
+#optimize option
+CFLAGS+=-Os
+CFLAGS+=-ffunction-sections -fdata-sections -Wl,--gc-sections
 
 #stm32-flash
 CFLAGS+=-Wl,-T,../../../arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_41xxx/STM32F407VGT6_FLASH.ld
