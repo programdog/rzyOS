@@ -1,6 +1,6 @@
 ﻿# rzyOS 被 RenZhongYu[任仲雨] 所创造
-**rzyOS 是基于宏内核设计的操作系统**
-**rzyOS Version : V1.0**
+*rzyOS 是基于宏内核设计的操作系统*
+*rzyOS Version : V1.0*
 
 rzyOS 采用抢占式优先级+时间片轮转的调度策略，支持信号量，邮箱，互斥锁，内存管理，工作队列，事件组
 

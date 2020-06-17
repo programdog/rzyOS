@@ -21,10 +21,10 @@ CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
 CFLAGS+=-nostdlib
+CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib
 CFLAGS+=-mfpu=fpv4-sp-d16
-CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
