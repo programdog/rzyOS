@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>ARMCM3_SIM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\rzyOS_kernel</IncludePath>
+              <IncludePath>..\..\rzyOS_kernel;..\..\rzyOS_kernel\rzyOS_memory;..\..\rzyOS_lib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -408,11 +408,6 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_mbox.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_memory.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_memory.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_mutex.c</FilePath>
@@ -452,6 +447,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_switch\mdk\rzyOS_switch.c</FilePath>
             </File>
+            <File>
+              <FileName>rzyOS_mm1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_memory\rzyOS_mm1.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_mm2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_memory\rzyOS_mm2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -461,6 +466,16 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\sim\app\main.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rzyOS_lib</GroupName>
+          <Files>
+            <File>
+              <FileName>r_string.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_lib\r_string.c</FilePath>
             </File>
           </Files>
         </Group>

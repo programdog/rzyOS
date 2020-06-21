@@ -31,6 +31,7 @@ include_directories(
 	arch/chip/STM32F4xx_StdPeriph_Templates
 	rzyOS_kernel
 	rzyOS_kernel/rzyOS_switch/gcc
+	rzyOS_kernel/rzyOS_memory
 	rzyOS_lib
 	src/board/stm32f4discovery/drvice/LED
 )
@@ -53,6 +54,7 @@ include_directories(
 file(GLOB RZYOS_KERNEL_DIR rzyOS_kernel/*.c)
 file(GLOB RZYOS_LIB_DIR rzyOS_lib/*.c)
 file(GLOB SWITCH_DIR rzyOS_kernel/rzyOS_switch/gcc/*.c)
+file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/*.c)
 file(GLOB STARTUP arch/arm/STM32F4xx_StdPeriph_Driver/startup/gcc_ride7/startup_stm32f40_41xxx.s)
 
 set_property(SOURCE ${STARTUP} PROPERTY LANGUAGE C)
@@ -70,6 +72,7 @@ add_library(${CMAKE_PROJECT_NAME}
 	${RZYOS_KERNEL_DIR}
 	${RZYOS_LIB_DIR}
 	${SWITCH_DIR}
+	${MEMORY_DIR}
 )
 
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_41xxx/STM32F407VGT6_FLASH.ld)

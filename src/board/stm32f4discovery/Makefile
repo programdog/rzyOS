@@ -53,7 +53,10 @@ CFLAGS+=-I$(ST_LIB)/inc
 CFLAGS+=-I../../../arch/chip/STM32F4xx_StdPeriph_Templates
 
 #rzyOS kernel includes
-CFLAGS+=-I../../..//rzyOS_kernel
+CFLAGS+=-I../../../rzyOS_kernel
+
+#rzyOS memory
+CFLAGS+=-I../../../rzyOS_kernel/rzyOS_memory
 
 #rzyOS lib includes
 CFLAGS+=-I../../../rzyOS_lib
@@ -68,6 +71,9 @@ RZYOS_LIB_DIR=../../../rzyOS_lib
 
 # rzyOS switch
 SWITCH_DIR=../../../rzyOS_kernel/rzyOS_switch/gcc
+
+# rzyOS memory
+MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
 
 #======================================================================#
 #setup system clock
@@ -88,6 +94,8 @@ SRC+=$(RZYOS_LIB_DIR)/*.c
 SRC+=$(SWITCH_DIR)/rzyOS_switch.o 
 # SRC+=$(SWITCH_DIR)/save_and_load_stack.o 
 # SRC+=$(SWITCH_DIR)/rzyOS_critical.o 
+
+SRC+=$(MEMORY_DIR)/*.c
 
 #======================================================================#
 
