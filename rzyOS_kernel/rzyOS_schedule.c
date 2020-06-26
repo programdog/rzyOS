@@ -3,6 +3,7 @@
 #include "rzyOS_wqueue.h"
 
 
+
 //当前任务指针
 task_tcb_s *currentTask;
 //下一个准备执行的任务指针
@@ -392,7 +393,11 @@ void rzyOS_kernel_init(void)
 	//cpu 状态检测模块变量初始化
 	cpu_usage_state_init();
 #endif
-	
+
+#if (RZYOS_ENABLE_MEMORY == 1) && (RZYOS_MM1_USE == 1)
+	rzyOS_memory_mm1_init();
+#endif
+
 	task_init(&tcb_task_idle, idle_task_entry, (void *)0, RZYOS_IDLETASK_PRIO, idleTaskEnv, RZYOS_IDLETASK_STACK_SIZE);
 	idleTask = &tcb_task_idle;
 }

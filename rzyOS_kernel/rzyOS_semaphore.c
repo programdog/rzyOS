@@ -25,7 +25,7 @@ void rzyOS_sem_init(rzyOS_sem_s *sem, uint32_t start_count, uint32_t max_count)
 }
 
 //信号量阻塞等待函数
-//wait_ticks ： 超时等待时间
+//wait_ticks ： 超时等待, 0：死等
 uint32_t rzyOS_sem_wait(rzyOS_sem_s *sem, uint32_t wait_ticks)
 {
 	uint32_t status = task_enter_critical();

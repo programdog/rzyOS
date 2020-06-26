@@ -1,6 +1,3 @@
-#if RZYOS_ENABLE_MEMORY == 1
-#ifdef RZYOS_MM2_USE
-
 #include "rzyOS_mm2.h"
 
 //内存管理初始化函数
@@ -161,6 +158,3 @@ void rzyOS_mem_block_get_info(rzyOS_mem_block_s *rzyOS_mem_block, rzyOS_mem_info
 
 	task_exit_critical(status);
 }
-
-#endif
-#endif

@@ -95,7 +95,9 @@ SRC+=$(SWITCH_DIR)/rzyOS_switch.o
 # SRC+=$(SWITCH_DIR)/save_and_load_stack.o 
 # SRC+=$(SWITCH_DIR)/rzyOS_critical.o 
 
-SRC+=$(MEMORY_DIR)/*.c
+#memory mangement
+# SRC+=$(MEMORY_DIR)/*.c
+SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
 
 #======================================================================#
 

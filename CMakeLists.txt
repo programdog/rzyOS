@@ -51,11 +51,20 @@ include_directories(
 # 	src/board/stm32f4discovery/drvice/LED/led.c
 # )
 
+
 file(GLOB RZYOS_KERNEL_DIR rzyOS_kernel/*.c)
+
 file(GLOB RZYOS_LIB_DIR rzyOS_lib/*.c)
+
 file(GLOB SWITCH_DIR rzyOS_kernel/rzyOS_switch/gcc/*.c)
-file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/*.c)
+
+#file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/*.c)
+
+file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/rzyOS_mm1.c)
+
 file(GLOB STARTUP arch/arm/STM32F4xx_StdPeriph_Driver/startup/gcc_ride7/startup_stm32f40_41xxx.s)
+
+
 
 set_property(SOURCE ${STARTUP} PROPERTY LANGUAGE C)
 

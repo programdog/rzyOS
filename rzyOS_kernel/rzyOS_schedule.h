@@ -7,6 +7,20 @@
 #include "rzyOS_event.h"
 #include "rzyOS_task.h"
 
+//默认使用mm1
+#if RZYOS_ENABLE_MEMORY == 1
+
+	#if RZYOS_MM1_USE == 1
+		#include "rzyOS_mm1.h"
+	#endif
+
+	#if RZYOS_MM2_USE == 1
+		#include "rzyOS_mm2.h"
+	#endif
+
+#endif
+
+
 //当前任务的指针
 extern task_tcb_s *currentTask;
 

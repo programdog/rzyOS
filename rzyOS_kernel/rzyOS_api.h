@@ -12,11 +12,11 @@
 //默认使用mm1
 #if RZYOS_ENABLE_MEMORY == 1
 
-	#ifndef RZYOS_MM2_USE
+	#if RZYOS_MM1_USE == 1
 		#include "rzyOS_mm1.h"
 	#endif
 
-	#ifdef RZYOS_MM2_USE
+	#if RZYOS_MM2_USE == 1
 		#include "rzyOS_mm2.h"
 	#endif
 
