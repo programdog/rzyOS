@@ -108,7 +108,7 @@ void *my_malloc(uint32_t size)
 void split(block_s *src_block, uint32_t size)
 {
 	//定义分配后剩下的内存块指针new_block
-	block_s *new_block = (void *)((void *)src_block + sizeof(block_s) + size);
+	block_s *new_block = (block_s *)((uint8_t *)src_block + sizeof(block_s) + size);
 	//定义new_block的size大小
 	new_block -> free_size = (src_block -> free_size) - size - sizeof(block_s);
 	//设置为空闲状态

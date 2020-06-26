@@ -1,6 +1,7 @@
 #ifndef RZYOS_MM1_H
 #define RZYOS_MM1_H
 
+#include <stdint.h>
 #include <stdio.h>
 #include "rzyOSconfig.h"
 

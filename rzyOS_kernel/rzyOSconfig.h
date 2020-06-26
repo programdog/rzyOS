@@ -39,7 +39,7 @@
 //memory management
 //--------------
 #define RZYOS_ENABLE_MEMORY 1
-//内存管理方式选择 (都关闭的情况默认使用RZYOS_MM1_USE)
+//内存管理方式选择 (默认使用RZYOS_MM1_USE)
 #define RZYOS_MM1_USE 1
 #define RZYOS_MM2_USE 0
 

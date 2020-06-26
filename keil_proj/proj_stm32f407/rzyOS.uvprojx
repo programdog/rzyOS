@@ -452,11 +452,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_memory\rzyOS_mm1.c</FilePath>
             </File>
-            <File>
-              <FileName>rzyOS_mm2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_memory\rzyOS_mm2.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
