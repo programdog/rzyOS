@@ -29,20 +29,17 @@
 
 
 /***********内核编译选项***********/
-
 #define RZYOS_ENABLE_SEMAPHORE 1
 #define RZYOS_ENABLE_MUTEX 1
 #define RZYOS_ENABLE_EVENTGROUP 1
 #define RZYOS_ENABLE_MBOX 1
 
-
-//memory management
-//--------------
+//--------------MEMORY MANAGEMENT--------------
 #define RZYOS_ENABLE_MEMORY 1
 //内存管理方式选择 (默认使用RZYOS_MM1_USE)
 #define RZYOS_MM1_USE 1
 #define RZYOS_MM2_USE 0
-
+//内存池大小
 #define HEAP_SIZE_3K (3 * 1024)
 #define HEAP_SIZE_5K (5 * 1024)
 #define HEAP_SIZE_10K (10 * 1024)
@@ -50,9 +47,10 @@
 #define HEAP_SIZE_20K (20 * 1024)
 
 #if (RZYOS_ENABLE_MEMORY == 1) && (RZYOS_MM1_USE == 1)
+//memory方式1内存池大小
 	#define MM1_HEAP_SIZE HEAP_SIZE_5K
 #endif
-//--------------
+//--------------MEMORY MANAGEMENT--------------
 
 #define RZYOS_ENABLE_WQUEUE 1
 #define RZYOS_ENABLE_CPU_DETECT 1

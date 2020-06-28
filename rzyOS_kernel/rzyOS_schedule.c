@@ -395,6 +395,7 @@ void rzyOS_kernel_init(void)
 #endif
 
 #if (RZYOS_ENABLE_MEMORY == 1) && (RZYOS_MM1_USE == 1)
+	//初始化memory方式1内存池
 	rzyOS_memory_mm1_init();
 #endif
 
