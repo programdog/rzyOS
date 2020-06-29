@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "rzyOS_api.h"
 
 #include "led.h"
@@ -33,6 +35,7 @@ void task1_entry(void *param)
 		{
 			test = 0;
 		}
+		
 		printf("test = %0.2f\n", test);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
