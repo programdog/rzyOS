@@ -20,7 +20,7 @@ CFLAGS+=-Wall
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
-#CFLAGS+=-nostdlib
+# CFLAGS+=-nostdlib
 CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib

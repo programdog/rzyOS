@@ -15,7 +15,9 @@ add_definitions(
 set(__FPU_PRESENT 1)
 set(__FPU_USED 1)
 
-set(MCU_FLAGS "-mlittle-endian -mthumb -nostdlib -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99")
+set(MCU_FLAGS "-mlittle-endian -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99")
+#remove -nostdlib
+
 set(CMAKE_C_FLAGS "${MCU_FLAGS} -Wall")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -g2 -ggdb")
 set(CMAKE_C_FLAGS_RELEASE "-Os -ffunction-sections -fdata-sections -Wl,--gc-sections")
@@ -34,6 +36,7 @@ include_directories(
 	rzyOS_kernel/rzyOS_memory
 	rzyOS_lib
 	src/board/stm32f4discovery/drvice/LED
+	src/board/stm32f4discovery/drvice/UART
 )
 
 # add_library(
@@ -62,6 +65,8 @@ file(GLOB SWITCH_DIR rzyOS_kernel/rzyOS_switch/gcc/*.c)
 
 file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/rzyOS_mm1.c)
 
+file(GLOB SYSCALL_DIR src/board/stm32f4discovery/syscall/syscall.c)
+
 file(GLOB STARTUP arch/arm/STM32F4xx_StdPeriph_Driver/startup/gcc_ride7/startup_stm32f40_41xxx.s)
 
 
@@ -75,18 +80,23 @@ add_library(${CMAKE_PROJECT_NAME}
 	${ST_LIB}/src/misc.c
 	${ST_LIB}/src/stm32f4xx_rcc.c
 	${ST_LIB}/src/stm32f4xx_gpio.c
+	${ST_LIB}/src/stm32f4xx_usart.c
 
 	src/board/stm32f4discovery/drvice/LED/led.c
+	src/board/stm32f4discovery/drvice/UART/uart.c
 
 	${RZYOS_KERNEL_DIR}
 	${RZYOS_LIB_DIR}
 	${SWITCH_DIR}
 	${MEMORY_DIR}
+	${SYSCALL_DIR}
 )
 
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_41xxx/STM32F407VGT6_FLASH.ld)
+
+#add libc : --specs=nano.specs -specs=nosys.specs
 set(CMAKE_EXE_LINKER_FLAGS
-"-nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
+"--specs=nano.specs -specs=nosys.specs -nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
 )
 
 
