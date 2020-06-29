@@ -21,17 +21,19 @@ float usage = 0;
 int task1Flag;
 void task1_entry(void *param)
 {
+	float test = 0.01;
+
 	for (;;)
 	{
 		usage = rzyOS_get_cpu_usage();
 
-		static float test = 0.01f;
-		test += 0.01;
+		test += 0.01f;
+
 		if (test > 100)
 		{
 			test = 0;
 		}
-		// printf("test = %0.2f\n", test);
+		printf("test = %0.2f\n", test);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(100);

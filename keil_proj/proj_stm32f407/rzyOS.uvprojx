@@ -188,7 +188,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4discovery\app;..\..\src\board\stm32f4discovery\drvice\LED;..\..\rzyOS_lib;..\..\rzyOS_kernel\rzyOS_memory</IncludePath>
+              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4discovery\app;..\..\src\board\stm32f4discovery\drvice\LED;..\..\rzyOS_lib;..\..\rzyOS_kernel\rzyOS_memory;..\..\src\board\stm32f4discovery\drvice\UART</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -512,6 +512,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\board\stm32f4discovery\drvice\LED\led.c</FilePath>
             </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\board\stm32f4discovery\drvice\UART\uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -531,6 +536,16 @@
               <FileName>r_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_lib\r_string.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>syscall</GroupName>
+          <Files>
+            <File>
+              <FileName>fputc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\board\stm32f4discovery\syscall\fputc.c</FilePath>
             </File>
           </Files>
         </Group>
