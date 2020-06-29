@@ -1,6 +1,7 @@
 #include "rzyOS_api.h"
 
-#include "led.h" 
+#include "led.h"
+#include "uart.h"
 
 
 
@@ -25,11 +26,12 @@ void task1_entry(void *param)
 		usage = rzyOS_get_cpu_usage();
 
 		static float test = 0.01f;
-		test ++;
+		test += 0.01;
 		if (test > 100)
 		{
 			test = 0;
 		}
+		// printf("test = %0.2f\n", test);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(100);
@@ -47,6 +49,7 @@ void task2_entry(void *param)
 		task_delay(50);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(500);
+		printf("i am task2\n");
 	}
 }
 
@@ -59,6 +62,7 @@ void task3_entry(void *param)
 		task_delay(300);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(1000);
+		printf("i am task3\n");
 	}
 }
 
@@ -86,6 +90,8 @@ void rzyOS_app_init(void)
 int main()
 {
 	LED_Init();
+	USART3_Init();
+
 	//设定systick中断时间周期
 	rzyOS_systick_init(168);
 

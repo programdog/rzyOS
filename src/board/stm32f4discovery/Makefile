@@ -20,7 +20,7 @@ CFLAGS+=-Wall
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
-CFLAGS+=-nostdlib
+#CFLAGS+=-nostdlib
 CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib
@@ -63,6 +63,7 @@ CFLAGS+=-I../../../rzyOS_lib
 
 # Driver includes
 CFLAGS+=-I./drvice/LED
+CFLAGS+=-I./drvice/UART
 
 
 RZYOS_KERNEL_DIR=../../../rzyOS_kernel
@@ -78,14 +79,17 @@ MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
 #======================================================================#
 #setup system clock
 SRC=../../../arch/chip/STM32F4xx_StdPeriph_Templates/system_stm32f4xx.c
+
 #StdPeriph
 SRC+=$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f4xx_rcc.c \
 	$(ST_LIB)/src/stm32f4xx_gpio.c \
+	$(ST_LIB)/src/stm32f4xx_usart.c
 
 #Major programs
 SRC+=./app/main.c \
-	./drvice/LED/led.c
+	./drvice/LED/led.c \
+	./drvice/UART/uart.c
 
 SRC+=$(RZYOS_KERNEL_DIR)/*.c
 
@@ -98,6 +102,9 @@ SRC+=$(SWITCH_DIR)/rzyOS_switch.o
 #memory mangement
 # SRC+=$(MEMORY_DIR)/*.c
 SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
+
+# syscall
+SRC+=syscall/syscall.c
 
 #======================================================================#
 
