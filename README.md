@@ -3,7 +3,9 @@
 *rzyOS Version : V1.0*
 
 rzyOS 采用抢占式优先级+时间片轮转的调度策略，支持硬件浮点，task堆栈统计，CPU使用率统计。
-支持信号量，邮箱，互斥锁，内存管理，工作队列，事件组。支持优先级继承
+最多支持32个task，支持信号量，邮箱，互斥锁，内存管理，工作队列，事件组。支持优先级继承
+
+rzyOS 支持linux与windows开发环境，拥有makefile 与 cmake 构建方式，以及MDK编译方式
 
 
 ## 目前支持的架构
@@ -21,16 +23,25 @@ MDK simulation
 
 ## 支持的开发环境
 ```
-Linux
+Linux(推荐)
 Windows
 ```
 
 ### Linux
 ```
+cmake：
+1.mkdir build
+2.cd build & cmake ..
+3.make
+```
+
+```
+makefile:
 1.cd src/board/stm32f4discovery
 2.make
 3.make flash
 ```
+
 ### Windows
 ```
 1.进入keil_proj目录
