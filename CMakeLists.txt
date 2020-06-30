@@ -105,7 +105,7 @@ set(CMAKE_EXE_LINKER_FLAGS
 
 add_executable(${CMAKE_PROJECT_NAME}.elf src/board/stm32f4discovery/app/main.c)
 
-target_link_libraries(${CMAKE_PROJECT_NAME}.elf
+target_link_libraries(${CMAKE_PROJECT_NAME}.elf -lgcc -lc -lm
 	${CMAKE_PROJECT_NAME}
 )
 
