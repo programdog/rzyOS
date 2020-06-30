@@ -36,7 +36,7 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		printf("test = %0.2f\n", test);
+		// printf("test = %0.2f\n", test);
 		printf("I am task1\n");
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
