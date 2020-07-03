@@ -1,3 +1,5 @@
+#if RZYOS_ENABLE_MEMORY == 1
+
 #include "rzyOS_mm1.h"
 #include "rzyOS_semaphore.h"
 
@@ -164,3 +166,5 @@ void my_free(void* addr)
 		merge();
 	}
 }
+
+#endif

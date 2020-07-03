@@ -99,7 +99,7 @@ set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/arch/arm/STM32F4xx_StdPeriph_Drive
 
 #add libc : --specs=nano.specs --specs=nosys.specs
 set(CMAKE_EXE_LINKER_FLAGS
-"--specs=nosys.specs --specs=nano.specs -nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
+"--specs=nosys.specs --specs=nano.specs -u _printf_float -u _scanf_float -nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
 )
 
 

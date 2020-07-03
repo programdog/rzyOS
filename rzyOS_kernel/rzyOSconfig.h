@@ -35,7 +35,7 @@
 #define RZYOS_ENABLE_MBOX 1
 
 //--------------MEMORY MANAGEMENT--------------
-#define RZYOS_ENABLE_MEMORY 1
+#define RZYOS_ENABLE_MEMORY 0
 //内存管理方式选择 (默认使用RZYOS_MM1_USE)
 #define RZYOS_MM1_USE 1
 #define RZYOS_MM2_USE 0

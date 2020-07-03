@@ -25,6 +25,8 @@ void task1_entry(void *param)
 {
 	float test = 0.01;
 
+	void *ptr = malloc(100);
+
 	for (;;)
 	{
 		usage = rzyOS_get_cpu_usage();
@@ -36,8 +38,8 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		// printf("test = %0.2f\n", test);
-		printf("I am task1\n");
+		printf("task1 float test = %0.2f\n", test);
+		printf("cpu usage : %0.2f%%\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(100);

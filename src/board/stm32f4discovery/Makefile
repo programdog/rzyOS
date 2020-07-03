@@ -27,7 +27,7 @@ CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib
 CFLAGS+=-mfpu=fpv4-sp-d16
 CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
-# CFLAGS+=-u _scanf_float -u _printf_float -fno-exceptions -lgcc
+# CFLAGS+=-u _scanf_float -u _printf_float -lgcc -lc -lm
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-D STM32F40_41xxx
