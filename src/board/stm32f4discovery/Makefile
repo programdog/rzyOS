@@ -64,8 +64,8 @@ CFLAGS+=-I../../../rzyOS_kernel/rzyOS_memory
 CFLAGS+=-I../../../rzyOS_lib
 
 # Driver includes
-CFLAGS+=-I./drvice/LED
-CFLAGS+=-I./drvice/UART
+CFLAGS+=-I./device/LED
+CFLAGS+=-I./device/UART
 
 
 RZYOS_KERNEL_DIR=../../../rzyOS_kernel
@@ -90,8 +90,8 @@ SRC+=$(ST_LIB)/src/misc.c \
 
 #Major programs
 SRC+=./app/main.c \
-	./drvice/LED/led.c \
-	./drvice/UART/uart.c
+	./device/LED/led.c \
+	./device/UART/uart.c
 
 SRC+=$(RZYOS_KERNEL_DIR)/*.c
 

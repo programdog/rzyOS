@@ -38,8 +38,8 @@ include_directories(
 	rzyOS_kernel/rzyOS_switch/gcc
 	rzyOS_kernel/rzyOS_memory
 	rzyOS_lib
-	src/board/stm32f4discovery/drvice/LED
-	src/board/stm32f4discovery/drvice/UART
+	src/board/stm32f4discovery/device/LED
+	src/board/stm32f4discovery/device/UART
 )
 
 # add_library(
@@ -54,7 +54,7 @@ include_directories(
 
 # add_library(
 # 	app/main.c
-# 	src/board/stm32f4discovery/drvice/LED/led.c
+# 	src/board/stm32f4discovery/device/LED/led.c
 # )
 
 
@@ -85,8 +85,8 @@ add_library(${CMAKE_PROJECT_NAME}
 	${ST_LIB}/src/stm32f4xx_gpio.c
 	${ST_LIB}/src/stm32f4xx_usart.c
 
-	src/board/stm32f4discovery/drvice/LED/led.c
-	src/board/stm32f4discovery/drvice/UART/uart.c
+	src/board/stm32f4discovery/device/LED/led.c
+	src/board/stm32f4discovery/device/UART/uart.c
 
 	${RZYOS_KERNEL_DIR}
 	${RZYOS_LIB_DIR}
