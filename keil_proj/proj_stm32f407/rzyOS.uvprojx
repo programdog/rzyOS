@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4discovery\app;..\..\src\board\stm32f4discovery\drvice\LED;..\..\rzyOS_lib;..\..\rzyOS_kernel\rzyOS_memory;..\..\src\board\stm32f4discovery\drvice\UART</IncludePath>
+              <IncludePath>..\..\arch\arm\STM32F4xx_StdPeriph_Driver\FWLIB\inc;..\..\arch\arm\STM32F4xx_StdPeriph_Driver\CMSIS;..\..\arch\chip\STM32F4xx_StdPeriph_Templates;..\..\rzyOS_kernel;..\..\src\board\stm32f4discovery\app;..\..\rzyOS_lib;..\..\rzyOS_kernel\rzyOS_memory;..\..\src\board\stm32f4discovery\device\LED;..\..\src\board\stm32f4discovery\device\UART</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -510,12 +510,12 @@
             <File>
               <FileName>led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\board\stm32f4discovery\drvice\LED\led.c</FilePath>
+              <FilePath>..\..\src\board\stm32f4discovery\device\LED\led.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\board\stm32f4discovery\drvice\UART\uart.c</FilePath>
+              <FilePath>..\..\src\board\stm32f4discovery\device\UART\uart.c</FilePath>
             </File>
           </Files>
         </Group>
