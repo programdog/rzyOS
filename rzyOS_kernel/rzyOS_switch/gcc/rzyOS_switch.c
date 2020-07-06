@@ -13,7 +13,7 @@ void rzyOS_StartFirstTask(void) __attribute__ (( naked ));
 
 void SVC_Handler(void) __attribute__ (( naked ));
 
-uint32_t saveAndLoadStackAddr(uint32_t stackAddr);
+uint32_t save_load_stack_addr(uint32_t stackAddr);
 
 //中断控制器地址
 #define NVIC_INT_CTRL	0xe000ed04
@@ -76,7 +76,7 @@ void rzyOS_swap_taskTCB(uint32_t stackAddr)
 
 }
 
-uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
+uint32_t save_load_stack_addr(uint32_t stackAddr)
 {
 	//第一次切换时， 当前任务tcb为0， 所以不会保存
 	if (currentTask != (task_tcb_s *)0)
@@ -104,7 +104,7 @@ uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
 // 	"vstmdbeq  R0!, {S16-S31}\n"				/* 保存浮点S16-31 */
 // 	"	dsb									\n"
 // 	"	isb									\n"
-// 	"BL      saveAndLoadStackAddr\n"		/* 调用函数：参数通过R0传递，返回值也通过R0传递 */
+// 	"BL      save_load_stack_addr\n"		/* 调用函数：参数通过R0传递，返回值也通过R0传递 */
 // 	"it eq								\n"
 // 	"vldmiaeq  R0!, {S16-S31}\n"				/* 恢复浮点S16-31 */
 // 	"LDMIA   R0!, {R4-R11}\n"				/* 从下一任务的堆栈中，恢复R4~R11 */

@@ -1,7 +1,7 @@
 #include "rzyOS_schedule.h"
 
 
-uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
+uint32_t save_load_stack_addr(uint32_t stackAddr)
 {
 	//第一次切换时， 当前任务tcb为0， 所以不会保存
 	if (currentTask != (task_tcb_s *)0)

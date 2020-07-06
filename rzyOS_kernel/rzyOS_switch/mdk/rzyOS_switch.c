@@ -66,7 +66,7 @@ PendSVHander_nosave
 //pendsv中断服务函数
 __asm void PendSV_Handler(void)
 {
-	IMPORT saveAndLoadStackAddr
+	IMPORT save_load_stack_addr
 
 	// 切换第一个任务时,由于设置了PSP=MSP，所以下面的STMDB保存会将R4~R11
 	// 保存到系统启动时默认的MSP堆栈中，而不是某个任务
@@ -74,7 +74,7 @@ __asm void PendSV_Handler(void)
 
 	STMDB   R0!, {R4-R11}				// 将R4~R11保存到当前任务栈，也就是PSP指向的堆栈
 	VSTMDB  R0!, {S16-S31}				// 保存浮点S16-31
-	BL      saveAndLoadStackAddr		// 调用函数：参数通过R0传递，返回值也通过R0传递 
+	BL      save_load_stack_addr		// 调用函数：参数通过R0传递，返回值也通过R0传递 
 	VLDMIA  R0!, {S16-S31}				// 恢复浮点S16-31
 	LDMIA   R0!, {R4-R11}				// 从下一任务的堆栈中，恢复R4~R11
 
@@ -83,7 +83,7 @@ __asm void PendSV_Handler(void)
 	BX      LR
 }
 
-uint32_t saveAndLoadStackAddr(uint32_t stackAddr)
+uint32_t save_load_stack_addr(uint32_t stackAddr)
 {
 	//第一次切换时， 当前任务tcb为0， 所以不会保存
 	if (currentTask != (task_tcb_s *)0)
@@ -265,7 +265,7 @@ void rzyOS_start(void)
 {
 	nextTask = task_highest_ready();
 
-	SysTick -> CTRL |= SysTick_CTRL_ENABLE_Msk;
+	rzyOS_systick_enable();
 
 	task_run_first();
 }
