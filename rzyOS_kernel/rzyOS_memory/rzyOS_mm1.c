@@ -1,8 +1,7 @@
-#if RZYOS_ENABLE_MEMORY == 1
-
 #include "rzyOS_mm1.h"
 #include "rzyOS_semaphore.h"
 
+#if RZYOS_MM1_USE == 1
 
 //堆内存静态分配
 static uint8_t memory[HEAP_SIZE] = {0};
@@ -20,7 +19,7 @@ void my_free(void* addr);
 
 
 
-void *malloc(uint32_t size)
+void *r_malloc(uint32_t size)
 {
 	rzyOS_sem_wait(&mm1_protect_sem, 0);
 
@@ -31,7 +30,7 @@ void *malloc(uint32_t size)
 	return addr;
 }
 
-void free(void *addr)
+void r_free(void *addr)
 {
 	rzyOS_sem_wait(&mm1_protect_sem, 0);
 

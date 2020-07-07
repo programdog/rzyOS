@@ -1,6 +1,6 @@
-#if RZYOS_ENABLE_MEMORY == 1
-
 #include "rzyOS_mm2.h"
+
+#if RZYOS_MM2_USE == 1
 
 //内存管理初始化函数
 //parameter : 

@@ -19,9 +19,9 @@ typedef struct block_s
 
 
 
-void *malloc(uint32_t size);
+void *r_malloc(uint32_t size);
 
-void free(void *addr);
+void r_free(void *addr);
 
 void rzyOS_memory_mm1_init(void);
 

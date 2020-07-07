@@ -1,7 +1,7 @@
 #include "rzyOS_schedule.h"
 #include "rzyOSarch.h"
 #include "rzyOS_wqueue.h"
-
+#include "rzyOS_mm1.h"
 
 
 //当前任务指针
@@ -394,7 +394,7 @@ void rzyOS_kernel_init(void)
 	cpu_usage_state_init();
 #endif
 
-#if (RZYOS_ENABLE_MEMORY == 1) && (RZYOS_MM1_USE == 1)
+#if RZYOS_MM1_USE == 1
 	//初始化memory方式1内存池
 	rzyOS_memory_mm1_init();
 #endif
