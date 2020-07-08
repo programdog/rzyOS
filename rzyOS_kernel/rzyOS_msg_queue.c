@@ -1,4 +1,4 @@
-#include "rzyOS_mbox.h"
+#include "rzyOS_msg_queue.h"
 
 //” œ‰≥ı ºªØ
 //parameter

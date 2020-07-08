@@ -7,7 +7,7 @@
 
 #include "rzyOS_eventgroup.h"
 #include "rzyOS_hook.h"
-#include "rzyOS_mbox.h"
+#include "rzyOS_msg_queue.h"
 
 
 #if RZYOS_MM1_USE == 1

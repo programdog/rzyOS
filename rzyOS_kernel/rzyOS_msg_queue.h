@@ -1,5 +1,5 @@
-#ifndef RZYOS_MBOX_H
-#define RZYOS_MBOX_H
+#ifndef RZYOS_MSG_QUEUE_H
+#define RZYOS_MSG_QUEUE_H
 
 #include "rzyOS_schedule.h"
 

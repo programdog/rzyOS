@@ -413,11 +413,6 @@
               <FilePath>..\..\rzyOS_kernel\rzyOS_list.c</FilePath>
             </File>
             <File>
-              <FileName>rzyOS_mbox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\rzyOS_kernel\rzyOS_mbox.c</FilePath>
-            </File>
-            <File>
               <FileName>rzyOS_mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_mutex.c</FilePath>
@@ -451,6 +446,11 @@
               <FileName>rzyOS_mm1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rzyOS_kernel\rzyOS_memory\rzyOS_mm1.c</FilePath>
+            </File>
+            <File>
+              <FileName>rzyOS_msg_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\rzyOS_kernel\rzyOS_msg_queue.c</FilePath>
             </File>
           </Files>
         </Group>
