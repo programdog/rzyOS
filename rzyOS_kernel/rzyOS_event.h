@@ -12,8 +12,8 @@ typedef enum rzyOS_event_type_e
 	event_type_unknow = 0,
 	//信号量事件类型
 	event_type_semaphore = 1,
-	//邮箱事件类型
-	event_type_mbox = 2,
+	//消息队列事件类型
+	event_type_msg_queue = 2,
 	//内存管理事件类型
 	event_type_mem_block = 3,
 	//事件组
