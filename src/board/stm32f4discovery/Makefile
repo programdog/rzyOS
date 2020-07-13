@@ -20,8 +20,8 @@ CFLAGS+=-Wall
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
-# CFLAGS+=-nostdlib
-CFLAGS+=-lgcc -lc -lm --specs=nano.specs --specs=nosys.specs
+CFLAGS+=-nostdlib
+# CFLAGS+=-lgcc -lc -lm --specs=nano.specs --specs=nosys.specs
 CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib

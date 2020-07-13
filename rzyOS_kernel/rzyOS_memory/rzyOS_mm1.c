@@ -19,7 +19,7 @@ void my_free(void* addr);
 
 
 
-void *r_malloc(uint32_t size)
+void *malloc(uint32_t size)
 {
 	rzyOS_sem_wait(&mm1_protect_sem, 0);
 
@@ -30,7 +30,7 @@ void *r_malloc(uint32_t size)
 	return addr;
 }
 
-void r_free(void *addr)
+void free(void *addr)
 {
 	rzyOS_sem_wait(&mm1_protect_sem, 0);
 

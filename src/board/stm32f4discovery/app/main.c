@@ -25,7 +25,7 @@ void task1_entry(void *param)
 {
 	float test = 0.01;
 
-	void *ptr = (void *)r_malloc(100);
+	void *ptr = (void *)malloc(100);
 
 	for (;;)
 	{
