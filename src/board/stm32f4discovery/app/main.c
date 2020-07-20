@@ -1,4 +1,5 @@
 #include <stdio.h>
+// #include "stdio.h"
 
 #include "rzyOS_api.h"
 
@@ -86,7 +87,7 @@ void task4_entry(void *param)
 	}
 }
 
-//ä»»åŠ¡åˆå§‹åŒ–
+//ÈÎÎñ³õÊ¼»¯
 void rzyOS_app_init(void)
 {
 	task_init(&tcb_task1, task1_entry, (void *)0x11111111, 0, task1Env, sizeof(task1Env));
@@ -100,13 +101,13 @@ int main()
 	LED_Init();
 	USART3_Init();
 
-	//è®¾å®šsystickä¸­æ–­æ—¶é—´å‘¨æœŸ
+	//Éè¶¨systickÖĞ¶ÏÊ±¼äÖÜÆÚ
 	rzyOS_systick_init(168);
 
 	rzyOS_kernel_init();
 
 
-	//appä»»åŠ¡åˆå§‹åŒ–
+	//appÈÎÎñ³õÊ¼»¯
 	rzyOS_app_init();
 
 

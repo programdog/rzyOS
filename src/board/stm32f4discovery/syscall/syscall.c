@@ -40,7 +40,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <stdio.h>
+// #include <stdio.h>
 #include "stm32f4xx_usart.h"
 
 /***************************************************************************/

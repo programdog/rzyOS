@@ -17,6 +17,8 @@ OBJCOPY=arm-none-eabi-objcopy
 #======================================================================#
 #Flags
 CFLAGS+=-Wall
+CFLAGS+=-Wfatal-errors
+CFLAGS+=-Wno-incompatible-pointer-types
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
@@ -46,6 +48,12 @@ CFLAGS+=-Wl,-T,../../../arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_
 
 #Stm32 libraries
 ST_LIB=../../../arch/arm/STM32F4xx_StdPeriph_Driver/FWLIB
+
+#libc
+CFLAGS+=-I../../../libc
+
+#rzyOS stdlib
+CFLAGS+=-I../../../rzyOS_stdlib
 
 #CMSIS libraries
 CFLAGS+=-I../../../arch/arm/STM32F4xx_StdPeriph_Driver/CMSIS
@@ -82,6 +90,9 @@ MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
 #setup system clock
 SRC=../../../arch/chip/STM32F4xx_StdPeriph_Templates/system_stm32f4xx.c
 
+#rzyOS stdlib
+SRC+=../../../rzyOS_stdlib/stdio.c
+
 #StdPeriph
 SRC+=$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f4xx_rcc.c \
@@ -92,6 +103,8 @@ SRC+=$(ST_LIB)/src/misc.c \
 SRC+=./app/main.c \
 	./device/LED/led.c \
 	./device/UART/uart.c
+
+SRC+=../../../libc/*.c
 
 SRC+=$(RZYOS_KERNEL_DIR)/*.c
 
@@ -106,7 +119,7 @@ SRC+=$(SWITCH_DIR)/rzyOS_switch.o
 SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
 
 # syscall
-SRC+=syscall/syscall.c
+# SRC+=syscall/syscall.c
 
 #======================================================================#
 
