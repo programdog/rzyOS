@@ -55,9 +55,6 @@ ST_LIB=../../../arch/arm/STM32F4xx_StdPeriph_Driver/FWLIB
 #libc
 # CFLAGS+=-I../../../libc
 
-#rzyOS stdlib
-CFLAGS+=-I../../../rzyOS_stdlib
-
 #CMSIS libraries
 CFLAGS+=-I../../../arch/arm/STM32F4xx_StdPeriph_Driver/CMSIS
 
@@ -92,9 +89,6 @@ MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
 #======================================================================#
 #setup system clock
 SRC=../../../arch/chip/STM32F4xx_StdPeriph_Templates/system_stm32f4xx.c
-
-#rzyOS stdlib
-SRC+=../../../rzyOS_stdlib/stdio.c
 
 #StdPeriph
 SRC+=$(ST_LIB)/src/misc.c \
