@@ -19,16 +19,19 @@ OBJCOPY=arm-none-eabi-objcopy
 CFLAGS+=-Wall
 CFLAGS+=-Wfatal-errors
 CFLAGS+=-Wno-incompatible-pointer-types
+CFLAGS+=-Wno-unused-but-set-variable
+CFLAGS+=-Wno-unused-variable
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
-CFLAGS+=-nostdlib
+# CFLAGS+=-nostdlib
+CFLAGS+=-nostartfiles
 # CFLAGS+=-lgcc -lc -lm --specs=nano.specs --specs=nosys.specs
 CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib
 CFLAGS+=-mfpu=fpv4-sp-d16
-CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
+# CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
 # CFLAGS+=-u _scanf_float -u _printf_float -lgcc -lc -lm
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
@@ -50,7 +53,7 @@ CFLAGS+=-Wl,-T,../../../arch/arm/STM32F4xx_StdPeriph_Driver/linked/GCC/STM32F40_
 ST_LIB=../../../arch/arm/STM32F4xx_StdPeriph_Driver/FWLIB
 
 #libc
-CFLAGS+=-I../../../libc
+# CFLAGS+=-I../../../libc
 
 #rzyOS stdlib
 CFLAGS+=-I../../../rzyOS_stdlib
@@ -104,7 +107,8 @@ SRC+=./app/main.c \
 	./device/LED/led.c \
 	./device/UART/uart.c
 
-SRC+=../../../libc/*.c
+#libc
+# SRC+=../../../libc/*.c
 
 SRC+=$(RZYOS_KERNEL_DIR)/*.c
 
