@@ -39,7 +39,7 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		// printf("task1 float test = %0.2f\n", test);
+		printf("task1 float test = %0.2f\n", test);
 		// printf("cpu usage : %0.2f%%\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);

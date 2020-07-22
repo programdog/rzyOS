@@ -19,20 +19,22 @@ OBJCOPY=arm-none-eabi-objcopy
 CFLAGS+=-Wall
 CFLAGS+=-Wfatal-errors
 CFLAGS+=-Wno-incompatible-pointer-types
-CFLAGS+=-Wno-unused-but-set-variable
-CFLAGS+=-Wno-unused-variable
+# CFLAGS+=-Wno-unused-but-set-variable
+# CFLAGS+=-Wno-unused-variable
 CFLAGS+=-g
 CFLAGS+=-mlittle-endian
 CFLAGS+=-mthumb 
 # CFLAGS+=-nostdlib
 CFLAGS+=-nostartfiles
-# CFLAGS+=-lgcc -lc -lm --specs=nano.specs --specs=nosys.specs
+CFLAGS+=-lgcc -lc -lm --specs=nosys.specs
 CFLAGS+=-mcpu=cortex-m4
 CFLAGS+=-mfloat-abi=hard
 # CFLAGS+=-print-multi-lib
 CFLAGS+=-mfpu=fpv4-sp-d16
 # CFLAGS+=-fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
 # CFLAGS+=-u _scanf_float -u _printf_float -lgcc -lc -lm
+CFLAGS+=-u _scanf_float -u _printf_float
+
 
 CFLAGS+=-D USE_STDPERIPH_DRIVER
 CFLAGS+=-D STM32F40_41xxx
@@ -117,7 +119,7 @@ SRC+=$(SWITCH_DIR)/rzyOS_switch.o
 SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
 
 # syscall
-# SRC+=syscall/syscall.c
+SRC+=syscall/syscall.c
 
 #======================================================================#
 
