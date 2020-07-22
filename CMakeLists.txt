@@ -16,7 +16,7 @@ set(__FPU_PRESENT 1)
 set(__FPU_USED 1)
 
 #remove -nostdlib
-set(MCU_FLAGS "-mlittle-endian -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99 -nostdlib")
+set(MCU_FLAGS "-mlittle-endian -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99")
 
 set(CMAKE_C_FLAGS "${MCU_FLAGS} -Wall")
 
@@ -99,7 +99,7 @@ set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/arch/arm/STM32F4xx_StdPeriph_Drive
 
 #add libc : --specs=nano.specs --specs=nosys.specs
 set(CMAKE_EXE_LINKER_FLAGS
-"-nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
+"--specs=nosys.specs -u _scanf_float -u _printf_float -nostartfiles -T${LINKER_SCRIPT} -Wl,-Map=${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections"
 )
 
 

@@ -58,7 +58,7 @@ void task2_entry(void *param)
 		task_delay(5);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(50);
-		// printf("i am task2\n");
+		printf("i am task2\n");
 	}
 }
 
