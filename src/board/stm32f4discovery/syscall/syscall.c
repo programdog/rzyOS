@@ -6,6 +6,11 @@
 
 #include <stdio.h>
 #include "stm32f4xx_usart.h"
+#include "rzyOS_semaphore.h"
+
+extern rzyOS_sem_s printf_protect_sem;
+
+
 
 /***************************************************************************/
 
@@ -36,17 +41,21 @@
 
 int _write(int file, char *ptr, int len)
 {
-	int index;
 	if (!ptr)
 	{
 		return 0;
 	}
-	for (index = 0; index < len; index++)
+
+	rzyOS_sem_wait(&printf_protect_sem, 0);
+
+	for (int index = 0; index < len; index++)
 	{
 		while (!(USART3->SR & 0x00000040));
 		USART_SendData(USART3, ptr[index]);
 		// USART3 -> DR = (uint8_t)ptr[index];
 	}
+
+	rzyOS_sem_post(&printf_protect_sem);
 
 	return len;
 }

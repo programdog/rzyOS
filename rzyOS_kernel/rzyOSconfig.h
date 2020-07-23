@@ -39,6 +39,7 @@
 #define RZYOS_MM1_USE 1
 // #define RZYOS_MM2_USE 0
 //内存池大小
+#define HEAP_SIZE_1K (1 * 1024)
 #define HEAP_SIZE_3K (3 * 1024)
 #define HEAP_SIZE_5K (5 * 1024)
 #define HEAP_SIZE_10K (10 * 1024)
@@ -47,7 +48,7 @@
 
 //memory方式1内存池大小
 #if RZYOS_MM1_USE == 1
-	#define MM1_HEAP_SIZE HEAP_SIZE_5K
+	#define MM1_HEAP_SIZE HEAP_SIZE_1K
 #endif
 //--------------MEMORY MANAGEMENT--------------
 

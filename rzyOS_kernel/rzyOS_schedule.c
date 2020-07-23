@@ -376,6 +376,13 @@ void idle_task_entry(void *param)
 	}
 }
 
+rzyOS_sem_s printf_protect_sem;
+
+void rzyOS_printf_protect_init(void)
+{
+	rzyOS_sem_init(&printf_protect_sem, 1, 1);
+}
+
 void rzyOS_kernel_init(void)
 {
 	task_schedule_init();
@@ -393,6 +400,8 @@ void rzyOS_kernel_init(void)
 	//cpu 状态检测模块变量初始化
 	cpu_usage_state_init();
 #endif
+
+	rzyOS_printf_protect_init();
 
 #if RZYOS_MM1_USE == 1
 	//初始化memory方式1内存池

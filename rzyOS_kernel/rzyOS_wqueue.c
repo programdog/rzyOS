@@ -250,7 +250,7 @@ void rzyOS_wqueue_module_init(void)
 	list_init(&rzyOS_high_wqueue_list);
 	list_init(&rzyOS_low_wqueue_list);
 
-	//初始值为0, 最大值1
+	//初始值为1, 最大值1
 	rzyOS_sem_init(&rzyOS_wqueue_protect_sem, 1, 1);
 	//初始值为0, 最大值无限制
 	rzyOS_sem_init(&rzyOS_wqueue_tick_sem, 0, 0);

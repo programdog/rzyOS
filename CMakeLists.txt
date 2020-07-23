@@ -15,8 +15,9 @@ add_definitions(
 set(__FPU_PRESENT 1)
 set(__FPU_USED 1)
 
+#remove -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99
 #remove -nostdlib
-set(MCU_FLAGS "-mlittle-endian -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -finline-functions -Wdouble-promotion -std=gnu99")
+set(MCU_FLAGS "-mlittle-endian -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
 
 set(CMAKE_C_FLAGS "${MCU_FLAGS} -Wall")
 
