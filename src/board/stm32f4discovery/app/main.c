@@ -100,7 +100,9 @@ void rzyOS_app_init(void)
 int main()
 {
 	LED_Init();
-	USART3_Init();
+
+	//串口打印波特率115200
+	USART3_Init(115200);
 
 	//设定systick中断时间周期
 	rzyOS_systick_init(168);
