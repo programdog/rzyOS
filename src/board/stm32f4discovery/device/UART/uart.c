@@ -5,14 +5,18 @@ void USART3_Init(uint32_t boundrate)
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
 	USART_InitTypeDef USART_InitStruct;
+	NVIC_InitTypeDef NVIC_InitStructure;
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
+	//复用功能
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	//推挽
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	//上拉
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -35,4 +39,22 @@ void USART3_Init(uint32_t boundrate)
 	USART_Init(USART3, &USART_InitStruct);
 	//使能串口
 	USART_Cmd(USART3, ENABLE);
+
+
+
+
+	#if ENABLE_USART3_RX == 1
+	//开启相关中断
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+	//Usart3 NVIC 配置
+	//串口3中断通道
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+	//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+	//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+	//IRQ通道使能
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	#endif
 }
