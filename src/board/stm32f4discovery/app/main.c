@@ -12,16 +12,17 @@ task_tcb_s tcb_task1;
 task_tcb_s tcb_task2;
 task_tcb_s tcb_task3;
 task_tcb_s tcb_task4;
+task_tcb_s tcb_task5;
 
 tTaskStack task1Env[1024];
 tTaskStack task2Env[1024];
 tTaskStack task3Env[1024];
 tTaskStack task4Env[1024];
+tTaskStack task5Env[1024];
 
 
 float usage = 0;
 
-int task1Flag;
 void task1_entry(void *param)
 {
 	float test = 0.01;
@@ -39,8 +40,8 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		printf("task1 float test = %0.2f\n", test);
-		printf("cpu usage : %0.2f%%\n", usage);
+		// printf("task1 float test = %0.2f\n", test);
+		// printf("cpu usage : %0.2f%%\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(10);
@@ -49,7 +50,6 @@ void task1_entry(void *param)
 	}
 }
 
-int task2Flag;
 void task2_entry(void *param)
 {
 	for (;;)
@@ -58,11 +58,10 @@ void task2_entry(void *param)
 		task_delay(5);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(50);
-		printf("i am task2\n");
+		// printf("i am task2\n");
 	}
 }
 
-int task3Flag;
 void task3_entry(void *param)
 {
 	for (;;)
@@ -71,11 +70,10 @@ void task3_entry(void *param)
 		task_delay(30);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(100);
-		printf("i am task3\n");
+		// printf("i am task3\n");
 	}
 }
 
-int task4Flag;
 void task4_entry(void *param)
 {
 	for (;;)
@@ -84,7 +82,16 @@ void task4_entry(void *param)
 		task_delay(20);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		task_delay(200);
-		printf("i am task4\n");
+		// printf("i am task4\n");
+	}
+}
+
+void task5_entry(void *param)
+{
+	for (;;)
+	{
+
+		task_delay(50);
 	}
 }
 
@@ -95,10 +102,14 @@ void rzyOS_app_init(void)
 	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task2Env));
 	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task3Env));
 	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task4Env));
+	task_init(&tcb_task5, task5_entry, (void *)0x55555555, 1, task5Env, sizeof(task5Env));
 }
 
 int main()
 {
+	//设置系统中断优先级分组4
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+
 	LED_Init();
 
 	//串口打印波特率115200

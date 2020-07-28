@@ -1,5 +1,6 @@
 #include "uart.h"
 
+
 //Configure USART3(PB10, PB11) to redirect printf data to host PC.
 void USART3_Init(uint32_t boundrate)
 {
@@ -43,7 +44,7 @@ void USART3_Init(uint32_t boundrate)
 
 
 
-	#if ENABLE_USART3_RX == 1
+	// #if ENABLE_USART3_RX == 1
 	//开启相关中断
 	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 	//Usart3 NVIC 配置
@@ -56,5 +57,12 @@ void USART3_Init(uint32_t boundrate)
 	//IRQ通道使能
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
-	#endif
+	// #endif
+}
+
+
+//串口3中断服务程序
+void USART3_IRQHandler(void)
+{
+
 }
