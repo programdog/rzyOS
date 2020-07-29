@@ -1,5 +1,5 @@
-#ifndef RZYOS_FS_H
-#define RZYOS_FS_H
+#ifndef RZYOS_VFS_H
+#define RZYOS_VFS_H
 
 #define NODE_NAME_SIZE (32)
 
