@@ -1,6 +1,8 @@
 #ifndef RZYOS_VFS_H
 #define RZYOS_VFS_H
 
+#include "rzyOS_semaphore.h"
+
 #define NODE_NAME_SIZE (32)
 
 struct file
@@ -19,7 +21,7 @@ typedef struct file_operations_s
 	int (*close)(struct file *filep);
 	uint32_t (*read)(struct file *filep, char *buffer, uint32_t buflen);
 	uint32_t (*write)(struct file *filep, const char *buffer, uint32_t buflen);
-	uint32_t (*seek)(struct file *filep, uint32_t offset, int whence);
+	// uint32_t (*seek)(struct file *filep, uint32_t offset, int whence);
 	int (*ioctl)(struct file *filep, int cmd, unsigned long arg);
 }file_operations_s;
 
@@ -31,10 +33,10 @@ typedef struct vfs_node_s
 	struct file_operations_s ops;
 } vfs_node_s;
 
-typedef struct vfs_root_node_s
+typedef struct vfs_root_mangement_s
 {
-	vfs_node_s *root;
-	sem_t sem_rw;
-} vfs_root_node_s;
+	vfs_node_s *root_node;
+	rzyOS_sem_s sem_rw;
+} vfs_root_mangement_s;
 
 #endif

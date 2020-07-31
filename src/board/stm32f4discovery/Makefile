@@ -70,6 +70,9 @@ CFLAGS+=-I../../../rzyOS_kernel
 #rzyOS memory
 CFLAGS+=-I../../../rzyOS_kernel/rzyOS_memory
 
+#rzyOS device tree
+CFLAGS+=-I../../../rzyOS_kernel/rzyOS_vfs
+
 #rzyOS lib includes
 CFLAGS+=-I../../../rzyOS_lib
 
@@ -87,6 +90,9 @@ SWITCH_DIR=../../../rzyOS_kernel/rzyOS_switch/gcc
 
 # rzyOS memory
 MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
+
+#rzyOS device tree
+DEVICE_TREE_DIR+=../../../rzyOS_kernel/rzyOS_vfs
 
 #======================================================================#
 #setup system clock
@@ -117,6 +123,9 @@ SRC+=$(SWITCH_DIR)/rzyOS_switch.o
 #memory mangement
 # SRC+=$(MEMORY_DIR)/*.c
 SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
+
+#rzyOS device tree
+SRC+=$(DEVICE_TREE_DIR)/*.c
 
 # syscall
 SRC+=syscall/syscall.c
