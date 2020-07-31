@@ -31,4 +31,10 @@ typedef struct vfs_node_s
 	struct file_operations_s ops;
 } vfs_node_s;
 
+typedef struct vfs_root_node_s
+{
+	vfs_node_s *root;
+	sem_t sem_rw;
+} vfs_root_node_s;
+
 #endif
