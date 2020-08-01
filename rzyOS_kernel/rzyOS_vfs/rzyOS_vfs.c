@@ -10,6 +10,8 @@ static vfs_node_s vfs_node_root;
 
 static int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops);
 
+static vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path);
+
 
 int vfs_init(void)
 {
@@ -103,3 +105,28 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 	return 0;
 }
 
+
+vfs_node_s *vfs_find_node(char *path)
+{
+	if (path[0] != '/')
+	{
+		return NULL;
+	}
+
+	if (path[1] == 0)
+	{
+		return vfs_root_mangement -> root_node;
+	}
+
+	rzyOS_sem_wait(&vfs_root_mangement -> sem_rw, 0);
+	vfs_node_s *node = vfs_find_node_r(vfs_root_mangement -> root_node -> child, &path[1]);
+	rzyOS_sem_post(&vfs_root_mangement -> sem_rw);
+
+	return node;
+}
+
+
+vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path)
+{
+	return NULL;
+}
