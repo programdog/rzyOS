@@ -39,4 +39,10 @@ typedef struct vfs_root_mangement_s
 	rzyOS_sem_s sem_rw;
 } vfs_root_mangement_s;
 
+int vfs_init(void);
+
+int vfs_insert_node(char *path, file_operations_s ops);
+
+vfs_node_s *vfs_find_node(char *path);
+
 #endif

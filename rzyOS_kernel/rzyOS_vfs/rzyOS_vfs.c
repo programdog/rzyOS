@@ -12,6 +12,8 @@ static int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_
 
 static vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path);
 
+static vfs_node_s *vfs_find_node_in_brother(vfs_node_s *node, char *node_name);
+
 
 int vfs_init(void)
 {
@@ -75,12 +77,16 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 		p++;
 	}
 
+	//已经存在节点
 	while (*node != NULL)
 	{
+		//判断是否为同名
 		if (strcmp((*node) -> name, node_name) == 0)
 		{
+			//无节点，则创造子节点
 			return vfs_insert_node_r(&(*node) -> child, p, ops);
 		}
+		//有节点，则切换指向同级节点
 		node = &(*node) -> brother;
 	}
 
@@ -95,6 +101,7 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 
 	*node = node_new;
 
+	//为新的父节点时， 则创造子节点
 	if (*p != 0)
 	{
 		return vfs_insert_node_r(&node_new -> child, p, ops);
@@ -128,5 +135,47 @@ vfs_node_s *vfs_find_node(char *path)
 
 vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path)
 {
+	if (node == NULL)
+	{
+		return NULL;
+	}
+	if (abs_path == NULL)
+	{
+		return NULL;
+	}
+	if (abs_path[0] == 0)
+	{
+		return NULL;
+	}
+
+	char node_name[NODE_NAME_SIZE] = {0};
+
+	char *p = abs_path;
+	for (int i = 0; *p != '/' && *p != 0 && i < NODE_NAME_SIZE; i++)
+	{
+		node_name[i] = *p++;
+	}
+
+	vfs_node_s *ret = vfs_find_node_in_brother(node, node_name);
+	if (*p == '/')
+	{
+		p++;
+		return vfs_find_node_r(ret -> child, p);
+	}
+	return ret;
+}
+
+vfs_node_s *vfs_find_node_in_brother(vfs_node_s *node, char *node_name)
+{
+	while (node != NULL)
+	{
+		//判断是否为当前节点
+		if (strcmp(node -> name, node_name) == 0)
+		{
+			return node;
+		}
+		//
+		node = node -> brother;
+	}
 	return NULL;
 }
