@@ -47,7 +47,11 @@ int vfs_insert_node(char *path, file_operations_s ops)
 	return ret;
 }
 
-
+//parameter :
+//vfs_node_s **node : 
+//char *abs_path : 
+//file_operations_s ops : 
+//return 0 :success ; -1 : false
 int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 {
 	if (node == NULL)
