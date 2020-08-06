@@ -14,7 +14,7 @@ static vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path);
 
 static vfs_node_s *vfs_find_node_in_brother(vfs_node_s *node, char *node_name);
 
-
+//设备树root节点初始化
 int vfs_init(void)
 {
 	vfs_root_mangement = &vfs_root_mangement_instance;
@@ -33,7 +33,8 @@ int vfs_init(void)
 	return 0;
 }
 
-
+//插入节点
+//rzyOS_fs_register_dev()调用
 int vfs_insert_node(char *path, file_operations_s ops)
 {
 	if (path[0] != '/')
@@ -116,7 +117,8 @@ int vfs_insert_node_r(vfs_node_s **node, char *abs_path, file_operations_s ops)
 	return 0;
 }
 
-
+//查找节点
+//rzyOS_fs_get_node()调用
 vfs_node_s *vfs_find_node(char *path)
 {
 	if (path[0] != '/')
@@ -169,6 +171,7 @@ vfs_node_s *vfs_find_node_r(vfs_node_s *node, char *abs_path)
 	return ret;
 }
 
+//查找同级节点
 vfs_node_s *vfs_find_node_in_brother(vfs_node_s *node, char *node_name)
 {
 	while (node != NULL)
