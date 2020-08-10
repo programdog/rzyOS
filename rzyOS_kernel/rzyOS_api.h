@@ -22,6 +22,8 @@
 #include "rzyOS_mutex.h"
 #include "rzyOS_wqueue.h"
 
+#include "rzyOS_std.h"
+
 
 #endif
 

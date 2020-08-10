@@ -120,6 +120,8 @@ int main()
 
 	rzyOS_kernel_init();
 
+	std_init();
+
 
 	//app任务初始化
 	rzyOS_app_init();

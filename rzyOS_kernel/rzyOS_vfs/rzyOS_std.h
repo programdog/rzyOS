@@ -3,4 +3,6 @@
 
 #include "rzyOS_fs.h"
 
+int std_init(void);
+
 #endif
