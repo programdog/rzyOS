@@ -13,7 +13,8 @@ extern task_tcb_s *currentTask;
 //下一个任务的指针
 extern task_tcb_s *nextTask;
 
-
+//获取当前运行的tcb指针
+task_tcb_s *get_current_tcb(void);
 
 //从位图中找到就绪的最高优先级
 task_tcb_s *task_highest_ready(void);

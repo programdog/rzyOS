@@ -36,6 +36,11 @@ uint32_t idle_max_count;
 static void check_cpu_usage_detect(void);
 #endif
 
+//获取当前运行的tcb指针
+task_tcb_s *get_current_tcb(void)
+{
+	return currentTask;
+}
 
 //从位图中找到就绪的最高优先级
 //按照就绪的最高优先级在就绪任务列表中获取第一个任务节点

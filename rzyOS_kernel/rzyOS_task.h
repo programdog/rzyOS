@@ -4,6 +4,7 @@
 #include <string.h>
 #include "rzyOS_event.h"
 
+
 //(任务状态)任务就绪
 #define RZYOS_TASK_STATUS_READY 0
 //(任务状态)任务等待
@@ -16,6 +17,9 @@
 
 //(任务状态)高16位作为事件等待标志
 #define RZYOS_TASK_WAIT_MASK (0xff << 16)
+
+//rzyOS 单个任务目前支持的最大文件描述符个数
+#define RZYOS_FS_NODE_NUM 32
 
 
 //定义任务堆栈地址为32位类型
@@ -42,6 +46,7 @@ typedef enum rzyOS_error_e
 
 //task.h与event.h结构体互相编译, 则做一下 原型宣告 声明
 typedef struct rzyOS_ecb_s rzyOS_ecb_s;
+typedef struct vfs_node_s vfs_node_s;
 
 
 //task TCB
@@ -95,6 +100,11 @@ typedef struct task_tcb_s
 	uint32_t wait_flag_type;
 	//请求的事件标志
 	uint32_t event_flag;
+
+	//进程文件描述符位图，1表示空闲，0表示使用
+	uint32_t fs_node_map;
+	//进程的文件描述符
+	vfs_node_s *fs_nodes[RZYOS_FS_NODE_NUM];
 } task_tcb_s;
 
 
