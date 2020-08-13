@@ -2,6 +2,7 @@
 #include "rzyOS_mm1.h"
 #include "rzyOS_vfs.h"
 
+
 //定义根节点管理结构指针
 static vfs_root_mangement_s *vfs_root_mangement = NULL;
 //定义根节点管理结构
@@ -49,6 +50,7 @@ int vfs_insert_node(char *path, file_operations_s ops)
 	rzyOS_sem_wait(&vfs_root_mangement -> sem_rw, 0);
 	int ret = vfs_insert_node_r(&vfs_root_mangement -> root_node -> child, &path[1], ops);
 	rzyOS_sem_post(&vfs_root_mangement -> sem_rw);
+
 	return ret;
 }
 

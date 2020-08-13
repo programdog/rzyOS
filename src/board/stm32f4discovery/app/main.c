@@ -120,6 +120,7 @@ int main()
 
 	rzyOS_kernel_init();
 
+	vfs_init();
 	std_init();
 
 
