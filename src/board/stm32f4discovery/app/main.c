@@ -27,7 +27,7 @@ void task1_entry(void *param)
 {
 	float test = 0.01;
 
-	void *ptr = (void *)malloc(924);
+	void *ptr = (void *)malloc(824);
 
 	for (;;)
 	{
@@ -40,8 +40,8 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		// printf("task1 float test = %0.2f\n", test);
-		// printf("cpu usage : %0.2f%%\n", usage);
+		printf("task1 float test = %0.2f\n", test);
+		printf("cpu usage : %0.2f%%\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(10);
@@ -58,7 +58,7 @@ void task2_entry(void *param)
 		task_delay(5);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(50);
-		// printf("i am task2\n");
+		printf("i am task2\n");
 	}
 }
 
@@ -70,7 +70,7 @@ void task3_entry(void *param)
 		task_delay(30);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(100);
-		// printf("i am task3\n");
+		printf("i am task3\n");
 	}
 }
 
@@ -82,7 +82,7 @@ void task4_entry(void *param)
 		task_delay(20);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		task_delay(200);
-		// printf("i am task4\n");
+		printf("i am task4\n");
 	}
 }
 

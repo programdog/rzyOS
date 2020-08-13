@@ -1,6 +1,8 @@
 #include "rzyOS_schedule.h"
 #include "rzyOSarch.h"
 #include "r_string.h"
+#include "rzyOS_fs.h"
+
 
 
 void PendSV_Handler(void) __attribute__ (( naked ));
@@ -357,6 +359,19 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 	task -> clean = (void (*) (void *))0;
 	task -> clean_param = (void *)0;
 	task -> request_delete_flag = 0;
+
+	//初始化文件描述符
+	task -> fs_node_map = ~0x7;
+	memset(task -> fs_nodes, 0, (sizeof(void *) * RZYOS_FS_NODE_NUM));
+
+	// //获取标准IO的节点指针
+	// vfs_node_s *node_stdin = rzyOS_fs_get_node("/dev/stdin");
+	// vfs_node_s *node_stdout = rzyOS_fs_get_node("/dev/stdout");
+	// vfs_node_s *node_stderr = rzyOS_fs_get_node("/dev/stderr");
+	// //设置标准IO的设备节点
+	// task -> fs_nodes[0] = node_stdin;
+	// task -> fs_nodes[1] = node_stdout;
+	// task -> fs_nodes[2] = node_stderr;
 	
 	//初始化结束后将任务插入延时队列等待调度
 	task_insert_ready_list(task);
