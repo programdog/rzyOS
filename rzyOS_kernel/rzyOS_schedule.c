@@ -346,6 +346,7 @@ float rzyOS_get_cpu_usage(void)
 
 #endif
 
+
 static task_tcb_s tcb_task_idle;
 static tTaskStack idleTaskEnv[RZYOS_IDLETASK_STACK_SIZE];
 
@@ -387,6 +388,7 @@ void rzyOS_printf_protect_init(void)
 {
 	rzyOS_sem_init(&printf_protect_sem, 1, 1);
 }
+
 
 void rzyOS_kernel_init(void)
 {

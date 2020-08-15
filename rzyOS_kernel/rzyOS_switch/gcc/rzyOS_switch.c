@@ -147,7 +147,7 @@ void SVC_Handler( void )
 					"	msr	basepri, r0					\n"
 					"	bx r14							\n"
 					"									\n"
-					"	.align 4						\n"
+					"	.align 8						\n"
 					"CurrentTCBConst2: .word currentTask	\n"
 				);
 }
@@ -214,6 +214,7 @@ void PendSV_Handler(void)
 	"										\n"
 	"										\n"
 	"	bx r14								\n"
+	"	.align 8							\n"
 	"CurrentTCBConst: .word currentTask		\n"
 	);
 }
@@ -380,6 +381,8 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 
 void rzyOS_start(void)
 {
+	rzyOS_rzh_show();
+
 	rzyOS_EnableVFP();
 
 	*(FPCCR) |= SET_ASPEN_AND_LSPEN_BITS;

@@ -1,6 +1,7 @@
 #ifndef __RZYOS_SCHEDULE_H
 #define __RZYOS_SCHEDULE_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include "rzyOS_event.h"
 #include "rzyOSconfig.h"
@@ -89,6 +90,7 @@ void rzyOS_task_delay_list_remove(task_tcb_s *task_tcb);
 
 //获取cpu使用率，并返回
 float rzyOS_get_cpu_usage(void);
+
 
 
 

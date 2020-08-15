@@ -61,9 +61,18 @@
 
 /***********内核编译选项***********/
 
-#define RZYOS_HOOK_ILDE  0
-#define RZYOS_HOOK_SYSTICK  0
-#define RZYOS_HOOK_SCHEDULE  0
+#define RZYOS_HOOK_ILDE 0
+#define RZYOS_HOOK_SYSTICK 0
+#define RZYOS_HOOK_SCHEDULE 0
+
+/********************************/
+
+
+
+/***********优先级***********/
+
+#define RZYOS_HIGHEST_PRIO 0
+#define RZYOS_LOWEST_PRIO 31
 
 /********************************/
 
