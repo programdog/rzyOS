@@ -145,7 +145,7 @@ void SVC_Handler( void )
 					"	msr	basepri, r0					\n"
 					"	bx r14							\n"
 					"									\n"
-					"	.align 4						\n"
+					"	.align 8						\n"
 					"CurrentTCBConst2: .word currentTask	\n"
 				);
 }
@@ -212,6 +212,7 @@ void PendSV_Handler(void)
 	"										\n"
 	"										\n"
 	"	bx r14								\n"
+	"	.align 8							\n"
 	"CurrentTCBConst: .word currentTask		\n"
 	);
 }

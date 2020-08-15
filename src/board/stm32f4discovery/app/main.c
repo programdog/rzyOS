@@ -13,15 +13,15 @@ task_tcb_s tcb_task2;
 task_tcb_s tcb_task3;
 task_tcb_s tcb_task4;
 
-tTaskStack task1Env[1024];
-tTaskStack task2Env[1024];
-tTaskStack task3Env[1024];
-tTaskStack task4Env[1024];
+tTaskStack task1Env[1024] __attribute__ ((aligned (8)));
+tTaskStack task2Env[1024] __attribute__ ((aligned (8)));
+tTaskStack task3Env[1024] __attribute__ ((aligned (8)));
+tTaskStack task4Env[1024] __attribute__ ((aligned (8)));
 
 
 float usage = 0;
 
-int task1Flag;
+
 void task1_entry(void *param)
 {
 	float test = 0.01;
@@ -49,7 +49,7 @@ void task1_entry(void *param)
 	}
 }
 
-int task2Flag;
+
 void task2_entry(void *param)
 {
 	for (;;)
@@ -62,7 +62,7 @@ void task2_entry(void *param)
 	}
 }
 
-int task3Flag;
+
 void task3_entry(void *param)
 {
 	for (;;)
@@ -75,7 +75,7 @@ void task3_entry(void *param)
 	}
 }
 
-int task4Flag;
+
 void task4_entry(void *param)
 {
 	for (;;)
