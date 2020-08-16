@@ -6,6 +6,8 @@ uint32_t fcntl_first_empty(task_tcb_s *task_tcb);
 
 int fcntl_alloc(task_tcb_s *task_tcb, uint32_t index);
 
+int fcntl_free(task_tcb_s *task_tcb, uint32_t index);
+
 //0为已经使用， 1为空闲可用
 static const uint8_t bitmap_table[] = 
 {
@@ -62,6 +64,35 @@ int open(char *path, int oflag, int mode)
 	return index;
 }
 
+int close(int fd)
+{
+	if (fd < 0 || fd > RZYOS_FS_NODE_NUM)
+	{
+		return -1;
+	}
+
+	task_tcb_s *task_tcb = get_current_tcb();
+	vfs_node_s *node = task_tcb -> fs_nodes[fd];
+
+	if (node == NULL)
+	{
+		return -1;
+	}
+
+	if (node -> ops.close == NULL)
+	{
+		return -1;
+	}
+
+	int ret = node -> ops.close(NULL);
+
+	task_tcb -> fs_nodes[fd] = NULL;
+
+	fcntl_free(task_tcb, fd);
+
+	return ret;
+}
+
 
 //0为已经使用， 1为空闲可用
 //找到第一个空闲位置的索引号
@@ -105,6 +136,18 @@ int fcntl_alloc(task_tcb_s *task_tcb, uint32_t index)
 
 	//将使用位图中指定的索引号置为0,表示此位置占用
 	task_tcb -> fs_node_map &= ~(1 << index);
+
+	return 0;
+}
+
+int fcntl_free(task_tcb_s *task_tcb, uint32_t index)
+{
+	if (task_tcb == NULL)
+	{
+		return -1;
+	}
+
+	task_tcb -> fs_node_map |= 1 << index;
 
 	return 0;
 }
