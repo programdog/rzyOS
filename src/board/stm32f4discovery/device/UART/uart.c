@@ -44,20 +44,20 @@ void USART3_Init(uint32_t boundrate)
 
 
 
-	// #if ENABLE_USART3_RX == 1
-	//开启相关中断
-	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
-	//Usart3 NVIC 配置
-	//串口3中断通道
-	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-	//子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-	//IRQ通道使能
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-	// #endif
+	// // #if ENABLE_USART3_RX == 1
+	// //开启相关中断
+	// USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+	// //Usart3 NVIC 配置
+	// //串口3中断通道
+	// NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+	// //抢占优先级3
+	// NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+	// //子优先级3
+	// NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+	// //IRQ通道使能
+	// NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	// NVIC_Init(&NVIC_InitStructure);
+	// // #endif
 }
 
 
