@@ -1,10 +1,13 @@
 #ifndef RZYOS_VFS_H
 #define RZYOS_VFS_H
 
+#include <sys/types.h>
 #include "rzyOS_semaphore.h"
 
 //节点名字长度
 #define NODE_NAME_SIZE (32)
+
+typedef int ssize_t;
 
 struct file
 {
@@ -21,9 +24,9 @@ typedef struct file_operations_s
 {
 	int (*open)(struct file *filep);
 	int (*close)(struct file *filep);
-	uint32_t (*read)(struct file *filep, char *buffer, uint32_t buflen);
-	uint32_t (*write)(struct file *filep, const char *buffer, uint32_t buflen);
-	// uint32_t (*seek)(struct file *filep, uint32_t offset, int whence);
+	ssize_t (*read)(struct file *filep, char *buffer, ssize_t buflen);
+	ssize_t (*write)(struct file *filep, const char *buffer, ssize_t buflen);
+	// ssize_t (*seek)(struct file *filep, uint32_t offset, int whence);
 	int (*ioctl)(struct file *filep, int cmd, unsigned long arg);
 }file_operations_s;
 

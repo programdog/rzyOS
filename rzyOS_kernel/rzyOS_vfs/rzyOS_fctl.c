@@ -66,7 +66,7 @@ int open(char *path, int oflag, int mode)
 
 int close(int fd)
 {
-	if (fd < 0 || fd > RZYOS_FS_NODE_NUM)
+	if (fd < 0 || fd >= RZYOS_FS_NODE_NUM)
 	{
 		return -1;
 	}
@@ -93,6 +93,77 @@ int close(int fd)
 	return ret;
 }
 
+ssize_t read(int fd, void *buf, ssize_t count)
+{
+	if (fd < 0 || fd >= RZYOS_FS_NODE_NUM)
+	{
+		return -1;
+	}
+
+	task_tcb_s *task_tcb = get_current_tcb();
+
+	vfs_node_s *node = task_tcb -> fs_nodes[fd];
+
+	if (node == NULL)
+	{
+		return -1;
+	}
+
+	if (node -> ops.read == NULL)
+	{
+		return -1;
+	}
+
+	return node -> ops.read(NULL, buf, count);
+}
+
+ssize_t write(int fd, void *buf, size_t count)
+{
+	if (fd < 0 || fd >= RZYOS_FS_NODE_NUM)
+	{
+		return -1;
+	}
+
+	task_tcb_s *task_tcb = get_current_tcb();
+
+	vfs_node_s *node = task_tcb -> fs_nodes[fd];
+	
+	if (node == NULL)
+	{
+		return -1;
+	}
+
+	if (node -> ops.write == NULL)
+	{
+		return -1;
+	}
+
+	return node -> ops.write(NULL, buf, count);
+}
+
+int ioctl(int fd, int req, unsigned long arg)
+{
+	if (fd < 0 || fd >= RZYOS_FS_NODE_NUM)
+	{
+		return -1;
+	}
+
+	task_tcb_s *task_tcb = get_current_tcb();
+
+	vfs_node_s *node = task_tcb -> fs_nodes[fd];
+	
+	if (node == NULL)
+	{
+		return -1;
+	}
+
+	if (node -> ops.ioctl == NULL)
+	{
+		return -1;
+	}
+
+	return node -> ops.ioctl(NULL, req, arg);
+}
 
 //0为已经使用， 1为空闲可用
 //找到第一个空闲位置的索引号
