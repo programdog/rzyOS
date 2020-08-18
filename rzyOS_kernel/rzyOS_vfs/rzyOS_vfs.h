@@ -7,7 +7,7 @@
 //节点名字长度
 #define NODE_NAME_SIZE (32)
 
-typedef int ssize_t;
+// typedef int ssize_t;
 
 struct file
 {

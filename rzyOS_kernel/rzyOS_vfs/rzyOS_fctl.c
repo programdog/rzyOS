@@ -1,5 +1,4 @@
 #include "rzyOS_fctl.h"
-#include "rzyOS_fs.h"
 #include "rzyOS_schedule.h"
 
 uint32_t fcntl_first_empty(task_tcb_s *task_tcb);
@@ -117,7 +116,7 @@ ssize_t read(int fd, void *buf, ssize_t count)
 	return node -> ops.read(NULL, buf, count);
 }
 
-ssize_t write(int fd, void *buf, size_t count)
+ssize_t write(int fd, void *buf, ssize_t count)
 {
 	if (fd < 0 || fd >= RZYOS_FS_NODE_NUM)
 	{
