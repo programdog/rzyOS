@@ -80,6 +80,9 @@ CFLAGS+=-I../../../rzyOS_lib
 CFLAGS+=-I./device/LED
 CFLAGS+=-I./device/UART
 
+# BSP include
+CFLAGS+=-I./device/BSP
+
 
 RZYOS_KERNEL_DIR=../../../rzyOS_kernel
 
@@ -107,7 +110,9 @@ SRC+=$(ST_LIB)/src/misc.c \
 #Major programs
 SRC+=./app/main.c \
 	./device/LED/led.c \
-	./device/UART/uart.c
+	./device/UART/uart.c \
+	./device/BSP/buffer.c
+
 
 #libc
 # SRC+=../../../libc/*.c
