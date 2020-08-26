@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "uart.h"
-
 
 //Configure USART3(PB10, PB11) to redirect printf data to host PC.
 void USART3_Init(uint32_t boundrate)
@@ -67,4 +67,10 @@ void USART3_Init(uint32_t boundrate)
 void USART3_IRQHandler(void)
 {
 	USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+
+	uint8_t rec = USART_ReceiveData(USART3);
+
+	// USART_SendData(USART3, rec);
+
+	uart3_rx_buffer_write(rec);
 }
