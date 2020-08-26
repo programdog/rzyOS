@@ -49,7 +49,7 @@
 
 //memory方式1内存池大小
 #if RZYOS_MM1_USE == 1
-	#define MM1_HEAP_SIZE HEAP_SIZE_1K
+	#define MM1_HEAP_SIZE HEAP_SIZE_10K
 #endif
 //--------------MEMORY MANAGEMENT--------------
 

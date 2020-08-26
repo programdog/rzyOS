@@ -25,6 +25,9 @@ tTaskStack task5Env[1024] __attribute__ ((aligned (8)));
 
 float usage = 0;
 
+uint8_t ch = 0;
+
+
 void task1_entry(void *param)
 {
 	float test = 0.01;
@@ -42,8 +45,8 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		printf("task1 float test = %0.2f\r\n", test);
-		printf("cpu usage : %0.2f%%\r\n", usage);
+		// printf("task1 float test = %0.2f\r\n", test);
+		// printf("cpu usage : %0.2f%%\r\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(10);
@@ -60,7 +63,7 @@ void task2_entry(void *param)
 		task_delay(5);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(50);
-		printf("i am task2\r\n");
+		// printf("i am task2\r\n");
 	}
 }
 
@@ -72,7 +75,7 @@ void task3_entry(void *param)
 		task_delay(30);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(100);
-		printf("i am task3\r\n");
+		// printf("i am task3\r\n");
 	}
 }
 
@@ -84,7 +87,7 @@ void task4_entry(void *param)
 		task_delay(20);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		task_delay(200);
-		printf("i am task4\r\n");
+		// printf("i am task4\r\n");
 	}
 }
 
@@ -92,8 +95,21 @@ void task5_entry(void *param)
 {
 	for (;;)
 	{
+		
+		uint16_t used = uart3_rx_buffer_used();
 
-		task_delay(50);
+		// printf("used=%d\r\n", used);
+		if (used > 0)
+		{
+			// printf("used=%d\r\n", used);
+			for (int i = 0; i < used; i ++)
+			{
+				uart3_rx_buffer_read(&ch);
+				printf("%c", ch);
+			}
+		}
+
+		task_delay(200);
 	}
 }
 
@@ -104,7 +120,7 @@ void rzyOS_app_init(void)
 	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task2Env));
 	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task3Env));
 	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task4Env));
-	task_init(&tcb_task5, task5_entry, (void *)0x55555555, 31, task5Env, sizeof(task5Env));
+	task_init(&tcb_task5, task5_entry, (void *)0x55555555, 30, task5Env, sizeof(task5Env));
 }
 
 int main()
@@ -122,8 +138,8 @@ int main()
 
 	rzyOS_kernel_init();
 
-	vfs_init();
-	std_init();
+	// vfs_init();
+	// std_init();
 
 
 	//app任务初始化

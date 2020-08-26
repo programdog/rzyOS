@@ -1,6 +1,7 @@
 #include "rzyOS_schedule.h"
 #include "rzyOSarch.h"
 #include "r_string.h"
+#include "rzyOS_rsh.h"
 
 
 //ÖÐ¶Ï¿ØÖÆÆ÷µØÖ·
@@ -263,6 +264,8 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 
 void rzyOS_start(void)
 {
+	rzyOS_rzh_show();
+
 	nextTask = task_highest_ready();
 
 	rzyOS_systick_enable();
