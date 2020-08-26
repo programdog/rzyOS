@@ -1,36 +1,33 @@
+#include <stdio.h>
 #include "buffer.h"
 
 uint8_t uart3_rx_buffer[UART3_RX_BUF_SIZE] = {0};
-uint8_t uart3_rx_buffer_head = 0;
-uint8_t uart3_rx_buffer_tail = 0;
+uint16_t uart3_rx_buffer_write_index = 0;
+uint16_t uart3_rx_buffer_read_index = 0;
 
-
-uint8_t uart3_rx_buffer_unused(void);
-uint8_t uart3_rx_buffer_used(void);
-void uart3_rx_buffer_clear(void);
 
 
 //buffer未使用量
-uint8_t uart3_rx_buffer_unused(void)
+uint16_t uart3_rx_buffer_unused(void)
 {
-	return (UART3_RX_BUF_SIZE - uart3_rx_buffer_used());
+	return UART3_RX_BUF_SIZE - uart3_rx_buffer_used();
 }
 
 
 //buffer使用量
-uint8_t uart3_rx_buffer_used(void)
+uint16_t uart3_rx_buffer_used(void)
 {
-	uint8_t tail_index = uart3_rx_buffer_tail;
+	uint16_t read_index = uart3_rx_buffer_read_index;
 	
-	if (uart3_rx_buffer_head > tail_index)
+	if (uart3_rx_buffer_write_index > read_index)
 	{
-		return (uart3_rx_buffer_head - tail_index);
+		return (uart3_rx_buffer_write_index - read_index);
 	}
-	else if (uart3_rx_buffer_head < tail_index)
+	else if (uart3_rx_buffer_write_index < read_index)
 	{
-		return (UART3_RX_BUF_SIZE - tail_index + uart3_rx_buffer_head);
+		return (UART3_RX_BUF_SIZE - read_index + uart3_rx_buffer_write_index);
 	}
-	else //uart3_rx_buffer_head == tail_index
+	else //uart3_rx_buffer_write_index == read_index
 	{
 		return 0;
 	}
@@ -38,17 +35,18 @@ uint8_t uart3_rx_buffer_used(void)
 
 void uart3_rx_buffer_clear(void)
 {
-	uart3_rx_buffer_head = 0;
-	uart3_rx_buffer_tail = 0;
+	uart3_rx_buffer_write_index = 0;
+	uart3_rx_buffer_read_index = 0;
 }
 
 int uart3_rx_buffer_read(uint8_t *c)
 {
 	if (uart3_rx_buffer_used())
 	{
-		*c =  uart3_rx_buffer[uart3_rx_buffer_tail];
-		uart3_rx_buffer_tail ++;
-		uart3_rx_buffer_tail %= UART3_RX_BUF_SIZE;
+		*c =  uart3_rx_buffer[uart3_rx_buffer_read_index];
+		uart3_rx_buffer_read_index ++;
+		uart3_rx_buffer_read_index %= UART3_RX_BUF_SIZE;
+
 		return 1;
 	}
 	else
@@ -60,14 +58,14 @@ int uart3_rx_buffer_read(uint8_t *c)
 
 void uart3_rx_buffer_write(uint8_t c)
 {
-	if (uart3_rx_buffer_unused())
+	if (0 == uart3_rx_buffer_unused())
 	{
 		uart3_rx_buffer_clear();
 	}
 	else
 	{
-		uart3_rx_buffer[uart3_rx_buffer_head] = c;
-		uart3_rx_buffer_head ++;
-		uart3_rx_buffer_head %= UART3_RX_BUF_SIZE;
+		uart3_rx_buffer[uart3_rx_buffer_write_index] = c;
+		uart3_rx_buffer_write_index ++;
+		uart3_rx_buffer_write_index %= UART3_RX_BUF_SIZE;
 	}
 }
