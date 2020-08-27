@@ -48,7 +48,7 @@ int _write(int file, char *ptr, int len)
 
 	rzyOS_sem_wait(&printf_protect_sem, 0);
 
-	for (int index = 0; index < len; index++)
+	for (int index = 0; index < len; index ++)
 	{
 		while (!(USART3->SR & 0x00000040));
 		USART_SendData(USART3, ptr[index]);

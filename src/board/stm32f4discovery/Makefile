@@ -97,6 +97,9 @@ MEMORY_DIR=../../../rzyOS_kernel/rzyOS_memory
 #rzyOS device tree
 DEVICE_TREE_DIR+=../../../rzyOS_kernel/rzyOS_vfs
 
+#rzyOS printf
+RZYOS_PRINTF_DIR+=../../../rzyOS_kernel/rzyOS_printf
+
 #======================================================================#
 #setup system clock
 SRC=../../../arch/chip/STM32F4xx_StdPeriph_Templates/system_stm32f4xx.c
@@ -131,6 +134,9 @@ SRC+=$(MEMORY_DIR)/rzyOS_mm1.c
 
 #rzyOS device tree
 SRC+=$(DEVICE_TREE_DIR)/*.c
+
+#rzyOS printf
+SRC+=$(RZYOS_PRINTF_DIR)/*.c
 
 # syscall
 SRC+=syscall/syscall.c
