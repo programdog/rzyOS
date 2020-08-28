@@ -24,6 +24,8 @@
 
 #include "rzyOS_rsh.h"
 
+#include "rzyOS_printf.h"
+
 // #include "rzyOS_std.h"
 
 

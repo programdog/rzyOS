@@ -76,6 +76,9 @@ CFLAGS+=-I../../../rzyOS_kernel/rzyOS_vfs
 #rzyOS lib includes
 CFLAGS+=-I../../../rzyOS_lib
 
+#rzyOS printf include
+CFLAGS+=-I../../../rzyOS_kernel/rzyOS_printf
+
 # Driver includes
 CFLAGS+=-I./device/LED
 CFLAGS+=-I./device/UART
