@@ -26,7 +26,7 @@
 
 #include "rzyOS_printf.h"
 
-// #include "rzyOS_std.h"
+#include "rzyOS_std.h"
 
 
 #endif

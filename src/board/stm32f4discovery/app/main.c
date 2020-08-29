@@ -75,7 +75,7 @@ void task3_entry(void *param)
 		task_delay(30);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		task_delay(100);
-		r_printf("i am task3\r\n");
+		// r_printf("i am task3\r\n");
 	}
 }
 
@@ -95,19 +95,15 @@ void task5_entry(void *param)
 {
 	for (;;)
 	{
-		
 		uint16_t used = uart3_rx_buffer_used();
 
-		// printf("used=%d\r\n", used);
 		if (used > 0)
 		{
-			// printf("used=%d\r\n", used);
 			for (int i = 0; i < used; i ++)
 			{
 				uart3_rx_buffer_read(&ch);
-				r_printf("%c", ch);
+				printf("%c", ch);
 			}
-			r_printf("\r\n");
 		}
 
 		task_delay(200);
@@ -139,8 +135,8 @@ int main()
 
 	rzyOS_kernel_init();
 
-	// vfs_init();
-	// std_init();
+	vfs_init();
+	std_init();
 
 
 	//app任务初始化

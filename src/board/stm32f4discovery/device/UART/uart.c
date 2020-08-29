@@ -51,9 +51,9 @@ void USART3_Init(uint32_t boundrate)
 	//串口3中断通道
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	//子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	//IRQ通道使能
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -64,13 +64,46 @@ void USART3_Init(uint32_t boundrate)
 
 
 //串口3中断服务程序
+// void USART3_IRQHandler(void)
+// {
+// 	if (SET == USART_GetFlagStatus(USART3, USART_FLAG_RXNE))
+// 	{
+// 		uint8_t rec = USART_ReceiveData(USART3);
+
+// 		// USART_SendData(USART3, rec);
+
+// 		// uart3_rx_buffer_write(rec);
+// 		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+// 	}
+// }
+
 void USART3_IRQHandler(void)
 {
-	USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+	if (USART_GetFlagStatus(USART3, USART_FLAG_PE) != RESET)
+	{
+		USART_ReceiveData(USART3);
+		USART_ClearFlag(USART3, USART_FLAG_PE);
+	}
 
-	uint8_t rec = USART_ReceiveData(USART3);
+	if (USART_GetFlagStatus(USART3, USART_FLAG_ORE) != RESET)
+	{
+		USART_ReceiveData(USART3);
+		USART_ClearFlag(USART3, USART_FLAG_ORE);
+	}
 
-	// USART_SendData(USART3, rec);
+	if (USART_GetFlagStatus(USART3, USART_FLAG_FE) != RESET)
+	{
+		USART_ReceiveData(USART3);
+		USART_ClearFlag(USART3, USART_FLAG_FE);
+	}
 
-	uart3_rx_buffer_write(rec);
+	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
+	{
+		uint8_t rec = USART_ReceiveData(USART3);
+		uart3_rx_buffer_write(rec);
+		
+		USART_ClearFlag(USART3, USART_FLAG_RXNE);
+		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+	}
 }
+

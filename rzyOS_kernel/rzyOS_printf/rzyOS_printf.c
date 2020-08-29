@@ -5,7 +5,8 @@
 #include "stm32f4xx.h"
 
 static char *buffer = NULL;
-static rzyOS_sem_s r_printf_protect_sem;
+// static rzyOS_sem_s r_printf_protect_sem;
+extern rzyOS_sem_s printf_protect_sem;
 
 void write_uart3(char *buffer, int count);
 
@@ -14,7 +15,7 @@ int r_printf(char *fmt, ...)
 	if (NULL == buffer)
 	{
 		buffer = malloc(R_PRINTF_BUFFER_SIZE);
-		rzyOS_sem_init(&r_printf_protect_sem, 1, 1);
+		// rzyOS_sem_init(&r_printf_protect_sem, 1, 1);
 	}
 
 	if (NULL == buffer)
@@ -22,7 +23,7 @@ int r_printf(char *fmt, ...)
 		return -1;
 	}
 
-	rzyOS_sem_wait(&r_printf_protect_sem, 0);
+	rzyOS_sem_wait(&printf_protect_sem, 0);
 
 	va_list ap;
 	va_start(ap, fmt);
@@ -31,7 +32,7 @@ int r_printf(char *fmt, ...)
 
 	write_uart3(buffer, ret);
 
-	rzyOS_sem_post(&r_printf_protect_sem);
+	rzyOS_sem_post(&printf_protect_sem);
 
 	return ret;
 }
