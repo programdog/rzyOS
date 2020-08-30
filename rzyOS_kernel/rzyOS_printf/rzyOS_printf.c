@@ -5,17 +5,17 @@
 #include "stm32f4xx.h"
 
 static char *buffer = NULL;
-// static rzyOS_sem_s r_printf_protect_sem;
+
 extern rzyOS_sem_s printf_protect_sem;
 
 void write_uart3(char *buffer, int count);
 
+//rzyOS printf 函数
 int r_printf(char *fmt, ...)
 {
 	if (NULL == buffer)
 	{
 		buffer = malloc(R_PRINTF_BUFFER_SIZE);
-		// rzyOS_sem_init(&r_printf_protect_sem, 1, 1);
 	}
 
 	if (NULL == buffer)
@@ -41,8 +41,8 @@ void write_uart3(char *buffer, int count)
 {
 	for (int i = 0; i < count; i ++)
 	{
-		// USART_SendData(USART3, buffer[i]);
-		while((USART3 -> SR & 0X40) == 0);//循环发送,直到发送完毕
+		//循环发送,直到发送完毕
+		while((USART3 -> SR & 0X40) == 0);
 		USART3 -> DR = (uint8_t)buffer[i];
 	}
 }

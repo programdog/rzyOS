@@ -1,6 +1,7 @@
 #ifndef RZYOS_PRINTF_H
 #define RZYOS_PRINTF_H
 
+//rzyOS printf buffer size
 #define R_PRINTF_BUFFER_SIZE 256
 
 #ifndef NULL

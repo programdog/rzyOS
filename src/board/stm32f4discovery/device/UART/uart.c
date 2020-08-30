@@ -50,9 +50,9 @@ void USART3_Init(uint32_t boundrate)
 	//Usart3 NVIC 配置
 	//串口3中断通道
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	//抢占优先级3
+	//抢占优先级0
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	//子优先级3
+	//子优先级0
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	//IRQ通道使能
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -77,6 +77,7 @@ void USART3_Init(uint32_t boundrate)
 // 	}
 // }
 
+//串口3中断服务程序
 void USART3_IRQHandler(void)
 {
 	if (USART_GetFlagStatus(USART3, USART_FLAG_PE) != RESET)
@@ -101,7 +102,7 @@ void USART3_IRQHandler(void)
 	{
 		uint8_t rec = USART_ReceiveData(USART3);
 		uart3_rx_buffer_write(rec);
-		
+
 		USART_ClearFlag(USART3, USART_FLAG_RXNE);
 		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
 	}
