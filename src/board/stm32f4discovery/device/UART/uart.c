@@ -85,7 +85,10 @@ void USART3_IRQHandler(void)
 		USART_ReceiveData(USART3);
 		USART_ClearFlag(USART3, USART_FLAG_PE);
 	}
-
+	//溢出中断
+	//溢出中断的产生是当RXNE=1时（也就是上次数据还没被读取），
+	//串口接收寄存器又接收好了一个字节的数据并准备往USART_RDR寄存器去转移的时候，
+	//ORE标志位会被置1，而ORE标志位必须软件清零
 	if (USART_GetFlagStatus(USART3, USART_FLAG_ORE) != RESET)
 	{
 		USART_ReceiveData(USART3);

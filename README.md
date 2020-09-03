@@ -44,6 +44,8 @@ makefile:
 
 ### Windows
 ```
-1.进入keil_proj目录
-2.选择平台(推荐proj_stm32f407)
+1.git tag切换到V1.3
+2.进入keil_proj目录
+3.选择平台(推荐proj_stm32f407)
+4.编译
 ```
