@@ -38,9 +38,12 @@ include_directories(
 	rzyOS_kernel
 	rzyOS_kernel/rzyOS_switch/gcc
 	rzyOS_kernel/rzyOS_memory
+	rzyOS_kernel/rzyOS_printf
+	rzyOS_kernel/rzyOS_vfs
 	rzyOS_lib
 	src/board/stm32f4discovery/device/LED
 	src/board/stm32f4discovery/device/UART
+	src/board/stm32f4discovery/device/BSP
 )
 
 # add_library(
@@ -65,9 +68,11 @@ file(GLOB RZYOS_LIB_DIR rzyOS_lib/*.c)
 
 file(GLOB SWITCH_DIR rzyOS_kernel/rzyOS_switch/gcc/*.c)
 
-#file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/*.c)
-
 file(GLOB MEMORY_DIR rzyOS_kernel/rzyOS_memory/rzyOS_mm1.c)
+
+file(GLOB PRINTF_DIR rzyOS_kernel/rzyOS_printf/rzyOS_printf.c)
+
+file(GLOB VFS_DIR rzyOS_kernel/rzyOS_vfs/*.c)
 
 file(GLOB SYSCALL_DIR src/board/stm32f4discovery/syscall/syscall.c)
 
@@ -88,11 +93,14 @@ add_library(${CMAKE_PROJECT_NAME}
 
 	src/board/stm32f4discovery/device/LED/led.c
 	src/board/stm32f4discovery/device/UART/uart.c
+	src/board/stm32f4discovery/device/BSP/buffer.c
 
 	${RZYOS_KERNEL_DIR}
 	${RZYOS_LIB_DIR}
 	${SWITCH_DIR}
 	${MEMORY_DIR}
+	${PRINTF_DIR}
+	${VFS_DIR}
 	${SYSCALL_DIR}
 )
 
