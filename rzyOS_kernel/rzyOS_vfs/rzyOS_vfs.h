@@ -33,15 +33,20 @@ typedef struct file_operations_s
 //设备节点结构
 typedef struct vfs_node_s
 {
+	//同级节点
 	struct vfs_node_s *brother;
+	//子节点
 	struct vfs_node_s *child;
+	//节点名
 	char name[NODE_NAME_SIZE];
+	//节点操作结构体
 	struct file_operations_s ops;
 } vfs_node_s;
 
 //设备树根节点管理结构
 typedef struct vfs_root_mangement_s
 {
+	//根节点结构
 	vfs_node_s *root_node;
 	rzyOS_sem_s sem_rw;
 } vfs_root_mangement_s;

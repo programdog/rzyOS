@@ -6,6 +6,7 @@
 
 static char *buffer = NULL;
 
+//printf & r_printf 保护
 extern rzyOS_sem_s printf_protect_sem;
 
 void write_uart3(char *buffer, int count);
@@ -13,6 +14,7 @@ void write_uart3(char *buffer, int count);
 //rzyOS printf 函数
 int r_printf(char *fmt, ...)
 {
+	//初始化申请空间
 	if (NULL == buffer)
 	{
 		buffer = malloc(R_PRINTF_BUFFER_SIZE);
@@ -30,6 +32,7 @@ int r_printf(char *fmt, ...)
 	int ret = vsnprintf(buffer, R_PRINTF_BUFFER_SIZE, fmt, ap);
 	va_end(ap);
 
+	//uart3输出到uart3
 	write_uart3(buffer, ret);
 
 	rzyOS_sem_post(&printf_protect_sem);
