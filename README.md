@@ -1,10 +1,10 @@
 ﻿# rzyOS create by RenZhongYu[任仲雨]
-*rzyOS is an operating system designed with a macro kernel conception*
+*rzyOS is an operating system designed with macro kernel conception*
 *rzyOS Version : V1.0*
 
-The scheduling strategy of rzyOS is preemptive priority & time slice rotation,the kernel can be clipped.Support for hardware floating calculate, task stack statistics, cpu usage statistics, most support 32 tasks, rzyOS has semaphore, work queue, mutex, memory management, message queue, event group, support priority inheritance. rzyOS has device tree，support posix interface, you can use open(),write(),read(),close().ioctl() to operate device driver.
+The scheduling strategy of rzyOS is preemptive priority & time slice rotation,the kernel can be clipped.Support for hardware floating calculate, task stack statistics, cpu usage statistics, most support 32 tasks, rzyOS has semaphore, work queue, mutex, memory management, message queue, event group, support priority inheritance. rzyOS has device tree，support posix interface, you can use open(), write(), read(), close(), ioctl() to operate device driver.
 
-rzyOS support construct by makefile and cmake in Linux.And support compile by Keil in Windows.
+rzyOS support construct by makefile and cmake in Linux. And support compile by Keil in Windows.
 
 
 ## Currently supported architecture
@@ -56,9 +56,9 @@ makefile:
 *rzyOS 是宏内核思想设计的操作系统*
 *rzyOS Version : V1.0*
 
-rzyOS 采用抢占式优先级+时间片轮转的调度策略，内核可裁剪。支持硬件浮点，task堆栈统计，CPU使用率统计。最多支持32个task，支持信号量，消息队列，互斥锁，内存管理，工作队列，事件组。支持优先级继承。支持设备树，支持posix接口，可通过open(),write(),read(),close().ioctl()对设备驱动进行操作。
+rzyOS 采用抢占式优先级+时间片轮转的调度策略，内核可裁剪。支持硬件浮点，task堆栈统计，CPU使用率统计。最多支持32个task，支持信号量，消息队列，互斥锁，内存管理，工作队列，事件组。支持优先级继承。支持设备树，支持posix接口，可通过open(),write(),read(),close(),ioctl()对设备驱动进行操作。
 
-rzyOS 支持linux与windows开发环境，拥有makefile 与 cmake 构建方式，以及window下MDK编译方式
+rzyOS 支持linux与windows开发环境，拥有makefile 与 cmake构建方式，以及window下MDK编译方式。
 
 
 ## 目前支持的架构
