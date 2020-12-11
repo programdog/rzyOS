@@ -8,6 +8,8 @@
 //rzyOS 同优先级task时间片 
 #define RZYOS_SLICE_MAX 10 // 10 * 1ms
 
+
+
 //rzyOS idle task 堆栈大小
 #define RZYOS_IDLETASK_STACK_SIZE 1024
 //rzyOS idle task 优先级
@@ -17,6 +19,13 @@
 #define RZYOS_WQUEUE_STACK_SIZE 1024
 //work queue task 优先级
 #define RZYOS_WQUEUE_PRIO 1
+
+//rsh shell task 堆栈大小
+#define RZYOS_RSH_STACK_SIZE 1024
+//rsh shell task 优先级
+#define RZYOS_RSH_PRIO (RZYOS_IDLETASK_PRIO - 1)
+
+
 
 //一个系统节拍的毫秒数
 #define RZYOS_TICK_MS 1 //1ms

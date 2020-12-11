@@ -2,6 +2,7 @@
 #include "rzyOSarch.h"
 #include "rzyOS_wqueue.h"
 #include "rzyOS_mm1.h"
+#include "rzyOS_rsh.h"
 
 
 //当前任务指针
@@ -362,6 +363,9 @@ void idle_task_entry(void *param)
 	//工作队列任务初始化
 	rzyOS_wqueue_task_init();
 #endif
+
+	//rzh任务初始化
+	rzyOS_rsh_task_init();
 
 //	//设定systick中断时间周期
 //	 set_systick_period(RZYOS_TICK_MS);
