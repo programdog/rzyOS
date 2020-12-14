@@ -14,6 +14,7 @@ static task_tcb_s rzyOS_rsh_task_tcb;
 //rsh任务堆栈
 static tTaskStack rzyOS_rsh_task_stack[RZYOS_RSH_STACK_SIZE];
 
+//rzyOS终端任务
 void rzyOS_rsh_task(void *param)
 {
 	while(1)
@@ -23,7 +24,7 @@ void rzyOS_rsh_task(void *param)
 	}
 }
 
-
+//rzyOS终端任务初始化
 void rzyOS_rsh_task_init(void)
 {
 	task_init(&rzyOS_rsh_task_tcb, rzyOS_rsh_task, (void *)0, RZYOS_RSH_PRIO, rzyOS_rsh_task_stack, sizeof(rzyOS_rsh_task_stack));

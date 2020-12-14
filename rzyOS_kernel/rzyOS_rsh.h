@@ -5,16 +5,23 @@
 #include "rzyOSconfig.h"
 #include "rzyOS_event.h"
 
+//参数个数
 #define ARGV_NUM 4
 
+//命令字符支持的最长长度
 #define CMD_CHAR_LEN 20
 
+//命令行支持的总长度
 #define CMD_BUF_SIZE 50
 
+//命令解析结构体
 typedef struct rzyOS_cmd_analyze_s
 {
+	//接收到的命令行buffer
 	char receive_buf[CMD_BUF_SIZE];
+	//处理后命令行buffer
 	char processed_buf[CMD_BUF_SIZE];
+	//参数数组
 	int32_t cmd_argv[ARGV_NUM];
 } rzyOS_cmd_analyze_s;
 
