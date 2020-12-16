@@ -14,11 +14,15 @@ static task_tcb_s rzyOS_rsh_task_tcb;
 //rsh任务堆栈
 static tTaskStack rzyOS_rsh_task_stack[RZYOS_RSH_STACK_SIZE];
 
+uint8_t ch = 0;
 //rzyOS终端任务
 void rzyOS_rsh_task(void *param)
 {
 	while(1)
 	{
+		uint16_t used = uart3_rx_buffer_used();
+		
+		uart3_rx_buffer_read(&ch);
 
 
 	}

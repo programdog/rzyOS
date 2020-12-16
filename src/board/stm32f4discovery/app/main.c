@@ -91,7 +91,7 @@ void task4_entry(void *param)
 	}
 }
 
-void task5_entry(void *param)
+void uart3_receive_task(void *param)
 {
 	for (;;)
 	{
@@ -117,7 +117,7 @@ void rzyOS_app_init(void)
 	task_init(&tcb_task2, task2_entry, (void *)0x22222222, 1, task2Env, sizeof(task2Env));
 	task_init(&tcb_task3, task3_entry, (void *)0x33333333, 0, task3Env, sizeof(task3Env));
 	task_init(&tcb_task4, task4_entry, (void *)0x44444444, 1, task4Env, sizeof(task4Env));
-	task_init(&tcb_task5, task5_entry, (void *)0x55555555, 30, task5Env, sizeof(task5Env));
+	// task_init(&tcb_task5, uart3_receive_task, (void *)0x55555555, 30, task5Env, sizeof(task5Env));
 }
 
 int main()
