@@ -45,8 +45,8 @@ void task1_entry(void *param)
 			test = 0;
 		}
 		
-		r_printf("task1 float test = %0.2f\r\n", test);
-		r_printf("cpu usage : %0.2f%%\r\n", usage);
+		// r_printf("task1 float test = %0.2f\r\n", test);
+		// r_printf("cpu usage : %0.2f%%\r\n", usage);
 
 		GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		task_delay(10);
@@ -63,7 +63,7 @@ void task2_entry(void *param)
 		task_delay(5);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		task_delay(50);
-		r_printf("i am task2\r\n");
+		// r_printf("i am task2\r\n");
 	}
 }
 
@@ -87,7 +87,7 @@ void task4_entry(void *param)
 		task_delay(20);
 		GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		task_delay(200);
-		r_printf("i am task4\r\n");
+		// r_printf("i am task4\r\n");
 	}
 }
 
