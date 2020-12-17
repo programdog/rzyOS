@@ -5,6 +5,9 @@
 #include "rzyOSconfig.h"
 #include "rzyOS_event.h"
 
+//board 相关！！！
+#include "uart.h"
+
 //参数个数
 #define ARGV_NUM 4
 
