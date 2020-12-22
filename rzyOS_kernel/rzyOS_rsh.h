@@ -42,7 +42,7 @@ typedef struct rzyOS_cmd_s
 } rzyOS_cmd_s;
 
 
-void rzyOS_rzh_show(void);
+void rzyOS_rsh_show(void);
 
 void rzyOS_rsh(void *param);
 

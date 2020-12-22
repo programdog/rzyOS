@@ -381,7 +381,7 @@ void task_init(task_tcb_s *task, void (*entry)(void *), void *param, uint32_t pr
 
 void rzyOS_start(void)
 {
-	rzyOS_rzh_show();
+	rzyOS_rsh_show();
 
 	rzyOS_EnableVFP();
 

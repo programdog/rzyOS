@@ -4,7 +4,7 @@ static char rzh_show_1[300] = "\r\n\r\n                 ____   _____ \r\n       
 
 // static char copyright_1[] = "";
 
-void rzyOS_rzh_show(void)
+void rzyOS_rsh_show(void)
 {
 	printf("%s", rzh_show_1);
 }
