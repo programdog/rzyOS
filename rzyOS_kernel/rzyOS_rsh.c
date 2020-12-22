@@ -34,6 +34,7 @@ void rzyOS_rsh_task(void *param)
 			}
 		}
 
+		task_delay(100);
 	}
 }
 
