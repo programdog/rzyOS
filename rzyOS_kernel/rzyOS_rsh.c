@@ -43,3 +43,13 @@ void rzyOS_rsh_task_init(void)
 {
 	task_init(&rzyOS_rsh_task_tcb, rzyOS_rsh_task, (void *)0, RZYOS_RSH_PRIO, rzyOS_rsh_task_stack, sizeof(rzyOS_rsh_task_stack));
 }
+
+void rzyOS_rsh_cmd_analyse()
+{
+
+}
+
+void printf_hello(int argc, void *argv)
+{
+	printf("HelloWorld!\r\n");
+}

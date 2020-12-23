@@ -32,7 +32,7 @@ typedef struct rzyOS_cmd_analyze_s
 typedef struct rzyOS_cmd_s
 {
 	//命令字符串表
-	char const *cmd_list;
+	char const *cmd_string;
 	//最大支持参数个数
 	uint32_t max_args;
 	//命令回调函数
@@ -41,6 +41,15 @@ typedef struct rzyOS_cmd_s
 	char *help;
 } rzyOS_cmd_s;
 
+
+
+//命令表
+// const rzyOS_cmd_s cmd_list[] =
+// {
+// 	/*命令		参数数目		处理函数			帮助信息	*/
+// 	{"hello",	0,		printf_hello,		"hello -print HelloWorld!"},
+// //	{"arg",		8,		handle_arg,			"arg<arg1> <arg2> ... -for testing, print input argument"},
+// };
 
 void rzyOS_rsh_show(void);
 
