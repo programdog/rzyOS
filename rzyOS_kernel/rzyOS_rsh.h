@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include "rzyOSconfig.h"
 #include "rzyOS_event.h"
+#include "rzyOS_cmd_list.h"
 
-//board 相关！！！
+//uart.h -> 涉及串口打印， board 相关！！！
 #include "uart.h"
 
 //参数个数
@@ -28,28 +29,6 @@ typedef struct rzyOS_cmd_analyze_s
 	int32_t cmd_argv[ARGV_NUM];
 } rzyOS_cmd_analyze_s;
 
-//命令元素
-typedef struct rzyOS_cmd_s
-{
-	//命令字符串表
-	char const *cmd_string;
-	//最大支持参数个数
-	uint32_t max_args;
-	//命令回调函数
-	void (*handle)(int argc, void *argv);
-	//命令使用帮助
-	char *help;
-} rzyOS_cmd_s;
-
-
-
-//命令表
-// const rzyOS_cmd_s cmd_list[] =
-// {
-// 	/*命令		参数数目		处理函数			帮助信息	*/
-// 	{"hello",	0,		printf_hello,		"hello -print HelloWorld!"},
-// //	{"arg",		8,		handle_arg,			"arg<arg1> <arg2> ... -for testing, print input argument"},
-// };
 
 void rzyOS_rsh_show(void);
 

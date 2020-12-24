@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "rzyOS_rsh.h"
 
 static char rzh_show_1[300] = "\r\n\r\n                 ____   _____ \r\n                / __ \\ / ____|\r\n _ __ _____   _| |  | | (___  \r\n| '__|_  / | | | |  | |\\___ \\ \r\n| |   / /| |_| | |__| |____) | \r\n|_|  /___|\\__, |\\____/|_____/ \r\n           __/ |              \r\n          |___/               \r\n\r\n";
@@ -24,7 +25,6 @@ void rzyOS_rsh_task(void *param)
 	{
 		uint16_t used = uart3_rx_buffer_used();
 		
-		// uart3_rx_buffer_read(&ch);
 		if (used > 0)
 		{
 			for (int i = 0; i < used; i ++)
@@ -33,6 +33,8 @@ void rzyOS_rsh_task(void *param)
 				printf("%c", ch);
 			}
 		}
+
+
 
 		task_delay(100);
 	}
@@ -44,12 +46,14 @@ void rzyOS_rsh_task_init(void)
 	task_init(&rzyOS_rsh_task_tcb, rzyOS_rsh_task, (void *)0, RZYOS_RSH_PRIO, rzyOS_rsh_task_stack, sizeof(rzyOS_rsh_task_stack));
 }
 
+
+static int32_t string_to_dec(char *buf, uint32_t len)
+{
+
+	return 0;
+}
+
 void rzyOS_rsh_cmd_analyse()
 {
 
-}
-
-void printf_hello(int argc, void *argv)
-{
-	printf("HelloWorld!\r\n");
 }
