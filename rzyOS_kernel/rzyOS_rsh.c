@@ -47,10 +47,51 @@ void rzyOS_rsh_task_init(void)
 }
 
 
+//isdigit() : 检查参数是否为阿拉伯数字0到9, 参数字符
 static int32_t string_to_dec(char *buf, uint32_t len)
 {
+	uint32_t i = 0;
+	uint32_t base = 10;
+	int32_t neg = 1;
+	int32_t result = 0;
 
-	return 0;
+	if (('0' == buf[0]) && ('x' == buf[1]))
+	{
+		base = 16;
+		neg = 1;
+		i = 2;
+	}
+	else if ('-' == buf[0])
+	{
+		base = 10;
+		neg = -1;
+		i = 1;
+	}
+	for (; i < len; i ++)
+	{
+		if ((0x20 == buf[i]) || (0x0d == buf[i]))
+		{
+			break ;
+		}
+
+		result *= base;
+		if (isdigit(buf[i]))
+		{
+			result += buf[i] - '0';
+		}
+		else if (isxdigit(buf[i]))
+		{
+			result += tolower(buf[i]) - 87;
+		}
+		else
+		{
+			result += buf[i] - '0';
+		}
+	}
+
+	result *= neg;
+
+	return result;
 }
 
 void rzyOS_rsh_cmd_analyse()
