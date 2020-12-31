@@ -48,47 +48,62 @@ void rzyOS_rsh_task_init(void)
 
 
 //isdigit() : 检查参数是否为阿拉伯数字0到9, 参数字符
+//isxdigit() : 检查参数是否为16进制数字， 16进制数字:0123456789abcdefABCDEF
+//tolower() : 字母字符转换成小写，非字母字符不做出处理
+
+//字符串转数字
 static int32_t string_to_dec(char *buf, uint32_t len)
 {
-	uint32_t i = 0;
-	uint32_t base = 10;
-	int32_t neg = 1;
-	int32_t result = 0;
+	uint32_t index = 0; //buffer index
+	uint32_t base = 10; //进制
+	int32_t neg = 1; //positive or negative
+	int32_t result = 0; //转换数字
 
+	//16 base
 	if (('0' == buf[0]) && ('x' == buf[1]))
 	{
 		base = 16;
 		neg = 1;
-		i = 2;
+		index = 2;
 	}
+	//negative & 10base
 	else if ('-' == buf[0])
 	{
 		base = 10;
 		neg = -1;
-		i = 1;
+		index = 1;
 	}
-	for (; i < len; i ++)
+
+	// pasre buffer
+	for (; index < len; index ++)
 	{
-		if ((0x20 == buf[i]) || (0x0d == buf[i]))
+		// 0x20 -> space
+		// 0x0d -> CR -> return
+		if ((0x20 == buf[index]) || (0x0d == buf[index])) // space or return
 		{
 			break ;
 		}
 
 		result *= base;
-		if (isdigit(buf[i]))
+		//如果字符为数字
+		if (isdigit((int)buf[index]))
 		{
-			result += buf[i] - '0';
+			//转换为int 数字
+			result += buf[index] - '0';
 		}
-		else if (isxdigit(buf[i]))
+		//如果为字母
+		else if (isxdigit((int)buf[index]))
 		{
-			result += tolower(buf[i]) - 87;
+			//变换小写字母后 -87 转化为int数字
+			result += tolower((int)buf[index]) - 87;
 		}
 		else
 		{
-			result += buf[i] - '0';
+			result += buf[index] - '0';
 		}
 	}
 
+	//加上正负
 	result *= neg;
 
 	return result;
