@@ -15,6 +15,7 @@ static task_tcb_s rzyOS_rsh_task_tcb;
 //rsh任务堆栈
 static tTaskStack rzyOS_rsh_task_stack[RZYOS_RSH_STACK_SIZE];
 
+rzyOS_cmd_analyze_s rzyOS_cmd_analyze;
 
 //rzyOS终端任务
 void rzyOS_rsh_task(void *param)
@@ -99,7 +100,8 @@ static int32_t string_to_dec(char *buf, uint32_t len)
 		}
 		else
 		{
-			result += buf[index] - '0';
+			// result += buf[index] - '0';
+			printf("string to dec error, invaild input\r\n");
 		}
 	}
 
@@ -109,7 +111,49 @@ static int32_t string_to_dec(char *buf, uint32_t len)
 	return result;
 }
 
-void rzyOS_rsh_cmd_analyse()
+void rzyOS_rsh_cmd_analyse(char *rec_buf, uint32_t len)
 {
+	uint32_t i;
+	uint32_t blank_space_flag = 0;
+	uint32_t arg_num = 0;
+	uint32_t index[ARGV_NUM];
 
+	for (i = 0; i < len; i ++)
+	{
+		if (0x20 == rec_buf[i])
+		{
+			blank_space_flag = 1;
+
+			continue ;
+		}
+		else if (0x0d == rec_buf[i])
+		{
+			break ;
+		}
+		else
+		{
+			if (1 == blank_space_flag)
+			{
+				blank_space_flag = 0;
+
+				if (arg_num < ARGV_NUM)
+				{
+					index[arg_num] = i;
+
+					arg_num ++;
+				}
+				else
+				{
+					printf("argument too many error");
+
+					return -1;
+				}
+			}
+		}
+	}
+
+	for (i = 0; i < arg_num; i ++)
+	{
+		//handle rzyOS_cmd_analyze_s
+	}
 }
