@@ -1,4 +1,4 @@
-﻿# rzyOS create by RenZhongYu[任仲雨]
+﻿# rzyOS - Create by RenZhongYu[任仲雨]
 *rzyOS is an operating system designed with macro kernel conception*
 *rzyOS Version : V1.0*
 
